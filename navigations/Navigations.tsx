@@ -1,49 +1,28 @@
-import { Image, StyleSheet } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import * as React from 'react';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 // Components
 import TestScreen from '../components/TestScreen';
+import MyLibScreen from '../components/MyLibScreeen';
 
-type RootTabParamList = {
+type RootDrawerParamList = {
     Test: undefined;
+    MyLib: undefined;
 };
 
-const Tab = createBottomTabNavigator<RootTabParamList>();
+const Drawer = createDrawerNavigator<RootDrawerParamList>();
 
-export default function RootTabNavigator() {
+export default function RootDrawerNavigator() {
     return (
-        <Tab.Navigator
-            screenOptions={() => ({
-                tabBarActiveTintColor: 'green',
-                tabBarActiveBackgroundColor: 'lightgrey',
-                tabBarInactiveBackgroundColor: 'white',
-                tabBarInactiveTintColor: 'gray',
-                tabBarShowLabel: false,
-            })}
-        >
-            <Tab.Screen
-                name="Test"
-                component={TestScreen}
+        <Drawer.Navigator initialRouteName="MyLib">
+            <Drawer.Screen
+                name="MyLib"
+                component={MyLibScreen}
                 options={{
-                    title: 'Test',
-                    tabBarIcon: () => {
-                        const image_name = '../images/icon_testing.png';
-                        return (
-                            <Image
-                                style={styles.tab_bar_icon}
-                                source={require(image_name)}
-                            ></Image>
-                        );
-                    },
+                    title: 'My library',
                 }}
             />
-        </Tab.Navigator>
+            <Drawer.Screen name="Test" component={TestScreen} />
+        </Drawer.Navigator>
     );
 }
-
-const styles = StyleSheet.create({
-    tab_bar_icon: {
-        width: 30,
-        height: 30,
-    },
-});
