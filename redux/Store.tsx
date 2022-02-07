@@ -1,7 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
+import personalLibraryReducer from './PersonalLibrarySlice';
 
 export const store = configureStore({
-    reducer: {},
+    reducer: {
+        personalLibrary: personalLibraryReducer,
+    },
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

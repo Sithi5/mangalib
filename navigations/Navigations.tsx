@@ -1,28 +1,45 @@
 import * as React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // Components
 import TestScreen from '../components/TestScreen';
-import MyLibScreen from '../components/MyLibScreeen';
+import PersonalLibraryScreen from '../components/PersonalLibraryScreen';
 
-type RootDrawerParamList = {
-    Test: undefined;
-    MyLib: undefined;
-};
+// Type
+import type {
+    PersonalLibraryStackParamList,
+    RootDrawerParamList,
+} from './Types';
 
-const Drawer = createDrawerNavigator<RootDrawerParamList>();
+const PersonalLibraryStack =
+    createNativeStackNavigator<PersonalLibraryStackParamList>();
+
+function PersonalLibraryStackNavigator() {
+    return (
+        <PersonalLibraryStack.Navigator initialRouteName="PersonalLibrary">
+            <PersonalLibraryStack.Screen
+                name="PersonalLibrary"
+                component={PersonalLibraryScreen}
+            />
+        </PersonalLibraryStack.Navigator>
+    );
+}
+
+const RootDrawer = createDrawerNavigator<RootDrawerParamList>();
 
 export default function RootDrawerNavigator() {
     return (
-        <Drawer.Navigator initialRouteName="MyLib">
-            <Drawer.Screen
-                name="MyLib"
-                component={MyLibScreen}
+        <RootDrawer.Navigator initialRouteName="PersonalLibraryStack">
+            <RootDrawer.Screen
+                name="PersonalLibraryStack"
+                component={PersonalLibraryStackNavigator}
                 options={{
-                    title: 'My library',
+                    headerShown: false,
+                    title: '',
                 }}
             />
-            <Drawer.Screen name="Test" component={TestScreen} />
-        </Drawer.Navigator>
+            <RootDrawer.Screen name="Test" component={TestScreen} />
+        </RootDrawer.Navigator>
     );
 }

@@ -13,6 +13,7 @@
     "@react-navigation/bottom-tabs": "^6.1.0",
     "@react-navigation/drawer": "^6.3.0",
     "@react-navigation/native": "^6.0.8",
+    "@react-navigation/native-stack": "^6.5.0",
     "@reduxjs/toolkit": "^1.7.1",
     "@types/react-redux": "^7.1.22",
     "expo": "~44.0.0",
