@@ -1,7 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Id } from '../types/Id';
+import { MangaData } from '../types/MangaData';
 
 type PersonalLibraryState = {
-    list: { [name: string]: MangaData };
+    list: Id[];
 };
 
 const initialState: PersonalLibraryState = {
@@ -12,7 +14,7 @@ export const personalLibrarySlice = createSlice({
     name: 'personalLibrary',
     initialState,
     reducers: {
-        updatePersonalLibrary: (state, action: PayloadAction<String>) => {
+        updatePersonalLibrary: (state, action: PayloadAction<string>) => {
             if (state.list.includes(action.payload)) {
                 let index = state.list.indexOf(action.payload);
                 if (index > -1) {
@@ -22,12 +24,12 @@ export const personalLibrarySlice = createSlice({
                 state.list.push(action.payload);
             }
         },
-        addToPersonalLibrary: (state, action: PayloadAction<String>) => {
+        addToPersonalLibrary: (state, action: PayloadAction<string>) => {
             if (!state.list.includes(action.payload)) {
                 state.list.push(action.payload);
             }
         },
-        removeInPersonalLibrary: (state, action: PayloadAction<String>) => {
+        removeInPersonalLibrary: (state, action: PayloadAction<string>) => {
             let index = state.list.indexOf(action.payload);
             if (index > -1) {
                 state.list.splice(index, 1);

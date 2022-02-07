@@ -36,7 +36,7 @@ export default function RootDrawerNavigator() {
                 component={PersonalLibraryStackNavigator}
                 options={{
                     headerShown: false,
-                    title: '',
+                    title: 'PersonalLibraryStack',
                 }}
             />
             <RootDrawer.Screen name="Test" component={TestScreen} />
