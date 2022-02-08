@@ -56,7 +56,7 @@ export default function RootBottomTabNavigator() {
         <RootBottomTab.Navigator
             initialRouteName="SearchStack"
             screenOptions={() => ({
-                tabBarActiveTintColor: 'green',
+                tabBarActiveTintColor: 'orange',
                 tabBarActiveBackgroundColor: 'lightgrey',
                 tabBarInactiveBackgroundColor: 'white',
                 tabBarInactiveTintColor: 'gray',
@@ -90,7 +90,7 @@ export default function RootBottomTabNavigator() {
                     headerShown: true,
                     title: 'Personal Library',
                     tabBarIcon: ({ color }) => {
-                        const image_name = '../images/icon_testing.png';
+                        const image_name = '../images/icon_open_book.png';
                         return (
                             <Image
                                 style={[
@@ -112,9 +112,10 @@ export default function RootBottomTabNavigator() {
                         const image_name = '../images/icon_testing.png';
                         return (
                             <Image
-                                style={
-                                    (styles.tab_bar_icon, { tintColor: color })
-                                }
+                                style={[
+                                    styles.tab_bar_icon,
+                                    { tintColor: color },
+                                ]}
                                 source={require(image_name)}
                             ></Image>
                         );
