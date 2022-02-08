@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import DisplayLoading from './DisplayLoading';
 import { useAppSelector } from '../redux/Hooks';
 
-import type { PersonalLibraryStackScreenProps } from '../navigations/types';
+import type { PersonalLibraryStackScreenProps } from '../navigations/NavigationsTypes';
 import { getMangaDetailFromApi } from '../api/KitsuApi';
 
 export type MangaData = {};

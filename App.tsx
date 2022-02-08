@@ -5,13 +5,13 @@ import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 
 import { store } from './redux/Store';
-import RootDrawerNavigator from './navigations/Navigations';
+import RootBottomTabNavigator from './navigations/Navigations';
 
 export default function App() {
     return (
         <Provider store={store}>
             <NavigationContainer>
-                <RootDrawerNavigator />
+                <RootBottomTabNavigator />
             </NavigationContainer>
         </Provider>
     );
