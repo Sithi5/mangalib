@@ -6,13 +6,15 @@ import { Image, StyleSheet } from 'react-native';
 // Components
 import TestScreen from '../components/TestScreen';
 import PersonalLibraryScreen from '../components/PersonalLibraryScreen';
+import SearchScreen from '../components/SearchScreen';
 
 // Type
 import type {
     PersonalLibraryStackParamList,
     SearchStackParamList,
     RootBottomTabParamList,
-} from './NavigationsTypes';
+} from './Types';
+import { GREY, LIGHTGREY, ORANGE, WHITE } from '../globals/AppStyles';
 
 const PersonalLibraryStack =
     createNativeStackNavigator<PersonalLibraryStackParamList>();
@@ -39,7 +41,7 @@ function SearchStackNavigator() {
         <SearchStack.Navigator initialRouteName="Search">
             <SearchStack.Screen
                 name="Search"
-                component={PersonalLibraryScreen}
+                component={SearchScreen}
                 options={{
                     headerShown: false,
                     title: 'Search a manga',
@@ -56,16 +58,19 @@ export default function RootBottomTabNavigator() {
         <RootBottomTab.Navigator
             initialRouteName="SearchStack"
             screenOptions={() => ({
-                tabBarActiveTintColor: 'orange',
-                tabBarActiveBackgroundColor: 'lightgrey',
-                tabBarInactiveBackgroundColor: 'white',
-                tabBarInactiveTintColor: 'gray',
+                headerStyle: {
+                    backgroundColor: WHITE,
+                },
+                tabBarActiveTintColor: ORANGE,
+                tabBarActiveBackgroundColor: LIGHTGREY,
+                tabBarInactiveBackgroundColor: WHITE,
+                tabBarInactiveTintColor: GREY,
                 tabBarShowLabel: false,
             })}
         >
             <RootBottomTab.Screen
                 name="SearchStack"
-                component={PersonalLibraryStackNavigator}
+                component={SearchStackNavigator}
                 options={{
                     headerShown: true,
                     title: 'Search Manga',

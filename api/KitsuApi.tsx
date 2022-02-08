@@ -6,7 +6,6 @@ const HEADERS = {
 
 export async function getMangaDetailFromApi(manga_title: string) {
     const url = API_BASE_URL + 'manga?filter[text]=' + manga_title;
-    console.log('\n\n\nURL = ', url, '\n\n');
     try {
         const response = await fetch(url, {
             method: 'GET',

@@ -4,8 +4,9 @@ import { StyleSheet, View } from 'react-native';
 import DisplayLoading from './DisplayLoading';
 import { useAppSelector } from '../redux/Hooks';
 
-import type { PersonalLibraryStackScreenProps } from '../navigations/NavigationsTypes';
+import type { PersonalLibraryStackScreenProps } from '../navigations/Types';
 import { getMangaDetailFromApi } from '../api/KitsuApi';
+import AppStyles from '../globals/AppStyles';
 
 export type MangaData = {};
 
@@ -24,7 +25,6 @@ export default function PersonalLibraryScreen({}: PersonalLibraryStackScreenProp
                 const response = await getMangaDetailFromApi('one piece');
                 tmp_mangas_list.push(response);
                 // }
-                console.log('tmp_mangas_list : ', tmp_mangas_list);
                 setMangasList(tmp_mangas_list);
             } catch (error) {
                 console.error(error);
@@ -36,7 +36,7 @@ export default function PersonalLibraryScreen({}: PersonalLibraryStackScreenProp
     }, [personal_library_list]);
 
     return (
-        <View style={styles.main_container}>
+        <View style={AppStyles.main_container}>
             {/* <DisplayMangasList
                 navigation={navigation}
                 mangas_list={mangas_list}
@@ -46,10 +46,4 @@ export default function PersonalLibraryScreen({}: PersonalLibraryStackScreenProp
     );
 }
 
-const styles = StyleSheet.create({
-    main_container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-});
+const styles = StyleSheet.create({});
