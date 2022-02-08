@@ -3,35 +3,37 @@ import { Button, StyleSheet, TextInput, View } from 'react-native';
 
 import DisplayLoading from './DisplayLoading';
 import { getMangaDetailFromApi } from '../api/KitsuApi';
-import AppStyles, { DEFAULT_MARGIN, WHITE } from '../globals/AppStyles';
+import AppStyles, { DEFAULT_MARGIN, ORANGE, WHITE } from '../globals/AppStyles';
 
-// Types
 import type { SearchStackScreenProps } from '../navigations/Types';
-
-export type MangaData = {};
+import type { MangaData } from '../types/MangaData';
 
 export default function SearchScreen({}: SearchStackScreenProps<'Search'>) {
     const [is_loading, setLoading] = useState(true);
     const [mangas_list, setMangasList] = useState<MangaData[]>([]);
     const search_title = useRef('');
-    const page = useRef(0);
-    const total_page = useRef(0);
+    const next_page_url = useRef<string | undefined>();
 
-    async function _getMangas(clear_movie_data: boolean = false) {
+    async function _getMangas({
+        clear_mangas_list = false,
+    }: {
+        clear_mangas_list: boolean;
+    }) {
         if (search_title.current.length > 0) {
             try {
                 setLoading(true);
-                // let response = await getFilmsFromTMDBApiWithSearchedText(
-                //     search_title.current,
-                //     page + 1
-                // );
-                // page = response.page;
-                // total_page = response.total_pages;
-                // if (clear_movie_data) {
-                //     setMoviesData(response.results);
-                // } else {
-                //     setMoviesData(movies_data.concat(response.results));
-                // }
+                let response = await getMangaDetailFromApi(
+                    search_title.current,
+                    next_page_url.current
+                );
+                if (response) {
+                    next_page_url.current = response.links.next;
+                    if (clear_mangas_list) {
+                        setMangasList(response.data);
+                    } else {
+                        setMangasList(mangas_list.concat(response.data));
+                    }
+                }
             } catch (error) {
                 console.error(error);
             } finally {
@@ -41,9 +43,8 @@ export default function SearchScreen({}: SearchStackScreenProps<'Search'>) {
     }
 
     function _newMangasSearch() {
-        page.current = 0;
-        total_page.current = 0;
-        _getMangas(true);
+        next_page_url.current = undefined;
+        _getMangas({ clear_mangas_list: true });
     }
 
     return (
@@ -58,7 +59,7 @@ export default function SearchScreen({}: SearchStackScreenProps<'Search'>) {
             />
             <View style={styles.button_search_view}>
                 <Button
-                    color="green"
+                    color={ORANGE}
                     title="Rechercher"
                     onPress={_newMangasSearch}
                 />

@@ -1,17 +1,45 @@
+import { PAGE_LIMIT } from '../globals/API';
+
+import type { MangaData } from '../types/MangaData';
+
 const API_BASE_URL = 'https://kitsu.io/api/edge/';
 const HEADERS = {
     Accept: 'application/vnd.api+json',
     'Content-Type': 'application/vnd.api+json',
 };
 
-export async function getMangaDetailFromApi(manga_title: string) {
-    const url = API_BASE_URL + 'manga?filter[text]=' + manga_title;
+type GetMangaDetailResponse = {
+    data: MangaData[];
+    links: { first: string; next: string; last: string };
+    meta: number;
+};
+
+export async function getMangaDetailFromApi(
+    manga_title: string,
+    next_page_url: string | undefined
+): Promise<GetMangaDetailResponse | undefined> {
+    const url = next_page_url
+        ? next_page_url
+        : API_BASE_URL +
+          'manga?' +
+          encodeURI(
+              'filter[text]=' +
+                  manga_title +
+                  '&page[offset]=' +
+                  0 +
+                  '&page[limit]=' +
+                  PAGE_LIMIT
+          );
+
+    console.log('url = ', url);
+
     try {
         const response = await fetch(url, {
             method: 'GET',
             headers: HEADERS,
         });
-        return await response.json();
+        const json_response = await response.json();
+        return json_response;
     } catch (error) {
         console.error(error);
     }
