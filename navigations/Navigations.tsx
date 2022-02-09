@@ -13,7 +13,7 @@ import type {
     PersonalLibraryStackParamList,
     SearchStackParamList,
     RootBottomTabParamList,
-} from './Types';
+} from './NavigationsTypes';
 import { GREY, LIGHTGREY, ORANGE, WHITE } from '../globals/AppStyles';
 
 const PersonalLibraryStack =

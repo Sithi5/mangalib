@@ -8,7 +8,7 @@ import MoviesItems from './MovieItem';
 import type { SearchNavigationProp } from './SearchScreen';
 import type { FavoritesNavigationProp } from './FavoritesScreen';
 import type { MangaData } from './PersonalPersonalLibraryScreen';
-import type { Id } from '../types/Id';
+import type { Id } from '../globals/GlobalTypes';
 
 type Navigation = SearchNavigationProp | FavoritesNavigationProp;
 

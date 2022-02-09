@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Id } from '../types/Id';
-import { MangaData } from '../types/MangaData';
+import { Id } from '../globals/GlobalTypes';
 
 type PersonalLibraryState = {
     list: Id[];

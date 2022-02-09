@@ -4,26 +4,28 @@ import { StyleSheet, View } from 'react-native';
 import DisplayLoading from './DisplayLoading';
 import { useAppSelector } from '../redux/Hooks';
 
-import type { PersonalLibraryStackScreenProps } from '../navigations/Types';
-import { getMangaDetailFromApi } from '../api/KitsuApi';
+import type { PersonalLibraryStackScreenProps } from '../navigations/NavigationsTypes';
+import { searchMangasFromApi } from '../api/KitsuApi';
 import AppStyles from '../globals/AppStyles';
 
-export type MangaData = {};
+import type { KitsuMangaData } from '../api/KitsuTypes';
 
 export default function PersonalLibraryScreen({}: PersonalLibraryStackScreenProps<'PersonalLibrary'>) {
     const [is_loading, setLoading] = useState(false);
     const personal_library_list = useAppSelector(
         (state) => state.personalLibrary.list
     );
-    const [mangas_list, setMangasList] = useState<MangaData[]>([]);
+    const [mangas_list, setMangasList] = useState<KitsuMangaData[]>([]);
 
     useEffect(() => {
         async function _getManga() {
             try {
-                let tmp_mangas_list: MangaData[] = [];
+                let tmp_mangas_list: KitsuMangaData[] = [];
                 // for (const id of personal_library_list) {
-                const response = await getMangaDetailFromApi('one piece');
-                tmp_mangas_list.push(response);
+                const response = await searchMangasFromApi({
+                    search_text: 'one piece',
+                });
+                // tmp_mangas_list.push(response);
                 // }
                 setMangasList(tmp_mangas_list);
             } catch (error) {

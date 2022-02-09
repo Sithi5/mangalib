@@ -2,30 +2,30 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Button, StyleSheet, TextInput, View } from 'react-native';
 
 import DisplayLoading from './DisplayLoading';
-import { getMangaDetailFromApi } from '../api/KitsuApi';
 import AppStyles, { DEFAULT_MARGIN, ORANGE, WHITE } from '../globals/AppStyles';
+import { searchMangasFromApi } from '../api/KitsuApi';
 
-import type { SearchStackScreenProps } from '../navigations/Types';
-import type { MangaData } from '../types/MangaData';
+import type { KitsuMangaData } from '../api/KitsuTypes';
+import type { SearchStackScreenProps } from '../navigations/NavigationsTypes';
 
 export default function SearchScreen({}: SearchStackScreenProps<'Search'>) {
     const [is_loading, setLoading] = useState(true);
-    const [mangas_list, setMangasList] = useState<MangaData[]>([]);
-    const search_title = useRef('');
+    const [mangas_list, setMangasList] = useState<KitsuMangaData[]>([]);
+    const search_text = useRef('');
     const next_page_url = useRef<string | undefined>();
 
-    async function _getMangas({
+    async function _searchMangas({
         clear_mangas_list = false,
     }: {
         clear_mangas_list: boolean;
     }) {
-        if (search_title.current.length > 0) {
+        if (search_text.current.length > 0) {
             try {
                 setLoading(true);
-                let response = await getMangaDetailFromApi(
-                    search_title.current,
-                    next_page_url.current
-                );
+                let response = await searchMangasFromApi({
+                    search_text: search_text.current,
+                    next_page_url: next_page_url.current,
+                });
                 if (response) {
                     next_page_url.current = response.links.next;
                     if (clear_mangas_list) {
@@ -42,9 +42,9 @@ export default function SearchScreen({}: SearchStackScreenProps<'Search'>) {
         }
     }
 
-    function _newMangasSearch() {
+    function _newSearch() {
         next_page_url.current = undefined;
-        _getMangas({ clear_mangas_list: true });
+        _searchMangas({ clear_mangas_list: true });
     }
 
     return (
@@ -53,15 +53,15 @@ export default function SearchScreen({}: SearchStackScreenProps<'Search'>) {
                 style={styles.text_input}
                 placeholder="Titre du film"
                 onChangeText={(text) => {
-                    search_title.current = text;
+                    search_text.current = text;
                 }}
-                onSubmitEditing={_newMangasSearch}
+                onSubmitEditing={_newSearch}
             />
             <View style={styles.button_search_view}>
                 <Button
                     color={ORANGE}
                     title="Rechercher"
-                    onPress={_newMangasSearch}
+                    onPress={_newSearch}
                 />
             </View>
             {/* <DisplayMoviesList

@@ -1,6 +1,5 @@
-import { PAGE_LIMIT } from '../globals/API';
-
-import type { MangaData } from '../types/MangaData';
+import { KITSU_PAGE_LIMIT } from '../globals/API';
+import { KitsuSearchMangaTitleResponse } from './KitsuTypes';
 
 const API_BASE_URL = 'https://kitsu.io/api/edge/';
 const HEADERS = {
@@ -8,27 +7,26 @@ const HEADERS = {
     'Content-Type': 'application/vnd.api+json',
 };
 
-type GetMangaDetailResponse = {
-    data: MangaData[];
-    links: { first: string; next: string; last: string };
-    meta: number;
+type Args = {
+    search_text: string;
+    next_page_url?: string | undefined;
 };
 
-export async function getMangaDetailFromApi(
-    manga_title: string,
-    next_page_url: string | undefined
-): Promise<GetMangaDetailResponse | undefined> {
+export async function searchMangasFromApi({
+    search_text,
+    next_page_url = undefined,
+}: Args): Promise<KitsuSearchMangaTitleResponse | undefined> {
     const url = next_page_url
         ? next_page_url
         : API_BASE_URL +
           'manga?' +
           encodeURI(
               'filter[text]=' +
-                  manga_title +
+                  search_text +
                   '&page[offset]=' +
                   0 +
                   '&page[limit]=' +
-                  PAGE_LIMIT
+                  KITSU_PAGE_LIMIT
           );
 
     console.log('url = ', url);
