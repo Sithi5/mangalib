@@ -54,23 +54,16 @@ export type RootBottomTabNavigationProp<
 export type SearchStackNavigationProp<T extends keyof SearchStackParamList> =
     CompositeNavigationProp<
         NativeStackNavigationProp<SearchStackParamList, T>,
-        BottomTabNavigationProp<
-            RootBottomTabParamList,
-            keyof RootBottomTabParamList
-        >
-    >;
+        RootBottomTabNavigationProp<keyof RootBottomTabParamList>
+    >; // ⚠️ Unfortunately not working because of nested generic type ?
 
-// CompositeNavigationProp<
-// NativeStackNavigationProp<SearchStackParamList, "Search">,
-// BottomTabNavigationProp<RootBottomTabParamList, keyof RootBottomTabParamList>>
+export type SearchScreenNavigationProp = CompositeNavigationProp<
+    NativeStackNavigationProp<SearchStackParamList, 'Search'>,
+    RootBottomTabNavigationProp<keyof RootBottomTabParamList>
+>;
 
 declare global {
     namespace ReactNavigation {
         interface RootParamList extends RootBottomTabParamList {}
     }
 }
-
-// Type 'CompositeNavigationProp<NativeStackNavigationProp<SearchStackParamList, "Search">, BottomTabNavigationProp<RootBottomTabParamList, keyof RootBottomTabParamList>>' is not assignable to type 'SearchStackNavigationProp<"Search">'.
-//   Type 'CompositeNavigationProp<NativeStackNavigationProp<SearchStackParamList, "Search">, BottomTabNavigationProp<RootBottomTabParamList, keyof RootBottomTabParamList>>' is not assignable to type '{ dispatch(action: Readonly<{ type: string; payload?: object | undefined; source?: string | undefined; target?: string | undefined; }> | ((state: StackNavigationState<SearchStackParamList>) => Readonly<...>)): void; ... 6 more ...; getState(): StackNavigationState<...>; }'.
-//     The types returned by 'getState()' are incompatible between these types.
-//       Type 'Readonly<{ key: string; index: number; routeNames: string[]; history?: unknown[] | undefined; routes: NavigationRoute<ParamListBase, string>[]; type: string; stale: false; }>' is not assignable to type 'StackNavigationState<SearchStackParamList>'.

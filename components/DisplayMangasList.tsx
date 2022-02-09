@@ -1,16 +1,17 @@
+import { NavigationRouteContext } from '@react-navigation/native';
 import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import type { KitsuData } from '../api/KitsuTypes';
 import { WHITE } from '../globals/AppStyles';
 import type { Id } from '../globals/GlobalTypes';
-import type { SearchStackNavigationProp } from '../navigations/NavigationsTypes';
+import type { SearchScreenNavigationProp } from '../navigations/NavigationsTypes';
 import MemoizedMangaItem, { MANGA_ITEM_HEIGHT } from './MangaItem';
 import type { FunctionSearchMangaArgs } from './SearchScreen';
 
 const SEPARATOR_HEIGHT = 5;
 
 type Props = {
-    navigation: SearchStackNavigationProp<'Search'>;
+    navigation: SearchScreenNavigationProp;
     mangas_list: KitsuData[];
     last_page_reached: boolean;
     _searchMangas: ({}: FunctionSearchMangaArgs) => Promise<void>;

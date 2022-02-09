@@ -1,13 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button, StyleSheet, TextInput, View } from 'react-native';
-
-import DisplayLoading from './DisplayLoading';
-import AppStyles, { DEFAULT_MARGIN, ORANGE, WHITE } from '../globals/AppStyles';
 import { searchMangasFromApi } from '../api/KitsuApi';
-import DisplayMangasList from './DisplayMangasList';
-
 import type { KitsuData } from '../api/KitsuTypes';
+import AppStyles, { DEFAULT_MARGIN, ORANGE, WHITE } from '../globals/AppStyles';
 import type { SearchStackScreenProps } from '../navigations/NavigationsTypes';
+import DisplayLoading from './DisplayLoading';
+import DisplayMangasList from './DisplayMangasList';
 
 export type FunctionSearchMangaArgs = {
     new_search?: boolean;
