@@ -1,24 +1,19 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-// import { getImageFromTMDBApi } from '../api/TMDBApi';
-
-// Redux
-import { useAppSelector } from '../redux/Hooks';
-
-// Component
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FadeIn from '../animations/FadeIn';
-
-// Types
-import { Id } from '../globals/GlobalTypes';
-import { KitsuData } from '../api/KitsuTypes';
 import { getMangaImageFromApi } from '../api/KitsuApi';
+import { KitsuData } from '../api/KitsuTypes';
+import AppStyles from '../globals/AppStyles';
+import { Id } from '../globals/GlobalTypes';
+
+export const MANGA_ITEM_HEIGHT = 190;
 
 type Props = {
     manga: KitsuData;
     _navigateToMangaDetails: (manga_id: Id) => void;
 };
 
-export default function MovieItems(props: Props) {
+export default React.memo(function MangaItem(props: Props) {
     const { manga, _navigateToMangaDetails } = props;
 
     function _getMangaTitle(): string {
@@ -55,42 +50,50 @@ export default function MovieItems(props: Props) {
     // }
 
     return (
-        <FadeIn>
-            <TouchableOpacity
-                style={styles.main_container}
-                onPress={() => _navigateToMangaDetails(manga.id)}
-            >
-                <Image source={{ uri: image_url }} style={styles.manga_image} />
-                <View style={styles.content_main_container}>
-                    <View style={styles.content_top_container}>
-                        {/* {_displayFavoriteImage()} */}
-                        <Text style={styles.title_text}>{manga_title}</Text>
-                        <Text style={styles.rating_text}>
-                            {manga.attributes.averageRating}
-                        </Text>
-                    </View>
+        <View style={AppStyles.main_container}>
+            <FadeIn>
+                <TouchableOpacity
+                    style={styles.manga_item_container}
+                    onPress={() => _navigateToMangaDetails(manga.id)}
+                >
+                    <Image
+                        source={{ uri: image_url }}
+                        style={styles.manga_image}
+                    />
+                    <View style={styles.content_main_container}>
+                        <View style={styles.content_top_container}>
+                            {/* {_displayFavoriteImage()} */}
+                            <Text style={styles.title_text}>{manga_title}</Text>
+                            <Text style={styles.rating_text}>
+                                {manga.attributes.averageRating}
+                            </Text>
+                        </View>
 
-                    <View style={styles.content_middle_container}>
-                        <Text style={styles.synopsis_text} numberOfLines={6}>
-                            {manga.attributes.synopsis}
-                        </Text>
+                        <View style={styles.content_middle_container}>
+                            <Text
+                                style={styles.synopsis_text}
+                                numberOfLines={6}
+                            >
+                                {manga.attributes.synopsis}
+                            </Text>
+                        </View>
+                        <View style={styles.content_bottom_container}>
+                            <Text style={styles.start_date_text}>
+                                {manga.attributes.startDate}
+                            </Text>
+                        </View>
                     </View>
-                    <View style={styles.content_bottom_container}>
-                        <Text style={styles.start_date_text}>
-                            {manga.attributes.startDate}
-                        </Text>
-                    </View>
-                </View>
-            </TouchableOpacity>
-        </FadeIn>
+                </TouchableOpacity>
+            </FadeIn>
+        </View>
     );
-}
+});
 
 const styles = StyleSheet.create({
-    main_container: {
+    manga_item_container: {
+        height: MANGA_ITEM_HEIGHT,
         backgroundColor: 'lightgrey',
         flexDirection: 'row',
-        height: 190,
     },
     manga_image: {
         width: 120,

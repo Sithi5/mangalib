@@ -1,13 +1,14 @@
-import React from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import MangaItem from './MangaItem';
-
-// Types
-import type { Id } from '../globals/GlobalTypes';
+import React from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
 import type { KitsuData } from '../api/KitsuTypes';
+import { WHITE } from '../globals/AppStyles';
+import type { Id } from '../globals/GlobalTypes';
 import type { SearchStackScreenProps } from '../navigations/NavigationsTypes';
+import MemoizedMangaItem, { MANGA_ITEM_HEIGHT } from './MangaItem';
 import type { FunctionSearchMangaArgs } from './SearchScreen';
+
+const SEPARATOR_HEIGHT = 5;
 
 type Props = {
     mangas_list: KitsuData[];
@@ -29,13 +30,19 @@ export default function DisplayMangasList(props: Props) {
         <FlatList
             data={mangas_list}
             keyExtractor={(item) => item.id.toString()}
+            ItemSeparatorComponent={() => (
+                <View style={styles.separator_container}></View>
+            )}
+            getItemLayout={(data, index) => ({
+                length: MANGA_ITEM_HEIGHT + SEPARATOR_HEIGHT,
+                offset: (MANGA_ITEM_HEIGHT + SEPARATOR_HEIGHT) * index,
+                index,
+            })}
             renderItem={({ item }) => (
-                <View style={styles.movie_items_container}>
-                    <MangaItem
-                        manga={item}
-                        _navigateToMangaDetails={_navigateToMangaDetails}
-                    />
-                </View>
+                <MemoizedMangaItem
+                    manga={item}
+                    _navigateToMangaDetails={_navigateToMangaDetails}
+                />
             )}
             onEndReachedThreshold={0.5}
             onEndReached={() => {
@@ -51,9 +58,8 @@ export default function DisplayMangasList(props: Props) {
 }
 
 const styles = StyleSheet.create({
-    movie_items_container: {
-        backgroundColor: 'white',
-        paddingTop: 5,
-        paddingLeft: 5,
+    separator_container: {
+        height: SEPARATOR_HEIGHT,
+        backgroundColor: WHITE,
     },
 });
