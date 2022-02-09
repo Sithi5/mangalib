@@ -13,7 +13,9 @@ export type FunctionSearchMangaArgs = {
     new_search?: boolean;
 };
 
-export default function SearchScreen({}: SearchStackScreenProps<'Search'>) {
+export default function SearchScreen({
+    navigation,
+}: SearchStackScreenProps<'Search'>) {
     const [is_loading, setLoading] = useState(false);
     const [mangas_list, setMangasList] = useState<KitsuData[]>([]);
     const search_text = useRef('');
@@ -79,6 +81,7 @@ export default function SearchScreen({}: SearchStackScreenProps<'Search'>) {
                 />
             </View>
             <DisplayMangasList
+                navigation={navigation}
                 mangas_list={mangas_list}
                 last_page_reached={last_page_reached.current}
                 _searchMangas={_searchMangas}

@@ -1,20 +1,19 @@
-import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import * as React from 'react';
 import { Image, StyleSheet } from 'react-native';
-
-// Components
-import TestScreen from '../components/TestScreen';
+import MangaDetailsScreen from '../components/MangaDetailsScreen';
 import PersonalLibraryScreen from '../components/PersonalLibraryScreen';
 import SearchScreen from '../components/SearchScreen';
-
+// Components
+import TestScreen from '../components/TestScreen';
+import { GREY, LIGHTGREY, ORANGE, WHITE } from '../globals/AppStyles';
 // Type
 import type {
     PersonalLibraryStackParamList,
-    SearchStackParamList,
     RootBottomTabParamList,
+    SearchStackParamList,
 } from './NavigationsTypes';
-import { GREY, LIGHTGREY, ORANGE, WHITE } from '../globals/AppStyles';
 
 const PersonalLibraryStack =
     createNativeStackNavigator<PersonalLibraryStackParamList>();
@@ -45,6 +44,14 @@ function SearchStackNavigator() {
                 options={{
                     headerShown: false,
                     title: 'Search a manga',
+                }}
+            />
+            <SearchStack.Screen
+                name="MangaDetails"
+                component={MangaDetailsScreen}
+                options={{
+                    headerShown: false,
+                    title: 'Details',
                 }}
             />
         </SearchStack.Navigator>

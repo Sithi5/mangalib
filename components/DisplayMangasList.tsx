@@ -1,29 +1,31 @@
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import type { KitsuData } from '../api/KitsuTypes';
 import { WHITE } from '../globals/AppStyles';
 import type { Id } from '../globals/GlobalTypes';
-import type { SearchStackScreenProps } from '../navigations/NavigationsTypes';
+import type { SearchStackNavigationProp } from '../navigations/NavigationsTypes';
 import MemoizedMangaItem, { MANGA_ITEM_HEIGHT } from './MangaItem';
 import type { FunctionSearchMangaArgs } from './SearchScreen';
 
 const SEPARATOR_HEIGHT = 5;
 
 type Props = {
+    navigation: SearchStackNavigationProp<'Search'>;
     mangas_list: KitsuData[];
     last_page_reached: boolean;
     _searchMangas: ({}: FunctionSearchMangaArgs) => Promise<void>;
 };
 
 export default function DisplayMangasList(props: Props) {
-    const { mangas_list, last_page_reached = true, _searchMangas } = props;
-
-    const navigation =
-        useNavigation<SearchStackScreenProps<'Search'>>().navigation;
+    const {
+        navigation,
+        mangas_list,
+        last_page_reached = true,
+        _searchMangas,
+    } = props;
 
     function _navigateToMangaDetails(id: Id) {
-        // navigation.navigate();
+        navigation.navigate('Test');
     }
 
     return (
