@@ -4,73 +4,85 @@ import { Button, StyleSheet, TextInput, View } from 'react-native';
 import DisplayLoading from './DisplayLoading';
 import AppStyles, { DEFAULT_MARGIN, ORANGE, WHITE } from '../globals/AppStyles';
 import { searchMangasFromApi } from '../api/KitsuApi';
+import DisplayMangasList from './DisplayMangasList';
 
-import type { KitsuMangaData } from '../api/KitsuTypes';
+import type { KitsuData } from '../api/KitsuTypes';
 import type { SearchStackScreenProps } from '../navigations/NavigationsTypes';
 
+export type FunctionSearchMangaArgs = {
+    new_search?: boolean;
+};
+
 export default function SearchScreen({}: SearchStackScreenProps<'Search'>) {
-    const [is_loading, setLoading] = useState(true);
-    const [mangas_list, setMangasList] = useState<KitsuMangaData[]>([]);
+    const [is_loading, setLoading] = useState(false);
+    const [mangas_list, setMangasList] = useState<KitsuData[]>([]);
     const search_text = useRef('');
     const next_page_url = useRef<string | undefined>();
+    const last_page_reached = useRef<boolean>(false);
 
     async function _searchMangas({
-        clear_mangas_list = false,
-    }: {
-        clear_mangas_list: boolean;
-    }) {
+        new_search = false,
+    }: FunctionSearchMangaArgs) {
         if (search_text.current.length > 0) {
-            try {
-                setLoading(true);
-                let response = await searchMangasFromApi({
-                    search_text: search_text.current,
-                    next_page_url: next_page_url.current,
-                });
-                if (response) {
-                    next_page_url.current = response.links.next;
-                    if (clear_mangas_list) {
-                        setMangasList(response.data);
-                    } else {
-                        setMangasList(mangas_list.concat(response.data));
+            if (new_search === true) {
+                next_page_url.current = undefined;
+                last_page_reached.current = false;
+            }
+            if (last_page_reached.current === false) {
+                try {
+                    setLoading(true);
+                    let response = await searchMangasFromApi({
+                        search_text: search_text.current,
+                        next_page_url: next_page_url.current,
+                    });
+                    if (response) {
+                        if (response.links.next) {
+                            next_page_url.current = response.links.next;
+                        } else {
+                            last_page_reached.current = true;
+                        }
+
+                        if (new_search === true) {
+                            setMangasList(response.data);
+                        } else {
+                            setMangasList(mangas_list.concat(response.data));
+                        }
                     }
+                } catch (error) {
+                    console.error(error);
+                } finally {
+                    setLoading(false);
                 }
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setLoading(false);
             }
         }
-    }
-
-    function _newSearch() {
-        next_page_url.current = undefined;
-        _searchMangas({ clear_mangas_list: true });
     }
 
     return (
         <View style={AppStyles.main_container}>
             <TextInput
                 style={styles.text_input}
-                placeholder="Titre du film"
+                placeholder="Manga title"
                 onChangeText={(text) => {
                     search_text.current = text;
                 }}
-                onSubmitEditing={_newSearch}
+                onSubmitEditing={() => {
+                    _searchMangas({ new_search: true });
+                }}
             />
             <View style={styles.button_search_view}>
                 <Button
                     color={ORANGE}
                     title="Rechercher"
-                    onPress={_newSearch}
+                    onPress={() => {
+                        _searchMangas({ new_search: true });
+                    }}
                 />
             </View>
-            {/* <DisplayMoviesList
-                navigation={navigation}
-                movies_data={movies_data}
-                page={page}
-                total_page={total_page}
-                _loadMovies={_loadMovies}
-            /> */}
+            <DisplayMangasList
+                mangas_list={mangas_list}
+                last_page_reached={last_page_reached.current}
+                _searchMangas={_searchMangas}
+            />
             <DisplayLoading is_loading={is_loading} />
         </View>
     );

@@ -1,58 +1,49 @@
 import React from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
-
-// Components
-import MoviesItems from './MovieItem';
+import { useNavigation } from '@react-navigation/native';
+import MangaItem from './MangaItem';
 
 // Types
-import type { SearchNavigationProp } from './SearchScreen';
-import type { FavoritesNavigationProp } from './FavoritesScreen';
-import type { MangaData } from './PersonalPersonalLibraryScreen';
 import type { Id } from '../globals/GlobalTypes';
-
-type Navigation = SearchNavigationProp | FavoritesNavigationProp;
+import type { KitsuData } from '../api/KitsuTypes';
+import type { SearchStackScreenProps } from '../navigations/NavigationsTypes';
+import type { FunctionSearchMangaArgs } from './SearchScreen';
 
 type Props = {
-    navigation: Navigation;
-    mangas_list: MangaData[];
-    page: number;
-    total_page: number;
+    mangas_list: KitsuData[];
+    last_page_reached: boolean;
+    _searchMangas: ({}: FunctionSearchMangaArgs) => Promise<void>;
 };
 
-function isSearchNavigationProp(
-    navigation: Navigation
-): navigation is SearchNavigationProp {
-    return (navigation as SearchNavigationProp).navigate !== undefined;
-}
-
 export default function DisplayMangasList(props: Props) {
-    const { navigation, mangas_list, page, total_page } = props;
+    const { mangas_list, last_page_reached = true, _searchMangas } = props;
 
-    function _navigateToMovieDetails(id: Id) {
-        if (isSearchNavigationProp(navigation)) {
-            // Tricks with user-defined type guard for TypeScript to be happy,  the else is actually useless here.
-            navigation.navigate('MovieDetails', { id: id });
-        } else {
-            navigation.navigate('MovieDetails', { id: id });
-        }
+    const navigation =
+        useNavigation<SearchStackScreenProps<'Search'>>().navigation;
+
+    function _navigateToMangaDetails(id: Id) {
+        // navigation.navigate();
     }
 
     return (
         <FlatList
-            data={movies_data}
+            data={mangas_list}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
                 <View style={styles.movie_items_container}>
-                    <MoviesItems
-                        movie={item}
-                        _navigateToMovieDetails={_navigateToMovieDetails}
+                    <MangaItem
+                        manga={item}
+                        _navigateToMangaDetails={_navigateToMangaDetails}
                     />
                 </View>
             )}
             onEndReachedThreshold={0.5}
             onEndReached={() => {
-                if (page < total_page && _loadMovies !== undefined) {
-                    _loadMovies();
+                if (
+                    last_page_reached === false &&
+                    _searchMangas !== undefined
+                ) {
+                    _searchMangas({});
                 }
             }}
         />

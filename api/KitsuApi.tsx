@@ -1,13 +1,16 @@
 import { KITSU_PAGE_LIMIT } from '../globals/API';
+import { Id } from '../globals/GlobalTypes';
 import { KitsuSearchMangaTitleResponse } from './KitsuTypes';
 
 const API_BASE_URL = 'https://kitsu.io/api/edge/';
+const API_MEDIA_BASE_URL = 'https://media.kitsu.io/';
+
 const HEADERS = {
     Accept: 'application/vnd.api+json',
     'Content-Type': 'application/vnd.api+json',
 };
 
-type Args = {
+type ArgsSearchMangasFromApi = {
     search_text: string;
     next_page_url?: string | undefined;
 };
@@ -15,7 +18,9 @@ type Args = {
 export async function searchMangasFromApi({
     search_text,
     next_page_url = undefined,
-}: Args): Promise<KitsuSearchMangaTitleResponse | undefined> {
+}: ArgsSearchMangasFromApi): Promise<
+    KitsuSearchMangaTitleResponse | undefined
+> {
     const url = next_page_url
         ? next_page_url
         : API_BASE_URL +
@@ -28,9 +33,7 @@ export async function searchMangasFromApi({
                   '&page[limit]=' +
                   KITSU_PAGE_LIMIT
           );
-
-    console.log('url = ', url);
-
+    // console.log('\nKITSU GET REQUEST: ', url);
     try {
         const response = await fetch(url, {
             method: 'GET',
@@ -41,6 +44,27 @@ export async function searchMangasFromApi({
     } catch (error) {
         console.error(error);
     }
+}
+
+type ArgsGetMangaImageFromApi = {
+    manga_id: Id;
+    format: 'original' | 'small' | 'tiny' | 'medium' | 'large';
+};
+
+// getImageFromTMDBApi(manga.poster_path, 'w300');
+export function getMangaImageFromApi({
+    manga_id,
+    format = 'original',
+}: ArgsGetMangaImageFromApi): string {
+    const url =
+        API_MEDIA_BASE_URL +
+        'manga/poster_images/' +
+        manga_id +
+        '/' +
+        format +
+        '.jpg';
+    // console.log('\nKITSU IMAGE URL CREATION: ', url);
+    return url;
 }
 
 // export function getImageFromTMDBApi(
