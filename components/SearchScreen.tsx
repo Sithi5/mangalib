@@ -102,9 +102,4 @@ const styles = StyleSheet.create({
         marginLeft: DEFAULT_MARGIN,
         marginRight: DEFAULT_MARGIN,
     },
-    movie_items_container: {
-        backgroundColor: WHITE,
-        paddingTop: DEFAULT_MARGIN,
-        paddingLeft: DEFAULT_MARGIN,
-    },
 });
