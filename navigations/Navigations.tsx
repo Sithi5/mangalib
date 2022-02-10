@@ -42,7 +42,7 @@ function SearchStackNavigator() {
                 name="Search"
                 component={SearchScreen}
                 options={{
-                    headerShown: false,
+                    headerShown: true,
                     title: 'Search a manga',
                 }}
             />
@@ -50,7 +50,7 @@ function SearchStackNavigator() {
                 name="MangaDetails"
                 component={MangaDetailsScreen}
                 options={{
-                    headerShown: false,
+                    headerShown: true,
                     title: 'Details',
                 }}
             />
@@ -79,7 +79,7 @@ export default function RootBottomTabNavigator() {
                 name="SearchStack"
                 component={SearchStackNavigator}
                 options={{
-                    headerShown: true,
+                    headerShown: false,
                     title: 'Search Manga',
                     tabBarIcon: ({ color }) => {
                         const image_name = '../images/icon_search.png';

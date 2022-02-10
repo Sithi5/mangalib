@@ -1,6 +1,6 @@
 import {
-    BottomTabScreenProps,
     BottomTabNavigationProp,
+    BottomTabScreenProps,
 } from '@react-navigation/bottom-tabs';
 import type {
     CompositeNavigationProp,
@@ -51,11 +51,11 @@ export type RootBottomTabNavigationProp<
     T extends keyof RootBottomTabParamList
 > = BottomTabNavigationProp<RootBottomTabParamList, T>;
 
-export type SearchStackNavigationProp<T extends keyof SearchStackParamList> =
-    CompositeNavigationProp<
-        NativeStackNavigationProp<SearchStackParamList, T>,
-        RootBottomTabNavigationProp<keyof RootBottomTabParamList>
-    >; // ⚠️ Unfortunately not working because of nested generic type ?
+// type SearchStackNavigationProp<T extends keyof SearchStackParamList> =
+//     CompositeNavigationProp<
+//         NativeStackNavigationProp<SearchStackParamList, T>,
+//         RootBottomTabNavigationProp<keyof RootBottomTabParamList>
+//     >; // ⚠️ Don't use! Unfortunately not working because of nested generic type ?
 
 export type SearchScreenNavigationProp = CompositeNavigationProp<
     NativeStackNavigationProp<SearchStackParamList, 'Search'>,

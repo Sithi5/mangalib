@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Button, StyleSheet, TextInput, View } from 'react-native';
 import { searchMangasFromApi } from '../api/KitsuApi';
-import type { KitsuData } from '../api/KitsuTypes';
+import type { KitsuMangaData } from '../api/KitsuTypes';
 import AppStyles, { DEFAULT_MARGIN, ORANGE, WHITE } from '../globals/AppStyles';
 import type { SearchStackScreenProps } from '../navigations/NavigationsTypes';
 import DisplayLoading from './DisplayLoading';
@@ -15,7 +15,7 @@ export default function SearchScreen({
     navigation,
 }: SearchStackScreenProps<'Search'>) {
     const [is_loading, setLoading] = useState(false);
-    const [mangas_list, setMangasList] = useState<KitsuData[]>([]);
+    const [mangas_list, setMangasList] = useState<KitsuMangaData[]>([]);
     const search_text = useRef('');
     const next_page_url = useRef<string | undefined>();
     const last_page_reached = useRef<boolean>(false);

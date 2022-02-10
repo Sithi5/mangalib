@@ -12,7 +12,6 @@ export type KitsuMangaAttributes = {
     chapterCount: number;
     id: Id;
     synopsis: string;
-    synopsis: description;
     titles: {
         en: string;
         en_jp: string;
@@ -27,16 +26,38 @@ export type KitsuMangaAttributes = {
     status: string;
 };
 
-export type KitsuData = {
+export type KitsuMangaData = {
     attributes: KitsuMangaAttributes;
-    id: number;
+    id: Id;
     links: {};
     relationships: {};
     type: string;
 };
 
-export type KitsuSearchMangaTitleResponse = {
-    data: KitsuData[];
+// Functions returns
+export type SearchMangaKitsuResponse = {
+    data: KitsuMangaData[];
     links: { first: string; next?: string; last: string; prev?: string };
     meta: number;
+};
+
+export type GetMangaDetailsKitsuResponse = {
+    data: KitsuMangaData;
+    links: { first: string; next?: string; last: string; prev?: string };
+    meta: number;
+};
+
+// Functions args
+export type ArgsGetMangaImageFromApi = {
+    manga_id: Id;
+    format: 'original' | 'small' | 'tiny' | 'medium' | 'large';
+};
+
+export type ArgsSearchMangasFromApi = {
+    search_text: string;
+    next_page_url?: string | undefined;
+};
+
+export type ArgsGetMangaDetailsFromApi = {
+    manga_id: Id;
 };

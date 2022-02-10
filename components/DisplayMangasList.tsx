@@ -1,7 +1,7 @@
 import { NavigationRouteContext } from '@react-navigation/native';
 import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import type { KitsuData } from '../api/KitsuTypes';
+import type { KitsuMangaData } from '../api/KitsuTypes';
 import { WHITE } from '../globals/AppStyles';
 import type { Id } from '../globals/GlobalTypes';
 import type { SearchScreenNavigationProp } from '../navigations/NavigationsTypes';
@@ -12,7 +12,7 @@ const SEPARATOR_HEIGHT = 5;
 
 type Props = {
     navigation: SearchScreenNavigationProp;
-    mangas_list: KitsuData[];
+    mangas_list: KitsuMangaData[];
     last_page_reached: boolean;
     _searchMangas: ({}: FunctionSearchMangaArgs) => Promise<void>;
 };
@@ -26,7 +26,7 @@ export default function DisplayMangasList(props: Props) {
     } = props;
 
     function _navigateToMangaDetails(id: Id) {
-        navigation.navigate('Test');
+        navigation.navigate('MangaDetails', { id });
     }
 
     return (

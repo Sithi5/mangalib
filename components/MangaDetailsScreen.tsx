@@ -1,16 +1,107 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+    Image,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native';
+import { getMangaDetailsFromApi, getMangaImageFromApi } from '../api/KitsuApi';
+import { KitsuMangaData } from '../api/KitsuTypes';
 import AppStyles from '../globals/AppStyles';
 import { Id } from '../globals/GlobalTypes';
 import { SearchStackScreenProps } from '../navigations/NavigationsTypes';
+import DisplayLoading from './DisplayLoading';
+import getMangaTitle from './GetMangaTitle';
 
-export default function MovieDetailsScreen({
+export default function MangaDetailsScreen({
     route,
 }: SearchStackScreenProps<'MangaDetails'>) {
+    const [is_loading, setLoading] = useState(true);
+    const [manga, setManga] = useState<KitsuMangaData>();
     const id: Id = route.params.id;
+
+    useEffect(() => {
+        async function _getMangaDetails() {
+            try {
+                const response = await getMangaDetailsFromApi({ manga_id: id });
+                if (response) {
+                    console.log(
+                        'response.data ',
+                        response.data.attributes.titles.en_jp
+                    );
+                    setManga(response.data);
+                }
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        _getMangaDetails();
+    }, [id]);
+
+    function _displayMangaDetails() {
+        if (manga != undefined) {
+            const image_url = getMangaImageFromApi({
+                manga_id: id,
+                format: 'small',
+            });
+
+            return (
+                <ScrollView style={styles.scrollview_container}>
+                    <Image
+                        source={{ uri: image_url }}
+                        style={styles.manga_image}
+                    />
+                    <View style={styles.content_main_container}>
+                        <View style={styles.content_title_container}>
+                            <Text style={styles.title_text}>
+                                {getMangaTitle({ manga: manga })}
+                            </Text>
+                            {/* <TouchableOpacity
+                                onPress={() => {
+                                    dispatch(updateFavorites(id));
+                                }}
+                            >
+                                {_displayFavoriteImage()}
+                            </TouchableOpacity> */}
+                        </View>
+                        <View style={styles.content_overview_container}>
+                            <Text style={styles.overview_text}>
+                                {manga.attributes.synopsis}
+                            </Text>
+                        </View>
+                        <View style={styles.content_bottom_container}>
+                            {/* <Text style={styles.bottom_text}>
+                                Released: {_displayDate()}
+                            </Text> */}
+                            <Text style={styles.bottom_text}>
+                                Vote: {manga.attributes.averageRating} / 100
+                            </Text>
+                            {/* <Text style={styles.bottom_text}>
+                                Budget: {_displayBudget()}
+                            </Text>
+                            <Text style={styles.bottom_text}>
+                                Genres: {_displayGenres()}
+                            </Text>
+                            <Text style={styles.bottom_text}>
+                                Production companies:{' '}
+                                {_displayProductionCompanies()}
+                            </Text>
+                            {_displayFloatingActionButton()} */}
+                        </View>
+                    </View>
+                </ScrollView>
+            );
+        }
+    }
+
     return (
         <View style={AppStyles.main_container}>
-            <Text>id = {id}</Text>
+            <DisplayLoading is_loading={is_loading} />
+            {_displayMangaDetails()}
         </View>
     );
 }
@@ -19,7 +110,7 @@ const styles = StyleSheet.create({
     scrollview_container: {
         flex: 1,
     },
-    movie_image: {
+    manga_image: {
         flex: 3,
         height: 150,
         margin: 5,
