@@ -60,7 +60,7 @@ export default function SearchScreen({
     return (
         <View style={AppStyles.main_container}>
             <TextInput
-                style={styles.text_input}
+                style={AppStyles.text_input}
                 placeholder="Manga title"
                 onChangeText={(text) => {
                     search_text.current = text;
@@ -69,10 +69,10 @@ export default function SearchScreen({
                     _searchMangas({ new_search: true });
                 }}
             />
-            <View style={styles.button_search_view}>
+            <View style={AppStyles.button_search}>
                 <Button
                     color={ORANGE}
-                    title="Rechercher"
+                    title="Search"
                     onPress={() => {
                         _searchMangas({ new_search: true });
                     }}
@@ -89,17 +89,4 @@ export default function SearchScreen({
     );
 }
 
-const styles = StyleSheet.create({
-    text_input: {
-        marginLeft: DEFAULT_MARGIN,
-        marginRight: DEFAULT_MARGIN,
-        height: 50,
-        borderColor: WHITE,
-        borderWidth: 1,
-        paddingLeft: DEFAULT_MARGIN,
-    },
-    button_search_view: {
-        marginLeft: DEFAULT_MARGIN,
-        marginRight: DEFAULT_MARGIN,
-    },
-});
+const styles = StyleSheet.create({});
