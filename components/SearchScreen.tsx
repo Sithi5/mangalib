@@ -2,10 +2,10 @@ import React, { useRef, useState } from 'react';
 import { Button, StyleSheet, TextInput, View } from 'react-native';
 import { searchMangasFromApi } from '../api/KitsuApi';
 import type { KitsuMangaData } from '../api/KitsuTypes';
-import AppStyles, { DEFAULT_MARGIN, ORANGE, WHITE } from '../globals/AppStyles';
+import AppStyles, { ORANGE } from '../globals/AppStyles';
 import type { SearchStackScreenProps } from '../navigations/NavigationsTypes';
 import DisplayLoading from './DisplayLoading';
-import DisplayMangasList from './DisplayMangasList';
+import SearchMangasList from './SearchMangasList';
 
 export type FunctionSearchMangaArgs = {
     new_search?: boolean;
@@ -78,7 +78,7 @@ export default function SearchScreen({
                     }}
                 />
             </View>
-            <DisplayMangasList
+            <SearchMangasList
                 navigation={navigation}
                 mangas_list={mangas_list}
                 last_page_reached={last_page_reached.current}

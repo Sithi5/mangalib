@@ -1,32 +1,22 @@
-import { NavigationRouteContext } from '@react-navigation/native';
 import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import type { KitsuMangaData } from '../api/KitsuTypes';
 import { WHITE } from '../globals/AppStyles';
 import type { Id } from '../globals/GlobalTypes';
-import type {
-    DisplayMangasListNavigationProp,
-    SearchScreenNavigationProp,
-} from '../navigations/NavigationsTypes';
+import type { SearchScreenNavigationProp } from '../navigations/NavigationsTypes';
 import MemoizedMangaItem, { MANGA_ITEM_HEIGHT } from './MangaItem';
 import type { FunctionSearchMangaArgs } from './SearchScreen';
 
 const SEPARATOR_HEIGHT = 5;
 
 type Props = {
-    navigation: DisplayMangasListNavigationProp;
+    navigation: SearchScreenNavigationProp;
     mangas_list: KitsuMangaData[];
     last_page_reached?: boolean;
     _searchMangas?: ({}: FunctionSearchMangaArgs) => Promise<void>;
 };
 
-function isSearchNavigationProp(
-    navigation: DisplayMangasListNavigationProp
-): navigation is SearchScreenNavigationProp {
-    return (navigation as SearchScreenNavigationProp).navigate !== undefined;
-}
-
-export default function DisplayMangasList(props: Props) {
+export default function SearchMangasList(props: Props) {
     const {
         navigation,
         mangas_list,
@@ -35,12 +25,7 @@ export default function DisplayMangasList(props: Props) {
     } = props;
 
     function _navigateToMangaDetails(id: Id) {
-        if (isSearchNavigationProp(navigation)) {
-            // Tricks with user-defined type guard for TypeScript to be happy,  the else is actually useless here.
-            navigation.navigate('MangaDetails', { id });
-        } else {
-            navigation.navigate('MangaDetails', { id });
-        }
+        navigation.navigate('MangaDetails', { id });
     }
 
     return (

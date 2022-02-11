@@ -1,39 +1,32 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, StyleSheet, TextInput, View } from 'react-native';
-import {
-    getMangaDetailsFromApi,
-    getMultipleMangasDetailsFromApi,
-} from '../api/KitsuApi';
+import { getMultipleMangasDetailsFromApi } from '../api/KitsuApi';
 import type { KitsuMangaData } from '../api/KitsuTypes';
-import { OnePieceSearchMangasListIds } from '../data/MangasData';
-import AppStyles, { DEFAULT_MARGIN, ORANGE, WHITE } from '../globals/AppStyles';
-import type { PersonalLibraryStackScreenProps } from '../navigations/NavigationsTypes';
+import { RandomSearchMangasListIds } from '../data/MangasData';
+import AppStyles, { ORANGE } from '../globals/AppStyles';
+import type { LibraryStackScreenProps } from '../navigations/NavigationsTypes';
 import { replaceAll } from '../utils/StringsMethods';
 import DisplayLoading from './DisplayLoading';
-import DisplayMangasList from './DisplayMangasList';
 import getMangaTitle from './GetMangaTitle';
+import LibraryMangasList from './LibraryMangasList';
 
-export default function PersonalLibraryScreen({
+export default function LibraryScreen({
     navigation,
-}: PersonalLibraryStackScreenProps<'PersonalLibrary'>) {
+}: LibraryStackScreenProps<'Library'>) {
     const [is_loading, setLoading] = useState(false);
     const search_text = useRef('');
-    // const personal_library_list = useAppSelector(
-    //     (state) => state.personalLibrary.list
-    // );
-    const personal_library_list = OnePieceSearchMangasListIds;
+    const library_list = RandomSearchMangasListIds;
     const mangas_list = useRef<KitsuMangaData[]>([]);
     const [filtered_mangas_list, setFilteredMangasList] = useState<
         KitsuMangaData[]
     >([]);
-    // console.log('RENDER - PersonalLibraryScreen');
 
     useEffect(() => {
         async function _getManga() {
             try {
                 let tmp_mangas_list: KitsuMangaData[] = [];
                 const responses = await getMultipleMangasDetailsFromApi({
-                    manga_id_list: personal_library_list,
+                    manga_id_list: library_list,
                 });
                 if (responses) {
                     responses.forEach((manga_details_kitsu_response) => {
@@ -53,7 +46,7 @@ export default function PersonalLibraryScreen({
             }
         }
         _getManga();
-    }, [personal_library_list]);
+    }, [library_list]);
 
     function _filterMangas({}) {
         let tmp_filtered_mangas_list: KitsuMangaData[] = [];
@@ -92,7 +85,11 @@ export default function PersonalLibraryScreen({
             <View style={AppStyles.button_search}>
                 <Button color={ORANGE} title="Search" onPress={() => {}} />
             </View>
-            <DisplayMangasList
+            <LibraryMangasList
+                navigation={navigation}
+                mangas_list={filtered_mangas_list}
+            />
+            <LibraryMangasList
                 navigation={navigation}
                 mangas_list={filtered_mangas_list}
             />

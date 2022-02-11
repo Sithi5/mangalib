@@ -3,30 +3,29 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 import { Image, StyleSheet } from 'react-native';
 import MangaDetailsScreen from '../components/MangaDetailsScreen';
-import PersonalLibraryScreen from '../components/PersonalLibraryScreen';
+import LibraryScreen from '../components/LibraryScreen';
 import SearchScreen from '../components/SearchScreen';
 // Components
 import TestScreen from '../components/TestScreen';
 import { GREY, LIGHTGREY, ORANGE, WHITE } from '../globals/AppStyles';
 // Type
 import type {
-    PersonalLibraryStackParamList,
+    LibraryStackParamList,
     RootBottomTabParamList,
     SearchStackParamList,
 } from './NavigationsTypes';
 
-const PersonalLibraryStack =
-    createNativeStackNavigator<PersonalLibraryStackParamList>();
+const LibraryStack = createNativeStackNavigator<LibraryStackParamList>();
 
-function PersonalLibraryStackNavigator() {
+function LibraryStackNavigator() {
     return (
-        <PersonalLibraryStack.Navigator initialRouteName="PersonalLibrary">
-            <PersonalLibraryStack.Screen
-                name="PersonalLibrary"
-                component={PersonalLibraryScreen}
+        <LibraryStack.Navigator initialRouteName="Library">
+            <LibraryStack.Screen
+                name="Library"
+                component={LibraryScreen}
                 options={{
                     headerShown: false,
-                    title: 'Personal Library',
+                    title: 'Library',
                 }}
             />
             <SearchStack.Screen
@@ -37,7 +36,7 @@ function PersonalLibraryStackNavigator() {
                     title: 'Details',
                 }}
             />
-        </PersonalLibraryStack.Navigator>
+        </LibraryStack.Navigator>
     );
 }
 
@@ -71,7 +70,7 @@ const RootBottomTab = createBottomTabNavigator<RootBottomTabParamList>();
 export default function RootBottomTabNavigator() {
     return (
         <RootBottomTab.Navigator
-            initialRouteName="PersonalLibraryStack"
+            initialRouteName="LibraryStack"
             screenOptions={() => ({
                 headerStyle: {
                     backgroundColor: WHITE,
@@ -104,11 +103,11 @@ export default function RootBottomTabNavigator() {
                 }}
             />
             <RootBottomTab.Screen
-                name="PersonalLibraryStack"
-                component={PersonalLibraryStackNavigator}
+                name="LibraryStack"
+                component={LibraryStackNavigator}
                 options={{
                     headerShown: true,
-                    title: 'Personal Library',
+                    title: 'Library',
                     tabBarIcon: ({ color }) => {
                         const image_name = '../images/icon_open_book.png';
                         return (

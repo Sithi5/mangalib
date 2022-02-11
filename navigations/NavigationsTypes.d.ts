@@ -16,7 +16,7 @@ import { Id } from '../globals/GlobalTypes';
 export type RootBottomTabParamList = {
     Test: undefined;
     SearchStack: undefined;
-    PersonalLibraryStack: undefined;
+    LibraryStack: undefined;
 };
 
 export type SearchStackParamList = {
@@ -24,8 +24,8 @@ export type SearchStackParamList = {
     MangaDetails: { id: Id };
 };
 
-export type PersonalLibraryStackParamList = {
-    PersonalLibrary: undefined;
+export type LibraryStackParamList = {
+    Library: undefined;
     MangaDetails: { id: Id };
 };
 
@@ -34,12 +34,11 @@ export type PersonalLibraryStackParamList = {
 export type RootBottomTabScreenProps<T extends keyof RootBottomTabParamList> =
     BottomTabScreenProps<RootBottomTabParamList, T>;
 
-export type PersonalLibraryStackScreenProps<
-    T extends keyof PersonalLibraryStackParamList
-> = CompositeScreenProps<
-    NativeStackScreenProps<PersonalLibraryStackParamList, T>,
-    RootBottomTabScreenProps<keyof RootBottomTabParamList>
->;
+export type LibraryStackScreenProps<T extends keyof LibraryStackParamList> =
+    CompositeScreenProps<
+        NativeStackScreenProps<LibraryStackParamList, T>,
+        RootBottomTabScreenProps<keyof RootBottomTabParamList>
+    >;
 
 export type SearchStackScreenProps<T extends keyof SearchStackParamList> =
     CompositeScreenProps<
@@ -63,13 +62,13 @@ export type SearchScreenNavigationProp = CompositeNavigationProp<
     RootBottomTabNavigationProp<keyof RootBottomTabParamList>
 >;
 
-export type PersonalLibraryScreenNavigationProp = CompositeNavigationProp<
-    NativeStackNavigationProp<PersonalLibraryStackParamList, 'PersonalLibrary'>,
+export type LibraryScreenNavigationProp = CompositeNavigationProp<
+    NativeStackNavigationProp<LibraryStackParamList, 'Library'>,
     RootBottomTabNavigationProp<keyof RootBottomTabParamList>
 >;
 
-export type DisplayMangasListNavigationProp =
-    | PersonalLibraryScreenNavigationProp
+export type MangasListNavigationProp =
+    | LibraryScreenNavigationProp
     | SearchScreenNavigationProp;
 
 declare global {

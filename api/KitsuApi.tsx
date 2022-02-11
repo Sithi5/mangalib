@@ -33,7 +33,7 @@ export async function searchMangasFromApi({
                   '&page[limit]=' +
                   KITSU_PAGE_LIMIT
           );
-    // console.log('\nKITSU GET REQUEST: ', url);
+    console.log('\nKITSU GET REQUEST: ', url);
     try {
         const response = await fetch(url, {
             method: 'GET',

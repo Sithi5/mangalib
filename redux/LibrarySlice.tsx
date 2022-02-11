@@ -1,19 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Id } from '../globals/GlobalTypes';
 
-type PersonalLibraryState = {
+type LibraryState = {
     list: Id[];
 };
 
-const initialState: PersonalLibraryState = {
+const initialState: LibraryState = {
     list: [],
 };
 
-export const personalLibrarySlice = createSlice({
-    name: 'personalLibrary',
+export const LibrarySlice = createSlice({
+    name: 'Library',
     initialState,
     reducers: {
-        updatePersonalLibrary: (state, action: PayloadAction<string>) => {
+        updateLibrary: (state, action: PayloadAction<string>) => {
             if (state.list.includes(action.payload)) {
                 let index = state.list.indexOf(action.payload);
                 if (index > -1) {
@@ -23,12 +23,12 @@ export const personalLibrarySlice = createSlice({
                 state.list.push(action.payload);
             }
         },
-        addToPersonalLibrary: (state, action: PayloadAction<string>) => {
+        addToLibrary: (state, action: PayloadAction<string>) => {
             if (!state.list.includes(action.payload)) {
                 state.list.push(action.payload);
             }
         },
-        removeInPersonalLibrary: (state, action: PayloadAction<string>) => {
+        removeInLibrary: (state, action: PayloadAction<string>) => {
             let index = state.list.indexOf(action.payload);
             if (index > -1) {
                 state.list.splice(index, 1);
@@ -38,10 +38,7 @@ export const personalLibrarySlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {
-    addToPersonalLibrary,
-    removeInPersonalLibrary,
-    updatePersonalLibrary,
-} = personalLibrarySlice.actions;
+export const { addToLibrary, removeInLibrary, updateLibrary } =
+    LibrarySlice.actions;
 
-export default personalLibrarySlice.reducer;
+export default LibrarySlice.reducer;
