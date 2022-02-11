@@ -84,8 +84,10 @@ export type GetMangaDetailsKitsuResponse = {
     meta: Nullable<number>;
 };
 
-export type GetMultipleMangasDetailsKitsuResponse =
-    GetMangaDetailsKitsuResponse[];
+export type GetMultipleMangasDetailsKitsuResponse = (
+    | GetMangaDetailsKitsuResponse
+    | undefined
+)[];
 
 // Functions args
 export type ArgsGetMangaImageFromApi = {

@@ -68,7 +68,7 @@ export async function getMangaDetailsFromApi({
     GetMangaDetailsKitsuResponse | undefined
 > {
     const url = encodeURI(API_BASE_URL + 'manga/' + manga_id);
-    console.log('\nKITSU GET REQUEST: ', url);
+    // console.log('\nKITSU GET REQUEST: ', url);
     try {
         const response = await fetch(url, {
             method: 'GET',
@@ -86,18 +86,11 @@ export async function getMultipleMangasDetailsFromApi({
 }: ArgsGetMultipleMangasDetailsFromApi): Promise<
     GetMultipleMangasDetailsKitsuResponse | undefined
 > {
-    // console.log('\nKITSU GET REQUEST: ', url);
     try {
         const responses = await Promise.all(
-            manga_id_list.map(async (id) => {
-                const url = encodeURI(API_BASE_URL + 'manga/' + id);
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: HEADERS,
-                });
-                const json_response = await response.json();
-                return json_response;
-            })
+            manga_id_list.map(async (id) =>
+                getMangaDetailsFromApi({ manga_id: id })
+            )
         );
         return responses;
     } catch (error) {
