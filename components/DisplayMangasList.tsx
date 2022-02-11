@@ -4,18 +4,27 @@ import { FlatList, StyleSheet, View } from 'react-native';
 import type { KitsuMangaData } from '../api/KitsuTypes';
 import { WHITE } from '../globals/AppStyles';
 import type { Id } from '../globals/GlobalTypes';
-import type { SearchScreenNavigationProp } from '../navigations/NavigationsTypes';
+import type {
+    DisplayMangasListNavigationProp,
+    SearchScreenNavigationProp,
+} from '../navigations/NavigationsTypes';
 import MemoizedMangaItem, { MANGA_ITEM_HEIGHT } from './MangaItem';
 import type { FunctionSearchMangaArgs } from './SearchScreen';
 
 const SEPARATOR_HEIGHT = 5;
 
 type Props = {
-    navigation: SearchScreenNavigationProp;
+    navigation: DisplayMangasListNavigationProp;
     mangas_list: KitsuMangaData[];
-    last_page_reached: boolean;
-    _searchMangas: ({}: FunctionSearchMangaArgs) => Promise<void>;
+    last_page_reached?: boolean;
+    _searchMangas?: ({}: FunctionSearchMangaArgs) => Promise<void>;
 };
+
+function isSearchNavigationProp(
+    navigation: DisplayMangasListNavigationProp
+): navigation is SearchScreenNavigationProp {
+    return (navigation as SearchScreenNavigationProp).navigate !== undefined;
+}
 
 export default function DisplayMangasList(props: Props) {
     const {
@@ -26,7 +35,12 @@ export default function DisplayMangasList(props: Props) {
     } = props;
 
     function _navigateToMangaDetails(id: Id) {
-        navigation.navigate('MangaDetails', { id });
+        if (isSearchNavigationProp(navigation)) {
+            // Tricks with user-defined type guard for TypeScript to be happy,  the else is actually useless here.
+            navigation.navigate('MangaDetails', { id });
+        } else {
+            navigation.navigate('MangaDetails', { id });
+        }
     }
 
     return (

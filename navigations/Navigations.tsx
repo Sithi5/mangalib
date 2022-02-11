@@ -29,6 +29,14 @@ function PersonalLibraryStackNavigator() {
                     title: 'Personal Library',
                 }}
             />
+            <SearchStack.Screen
+                name="MangaDetails"
+                component={MangaDetailsScreen}
+                options={{
+                    headerShown: true,
+                    title: 'Details',
+                }}
+            />
         </PersonalLibraryStack.Navigator>
     );
 }
@@ -63,7 +71,7 @@ const RootBottomTab = createBottomTabNavigator<RootBottomTabParamList>();
 export default function RootBottomTabNavigator() {
     return (
         <RootBottomTab.Navigator
-            initialRouteName="SearchStack"
+            initialRouteName="PersonalLibraryStack"
             screenOptions={() => ({
                 headerStyle: {
                     backgroundColor: WHITE,

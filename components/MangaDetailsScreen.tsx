@@ -27,10 +27,6 @@ export default function MangaDetailsScreen({
             try {
                 const response = await getMangaDetailsFromApi({ manga_id: id });
                 if (response) {
-                    console.log(
-                        'response.data ',
-                        response.data.attributes.titles.en_jp
-                    );
                     setManga(response.data);
                 }
             } catch (error) {

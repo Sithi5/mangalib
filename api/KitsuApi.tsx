@@ -1,10 +1,11 @@
 import { KITSU_PAGE_LIMIT } from '../globals/API';
-import { Id } from '../globals/GlobalTypes';
 import {
     ArgsGetMangaDetailsFromApi,
     ArgsGetMangaImageFromApi,
+    ArgsGetMultipleMangasDetailsFromApi,
     ArgsSearchMangasFromApi,
     GetMangaDetailsKitsuResponse,
+    GetMultipleMangasDetailsKitsuResponse,
     SearchMangaKitsuResponse,
 } from './KitsuTypes';
 
@@ -75,6 +76,30 @@ export async function getMangaDetailsFromApi({
         });
         const json_response = await response.json();
         return json_response;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function getMultipleMangasDetailsFromApi({
+    manga_id_list,
+}: ArgsGetMultipleMangasDetailsFromApi): Promise<
+    GetMultipleMangasDetailsKitsuResponse | undefined
+> {
+    // console.log('\nKITSU GET REQUEST: ', url);
+    try {
+        const responses = await Promise.all(
+            manga_id_list.map(async (id) => {
+                const url = encodeURI(API_BASE_URL + 'manga/' + id);
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: HEADERS,
+                });
+                const json_response = await response.json();
+                return json_response;
+            })
+        );
+        return responses;
     } catch (error) {
         console.error(error);
     }

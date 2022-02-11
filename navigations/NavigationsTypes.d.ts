@@ -26,6 +26,7 @@ export type SearchStackParamList = {
 
 export type PersonalLibraryStackParamList = {
     PersonalLibrary: undefined;
+    MangaDetails: { id: Id };
 };
 
 // Screen props
@@ -61,6 +62,15 @@ export type SearchScreenNavigationProp = CompositeNavigationProp<
     NativeStackNavigationProp<SearchStackParamList, 'Search'>,
     RootBottomTabNavigationProp<keyof RootBottomTabParamList>
 >;
+
+export type PersonalLibraryScreenNavigationProp = CompositeNavigationProp<
+    NativeStackNavigationProp<PersonalLibraryStackParamList, 'PersonalLibrary'>,
+    RootBottomTabNavigationProp<keyof RootBottomTabParamList>
+>;
+
+export type DisplayMangasListNavigationProp =
+    | PersonalLibraryScreenNavigationProp
+    | SearchScreenNavigationProp;
 
 declare global {
     namespace ReactNavigation {
