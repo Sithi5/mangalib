@@ -61,7 +61,7 @@ export default function SearchMangaScreen({
         <View style={AppStyles.main_container}>
             <TextInput
                 style={AppStyles.text_input}
-                placeholder="Manga title"
+                placeholder="Anime title"
                 onChangeText={(text) => {
                     search_text.current = text;
                 }}
