@@ -1,13 +1,13 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { GREY, LIGHTGREY, ORANGE, WHITE } from 'globals/AppStyles';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import {
     MangaDetailsScreen,
     SearchAnimeScreen,
     SearchMangaScreen,
-} from '../Screens';
-import { GREY, LIGHTGREY, ORANGE, WHITE } from '../globals/AppStyles';
+} from 'screens';
 import {
     SearchAnimeStackParamList,
     SearchMangaStackParamList,

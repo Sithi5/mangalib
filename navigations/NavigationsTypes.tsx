@@ -14,7 +14,7 @@ import type {
     NativeStackNavigationProp,
     NativeStackScreenProps,
 } from '@react-navigation/native-stack';
-import { Id } from '../globals/GlobalTypes';
+import { Id } from 'globals/GlobalTypes';
 
 // Param list
 export type RootBottomTabParamList = {

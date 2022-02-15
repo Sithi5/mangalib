@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import type { KitsuMangaData } from '../../api/KitsuTypes';
-import { WHITE } from '../../globals/AppStyles';
-import type { Id } from '../../globals/GlobalTypes';
-import type { SearchMangaScreenNavigationProp } from '../../navigations/NavigationsTypes';
-import type { FunctionSearchMangaArgs } from '../../screens/SearchMangaScreen';
+import type { KitsuMangaData } from 'api/KitsuTypes';
+import { WHITE } from 'globals/AppStyles';
+import type { Id } from 'globals/GlobalTypes';
+import type { SearchMangaScreenNavigationProp } from 'navigations/NavigationsTypes';
+import type { FunctionSearchMangaArgs } from 'screens/SearchMangaScreen';
 import SearchItemsList from './SearchItemsList';
 
 const SEPARATOR_HEIGHT = 5;

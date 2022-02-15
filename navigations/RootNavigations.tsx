@@ -1,10 +1,10 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+// Components
+import { GREY, LIGHTGREY, ORANGE, WHITE } from 'globals/AppStyles';
 import * as React from 'react';
 import { Image, StyleSheet } from 'react-native';
-import { LibraryScreen, MangaDetailsScreen, TestScreen } from '../Screens';
-// Components
-import { GREY, LIGHTGREY, ORANGE, WHITE } from '../globals/AppStyles';
+import { LibraryScreen, MangaDetailsScreen, TestScreen } from 'Screens';
 // Type
 import type {
     LibraryStackParamList,

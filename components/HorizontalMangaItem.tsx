@@ -1,3 +1,7 @@
+import FadeIn from 'animations/FadeIn';
+import { getMangaImageFromApi } from 'api/KitsuApi';
+import { KitsuMangaData } from 'api/KitsuTypes';
+import { Id } from 'globals/GlobalTypes';
 import React from 'react';
 import {
     Dimensions,
@@ -7,12 +11,7 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
-import FadeIn from '../animations/FadeIn';
-import { getMangaImageFromApi } from '../api/KitsuApi';
-import { KitsuMangaData } from '../api/KitsuTypes';
-import AppStyles from '../globals/AppStyles';
-import { Id } from '../globals/GlobalTypes';
-import getMangaTitle from '../utils/GetMangaTitle';
+import getMangaTitle from 'utils/GetMangaTitle';
 
 const WINDOWS_HEIGHT = Dimensions.get('window').height;
 const WINDOWS_WIDTH = Dimensions.get('window').height;

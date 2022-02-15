@@ -1,13 +1,11 @@
+import type { KitsuMangaData } from 'api/KitsuTypes';
+import { WHITE } from 'globals/AppStyles';
+import type { Id } from 'globals/GlobalTypes';
+import type { LibraryScreenNavigationProp } from 'navigations/NavigationsTypes';
 import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import type { KitsuMangaData } from '../api/KitsuTypes';
-import { WHITE } from '../globals/AppStyles';
-import type { Id } from '../globals/GlobalTypes';
-import type { LibraryScreenNavigationProp } from '../navigations/NavigationsTypes';
-import MemoizedHorizontalMangaItem, {
-    HORIZONTAL_MANGA_ITEM_HEIGHT,
-} from './HorizontalMangaItem';
-import type { FunctionSearchMangaArgs } from './Screens/SearchMangaScreen';
+import type { FunctionSearchMangaArgs } from 'screens/SearchMangaScreen';
+import MemoizedHorizontalMangaItem from './HorizontalMangaItem';
 
 const SEPARATOR_WIDTH = 5;
 

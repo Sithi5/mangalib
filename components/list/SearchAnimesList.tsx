@@ -1,11 +1,11 @@
 import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import type { KitsuMangaData } from '../../api/KitsuTypes';
-import { WHITE } from '../../globals/AppStyles';
-import type { Id } from '../../globals/GlobalTypes';
-import type { SearchAnimeScreenNavigationProp } from '../../navigations/NavigationsTypes';
-import MemoizedMangaItem, { MANGA_ITEM_HEIGHT } from '../MangaItem';
-import type { FunctionSearchMangaArgs } from '../../Screens/SearchMangaScreen';
+import type { KitsuMangaData } from 'api/KitsuTypes';
+import { WHITE } from 'globals/AppStyles';
+import type { Id } from 'globals/GlobalTypes';
+import type { SearchAnimeScreenNavigationProp } from 'navigations/NavigationsTypes';
+import MemoizedMangaItem, { MANGA_ITEM_HEIGHT } from 'components/MangaItem';
+import type { FunctionSearchMangaArgs } from 'screens/SearchMangaScreen';
 
 const SEPARATOR_HEIGHT = 5;
 

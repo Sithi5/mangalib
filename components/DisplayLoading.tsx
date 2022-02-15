@@ -1,6 +1,6 @@
+import { ORANGE } from 'globals/AppStyles';
 import React from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
-import { ORANGE } from '../globals/AppStyles';
 
 type Props = {
     is_loading: boolean;

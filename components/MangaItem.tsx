@@ -1,11 +1,11 @@
+import FadeIn from 'animations/FadeIn';
+import { getMangaImageFromApi } from 'api/KitsuApi';
+import { KitsuMangaData } from 'api/KitsuTypes';
+import AppStyles from 'globals/AppStyles';
+import { Id } from 'globals/GlobalTypes';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import FadeIn from '../animations/FadeIn';
-import { getMangaImageFromApi } from '../api/KitsuApi';
-import { KitsuMangaData } from '../api/KitsuTypes';
-import AppStyles from '../globals/AppStyles';
-import { Id } from '../globals/GlobalTypes';
-import getMangaTitle from '../utils/GetMangaTitle';
+import getMangaTitle from 'utils/GetMangaTitle';
 
 export const MANGA_ITEM_HEIGHT = 190;
 
