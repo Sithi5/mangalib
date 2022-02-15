@@ -5,7 +5,7 @@ import type { KitsuMangaData } from 'api/KitsuTypes';
 import { RandomSearchMangasListIds } from 'data/MangasData';
 import AppStyles, { ORANGE } from 'globals/AppStyles';
 import type { LibraryStackScreenProps } from 'navigations/NavigationsTypes';
-import getMangaTitle from 'utils/GetMangaTitle';
+import getMangaTitle from 'utils/GetKitsuItemTitle';
 import { replaceAll } from 'utils/StringsMethods';
 import DisplayLoading from 'components/DisplayLoading';
 import LibraryMangasList from 'components/LibraryMangasList';
@@ -58,7 +58,7 @@ export default function LibraryScreen({
         tmp_filtered_mangas_list = mangas_list.current.filter((manga) => {
             const compared_manga_title = replaceAll({
                 str: getMangaTitle({
-                    manga: manga,
+                    item: manga,
                 }).toLowerCase(),
                 find: ' ',
                 replace: '',

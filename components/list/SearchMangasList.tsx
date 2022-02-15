@@ -1,11 +1,12 @@
-import React from 'react';
-import { StyleSheet } from 'react-native';
 import type { KitsuMangaData } from 'api/KitsuTypes';
+import { MANGA_ITEM_HEIGHT } from 'components/MangaItem';
 import { WHITE } from 'globals/AppStyles';
 import type { Id } from 'globals/GlobalTypes';
 import type { SearchMangaScreenNavigationProp } from 'navigations/NavigationsTypes';
+import React from 'react';
+import { StyleSheet } from 'react-native';
 import type { FunctionSearchMangaArgs } from 'screens/SearchMangaScreen';
-import SearchItemsList from './SearchItemsList';
+import SearchItemsList from 'components/list/SearchItemsList'; // Not using the index.ts to avoid cycle import.
 
 const SEPARATOR_HEIGHT = 5;
 
@@ -30,10 +31,12 @@ export default function SearchMangasList(props: Props) {
 
     return (
         <SearchItemsList
+            item_type="manga"
             items_list={mangas_list}
             last_page_reached={last_page_reached}
             _navigateToItemDetails={_navigateToMangaDetails}
             _searchItems={_searchMangas}
+            item_height={MANGA_ITEM_HEIGHT}
         />
     );
 }

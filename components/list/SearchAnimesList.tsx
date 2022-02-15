@@ -1,11 +1,12 @@
-import React from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
 import type { KitsuMangaData } from 'api/KitsuTypes';
+import { ANIME_ITEM_HEIGHT } from 'components/AnimeItem';
 import { WHITE } from 'globals/AppStyles';
 import type { Id } from 'globals/GlobalTypes';
 import type { SearchAnimeScreenNavigationProp } from 'navigations/NavigationsTypes';
-import MemoizedMangaItem, { MANGA_ITEM_HEIGHT } from 'components/MangaItem';
+import React from 'react';
+import { StyleSheet } from 'react-native';
 import type { FunctionSearchMangaArgs } from 'screens/SearchMangaScreen';
+import SearchItemsList from 'components/list/SearchItemsList'; // Not using the index.ts to avoid cycle import.
 
 const SEPARATOR_HEIGHT = 5;
 
@@ -24,37 +25,18 @@ export default function SearchAnimesList(props: Props) {
         _searchAnimes,
     } = props;
 
-    function _navigateToMangaDetails({ id }: { id: Id }) {
+    function _navigateToAnimeDetails({ id }: { id: Id }) {
         navigation.navigate('AnimeDetails', { id });
     }
 
     return (
-        <FlatList
-            data={animes_list}
-            keyExtractor={(item) => item.id.toString()}
-            ItemSeparatorComponent={() => (
-                <View style={styles.separator_container}></View>
-            )}
-            getItemLayout={(data, index) => ({
-                length: MANGA_ITEM_HEIGHT + SEPARATOR_HEIGHT,
-                offset: (MANGA_ITEM_HEIGHT + SEPARATOR_HEIGHT) * index,
-                index,
-            })}
-            renderItem={({ item }) => (
-                <MemoizedMangaItem
-                    manga={item}
-                    _navigateToItemDetails={_navigateToMangaDetails}
-                />
-            )}
-            onEndReachedThreshold={0.5}
-            onEndReached={() => {
-                if (
-                    last_page_reached === false &&
-                    _searchAnimes !== undefined
-                ) {
-                    _searchAnimes({});
-                }
-            }}
+        <SearchItemsList
+            item_type="anime"
+            items_list={animes_list}
+            last_page_reached={last_page_reached}
+            _navigateToItemDetails={_navigateToAnimeDetails}
+            _searchItems={_searchAnimes}
+            item_height={ANIME_ITEM_HEIGHT}
         />
     );
 }

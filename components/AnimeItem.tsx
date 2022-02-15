@@ -5,23 +5,23 @@ import AppStyles from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import getMangaTitle from 'utils/GetKitsuItemTitle';
+import getKitsuItemTitle from 'utils/GetKitsuItemTitle';
 
-export const MANGA_ITEM_HEIGHT = 190;
+export const ANIME_ITEM_HEIGHT = 190;
 
 type Props = {
-    manga: KitsuMangaData;
+    anime: KitsuMangaData;
     _navigateToItemDetails: ({ id }: { id: Id }) => void;
 };
 
-export default React.memo(function MangaItem(props: Props) {
-    const { manga, _navigateToItemDetails } = props;
+export default React.memo(function AnimeItem(props: Props) {
+    const { anime, _navigateToItemDetails } = props;
 
-    let manga_title = getMangaTitle({ item: manga });
+    let anime_title = getKitsuItemTitle({ item: anime });
 
     const image_url = getItemImageFromApi({
-        id: manga.id,
-        item_type: 'manga',
+        id: anime.id,
+        item_type: 'anime',
         format: 'small',
     });
 
@@ -29,18 +29,18 @@ export default React.memo(function MangaItem(props: Props) {
         <View style={AppStyles.main_container}>
             <FadeIn>
                 <TouchableOpacity
-                    style={styles.manga_item_container}
-                    onPress={() => _navigateToItemDetails({ id: manga.id })}
+                    style={styles.anime_item_container}
+                    onPress={() => _navigateToItemDetails({ id: anime.id })}
                 >
                     <Image
                         source={{ uri: image_url }}
-                        style={styles.manga_image}
+                        style={styles.anime_image}
                     />
                     <View style={styles.content_main_container}>
                         <View style={styles.content_top_container}>
-                            <Text style={styles.title_text}>{manga_title}</Text>
+                            <Text style={styles.title_text}>{anime_title}</Text>
                             <Text style={styles.rating_text}>
-                                {manga.attributes.averageRating}
+                                {anime.attributes.averageRating}
                             </Text>
                         </View>
 
@@ -49,12 +49,12 @@ export default React.memo(function MangaItem(props: Props) {
                                 style={styles.synopsis_text}
                                 numberOfLines={6}
                             >
-                                {manga.attributes.synopsis}
+                                {anime.attributes.synopsis}
                             </Text>
                         </View>
                         <View style={styles.content_bottom_container}>
                             <Text style={styles.start_date_text}>
-                                {manga.attributes.startDate}
+                                {anime.attributes.startDate}
                             </Text>
                         </View>
                     </View>
@@ -65,12 +65,12 @@ export default React.memo(function MangaItem(props: Props) {
 });
 
 const styles = StyleSheet.create({
-    manga_item_container: {
-        height: MANGA_ITEM_HEIGHT,
+    anime_item_container: {
+        height: ANIME_ITEM_HEIGHT,
         backgroundColor: 'lightgrey',
         flexDirection: 'row',
     },
-    manga_image: {
+    anime_image: {
         width: 120,
         height: 180,
         margin: 5,

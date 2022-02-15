@@ -1,7 +1,7 @@
 import { KITSU_PAGE_LIMIT } from '../globals/API';
 import {
+    ArgsGetImageFromApi,
     ArgsGetMangaDetailsFromApi,
-    ArgsGetMangaImageFromApi,
     ArgsGetMultipleMangasDetailsFromApi,
     ArgsSearchMangasFromApi,
     GetMangaDetailsKitsuResponse,
@@ -46,14 +46,16 @@ export async function searchMangasFromApi({
     }
 }
 
-export function getMangaImageFromApi({
-    manga_id,
+export function getItemImageFromApi({
+    id,
+    item_type,
     format = 'original',
-}: ArgsGetMangaImageFromApi): string {
+}: ArgsGetImageFromApi): string {
     const url = encodeURI(
         API_MEDIA_BASE_URL +
-            'manga/poster_images/' +
-            manga_id +
+            item_type +
+            '/poster_images/' +
+            id +
             '/' +
             format +
             '.jpg'

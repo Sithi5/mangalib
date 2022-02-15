@@ -1,5 +1,5 @@
 import FadeIn from 'animations/FadeIn';
-import { getMangaImageFromApi } from 'api/KitsuApi';
+import { getItemImageFromApi } from 'api/KitsuApi';
 import { KitsuMangaData } from 'api/KitsuTypes';
 import { Id } from 'globals/GlobalTypes';
 import React from 'react';
@@ -11,7 +11,7 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
-import getMangaTitle from 'utils/GetMangaTitle';
+import getMangaTitle from 'utils/GetKitsuItemTitle';
 
 const WINDOWS_HEIGHT = Dimensions.get('window').height;
 const WINDOWS_WIDTH = Dimensions.get('window').height;
@@ -25,10 +25,11 @@ type Props = {
 export default React.memo(function HorizontalMangaItem(props: Props) {
     const { manga, _navigateToMangaDetails } = props;
 
-    let manga_title = getMangaTitle({ manga: manga });
+    let manga_title = getMangaTitle({ item: manga });
 
-    const image_url = getMangaImageFromApi({
-        manga_id: manga.id,
+    const image_url = getItemImageFromApi({
+        id: manga.id,
+        item_type: 'manga',
         format: 'small',
     });
 

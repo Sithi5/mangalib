@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { GREY, LIGHTGREY, ORANGE, WHITE } from 'globals/AppStyles';
 import * as React from 'react';
 import { Image, StyleSheet } from 'react-native';
-import { LibraryScreen, MangaDetailsScreen, TestScreen } from 'Screens';
+import { LibraryScreen, MangaDetailsScreen, TestScreen } from 'screens';
 // Type
 import type {
     LibraryStackParamList,
