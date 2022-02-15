@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import {
-    Image,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from 'react-native';
-import { getMangaDetailsFromApi, getMangaImageFromApi } from '../api/KitsuApi';
-import { KitsuMangaData } from '../api/KitsuTypes';
-import AppStyles from '../globals/AppStyles';
-import { Id } from '../globals/GlobalTypes';
-import { SearchMangaStackScreenProps } from '../navigations/NavigationsTypes';
-import DisplayLoading from '../components/DisplayLoading';
-import getMangaTitle from '../utils/GetMangaTitle';
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { getMangaDetailsFromApi, getMangaImageFromApi } from 'api/KitsuApi';
+import { KitsuMangaData } from 'api/KitsuTypes';
+import DisplayLoading from 'components/DisplayLoading';
+import AppStyles from 'globals/AppStyles';
+import { Id } from 'globals/GlobalTypes';
+import { SearchMangaStackScreenProps } from 'navigations/NavigationsTypes';
+import getMangaTitle from 'utils/GetMangaTitle';
 
 export default function MangaDetailsScreen({
     route,

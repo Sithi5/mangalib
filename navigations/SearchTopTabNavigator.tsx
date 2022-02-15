@@ -2,9 +2,11 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import MangaDetailsScreen from '../components/Screens/MangaDetailsScreen';
-import SearchAnimeScreen from '../components/Screens/SearchAnimeScreen';
-import SearchMangaScreen from '../components/Screens/SearchMangaScreen';
+import {
+    MangaDetailsScreen,
+    SearchAnimeScreen,
+    SearchMangaScreen,
+} from '../Screens';
 import { GREY, LIGHTGREY, ORANGE, WHITE } from '../globals/AppStyles';
 import {
     SearchAnimeStackParamList,
@@ -55,7 +57,7 @@ function SearchAnimeStackNavigator() {
                 }}
             />
             <SearchAnimeStack.Screen
-                name="MangaDetails"
+                name="AnimeDetails"
                 component={MangaDetailsScreen}
                 options={{
                     headerShown: true,

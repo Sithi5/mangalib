@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, StyleSheet, TextInput, View } from 'react-native';
-import { getMultipleMangasDetailsFromApi } from '../api/KitsuApi';
-import type { KitsuMangaData } from '../api/KitsuTypes';
-import { RandomSearchMangasListIds } from '../data/MangasData';
-import AppStyles, { ORANGE } from '../globals/AppStyles';
-import type { LibraryStackScreenProps } from '../navigations/NavigationsTypes';
-import getMangaTitle from '../utils/GetMangaTitle';
-import { replaceAll } from '../utils/StringsMethods';
-import DisplayLoading from '../components/DisplayLoading';
-import LibraryMangasList from '../components/LibraryMangasList';
+import { getMultipleMangasDetailsFromApi } from 'api/KitsuApi';
+import type { KitsuMangaData } from 'api/KitsuTypes';
+import { RandomSearchMangasListIds } from 'data/MangasData';
+import AppStyles, { ORANGE } from 'globals/AppStyles';
+import type { LibraryStackScreenProps } from 'navigations/NavigationsTypes';
+import getMangaTitle from 'utils/GetMangaTitle';
+import { replaceAll } from 'utils/StringsMethods';
+import DisplayLoading from 'components/DisplayLoading';
+import LibraryMangasList from 'components/LibraryMangasList';
 
 export default function LibraryScreen({
     navigation,

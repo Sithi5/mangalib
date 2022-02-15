@@ -1,11 +1,11 @@
 import React, { useRef, useState } from 'react';
 import { Button, StyleSheet, TextInput, View } from 'react-native';
-import { searchMangasFromApi } from '../../api/KitsuApi';
-import type { KitsuMangaData } from '../../api/KitsuTypes';
-import AppStyles, { ORANGE } from '../../globals/AppStyles';
-import type { SearchMangaStackScreenProps } from '../../navigations/NavigationsTypes';
-import DisplayLoading from '../DisplayLoading';
-import SearchMangasList from '../SearchMangasList';
+import { searchMangasFromApi } from 'api/KitsuApi';
+import type { KitsuMangaData } from 'api/KitsuTypes';
+import AppStyles, { ORANGE } from 'globals/AppStyles';
+import type { SearchMangaStackScreenProps } from 'navigations/NavigationsTypes';
+import DisplayLoading from 'components/DisplayLoading';
+import { SearchMangasList } from 'components/list';
 
 export type FunctionSearchMangaArgs = {
     new_search?: boolean;
