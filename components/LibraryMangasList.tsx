@@ -7,7 +7,7 @@ import type { LibraryScreenNavigationProp } from '../navigations/NavigationsType
 import MemoizedHorizontalMangaItem, {
     HORIZONTAL_MANGA_ITEM_HEIGHT,
 } from './HorizontalMangaItem';
-import type { FunctionSearchMangaArgs } from './SearchScreen';
+import type { FunctionSearchMangaArgs } from './Screens/SearchMangaScreen';
 
 const SEPARATOR_WIDTH = 5;
 

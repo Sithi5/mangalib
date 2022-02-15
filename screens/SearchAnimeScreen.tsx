@@ -3,24 +3,24 @@ import { Button, StyleSheet, TextInput, View } from 'react-native';
 import { searchMangasFromApi } from '../api/KitsuApi';
 import type { KitsuMangaData } from '../api/KitsuTypes';
 import AppStyles, { ORANGE } from '../globals/AppStyles';
-import type { SearchStackScreenProps } from '../navigations/NavigationsTypes';
-import DisplayLoading from './DisplayLoading';
-import SearchMangasList from './SearchMangasList';
+import type { SearchAnimeStackScreenProps } from '../navigations/NavigationsTypes';
+import DisplayLoading from '../components/DisplayLoading';
+import { SearchAnimesList } from '../components/list';
 
 export type FunctionSearchMangaArgs = {
     new_search?: boolean;
 };
 
-export default function SearchScreen({
+export default function SearchMangaScreen({
     navigation,
-}: SearchStackScreenProps<'Search'>) {
+}: SearchAnimeStackScreenProps<'SearchAnime'>) {
     const [is_loading, setLoading] = useState(false);
-    const [mangas_list, setMangasList] = useState<KitsuMangaData[]>([]);
+    const [animes_list, setAnimesList] = useState<KitsuMangaData[]>([]);
     const search_text = useRef('');
     const next_page_url = useRef<string | undefined>();
     const last_page_reached = useRef<boolean>(false);
 
-    async function _searchMangas({
+    async function _searchAnimes({
         new_search = false,
     }: FunctionSearchMangaArgs) {
         if (search_text.current.length > 0) {
@@ -43,9 +43,9 @@ export default function SearchScreen({
                         }
 
                         if (new_search === true) {
-                            setMangasList(response.data);
+                            setAnimesList(response.data);
                         } else {
-                            setMangasList(mangas_list.concat(response.data));
+                            setAnimesList(animes_list.concat(response.data));
                         }
                     }
                 } catch (error) {
@@ -66,7 +66,7 @@ export default function SearchScreen({
                     search_text.current = text;
                 }}
                 onSubmitEditing={() => {
-                    _searchMangas({ new_search: true });
+                    _searchAnimes({ new_search: true });
                 }}
             />
             <View style={AppStyles.button_search}>
@@ -74,15 +74,15 @@ export default function SearchScreen({
                     color={ORANGE}
                     title="Search"
                     onPress={() => {
-                        _searchMangas({ new_search: true });
+                        _searchAnimes({ new_search: true });
                     }}
                 />
             </View>
-            <SearchMangasList
+            <SearchAnimesList
                 navigation={navigation}
-                mangas_list={mangas_list}
+                animes_list={animes_list}
                 last_page_reached={last_page_reached.current}
-                _searchMangas={_searchMangas}
+                _searchAnimes={_searchAnimes}
             />
             <DisplayLoading is_loading={is_loading} />
         </View>

@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 
 import { store } from './redux/Store';
-import RootBottomTabNavigator from './navigations/Navigations';
+import RootBottomTabNavigator from './navigations/RootNavigations';
 
 export default function App() {
     return (

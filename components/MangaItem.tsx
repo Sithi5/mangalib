@@ -5,17 +5,17 @@ import { getMangaImageFromApi } from '../api/KitsuApi';
 import { KitsuMangaData } from '../api/KitsuTypes';
 import AppStyles from '../globals/AppStyles';
 import { Id } from '../globals/GlobalTypes';
-import getMangaTitle from './GetMangaTitle';
+import getMangaTitle from '../utils/GetMangaTitle';
 
 export const MANGA_ITEM_HEIGHT = 190;
 
 type Props = {
     manga: KitsuMangaData;
-    _navigateToMangaDetails: (manga_id: Id) => void;
+    _navigateToItemDetails: ({ id }: { id: Id }) => void;
 };
 
 export default React.memo(function MangaItem(props: Props) {
-    const { manga, _navigateToMangaDetails } = props;
+    const { manga, _navigateToItemDetails } = props;
 
     let manga_title = getMangaTitle({ manga: manga });
 
@@ -29,7 +29,7 @@ export default React.memo(function MangaItem(props: Props) {
             <FadeIn>
                 <TouchableOpacity
                     style={styles.manga_item_container}
-                    onPress={() => _navigateToMangaDetails(manga.id)}
+                    onPress={() => _navigateToItemDetails({ id: manga.id })}
                 >
                     <Image
                         source={{ uri: image_url }}

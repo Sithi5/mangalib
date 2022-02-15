@@ -5,10 +5,10 @@ import type { KitsuMangaData } from '../api/KitsuTypes';
 import { RandomSearchMangasListIds } from '../data/MangasData';
 import AppStyles, { ORANGE } from '../globals/AppStyles';
 import type { LibraryStackScreenProps } from '../navigations/NavigationsTypes';
+import getMangaTitle from '../utils/GetMangaTitle';
 import { replaceAll } from '../utils/StringsMethods';
-import DisplayLoading from './DisplayLoading';
-import getMangaTitle from './GetMangaTitle';
-import LibraryMangasList from './LibraryMangasList';
+import DisplayLoading from '../components/DisplayLoading';
+import LibraryMangasList from '../components/LibraryMangasList';
 
 export default function LibraryScreen({
     navigation,

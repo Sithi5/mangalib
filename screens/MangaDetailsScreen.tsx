@@ -11,13 +11,13 @@ import { getMangaDetailsFromApi, getMangaImageFromApi } from '../api/KitsuApi';
 import { KitsuMangaData } from '../api/KitsuTypes';
 import AppStyles from '../globals/AppStyles';
 import { Id } from '../globals/GlobalTypes';
-import { SearchStackScreenProps } from '../navigations/NavigationsTypes';
-import DisplayLoading from './DisplayLoading';
-import getMangaTitle from './GetMangaTitle';
+import { SearchMangaStackScreenProps } from '../navigations/NavigationsTypes';
+import DisplayLoading from '../components/DisplayLoading';
+import getMangaTitle from '../utils/GetMangaTitle';
 
 export default function MangaDetailsScreen({
     route,
-}: SearchStackScreenProps<'MangaDetails'>) {
+}: SearchMangaStackScreenProps<'MangaDetails'>) {
     const [is_loading, setLoading] = useState(true);
     const [manga, setManga] = useState<KitsuMangaData>();
     const id: Id = route.params.id;

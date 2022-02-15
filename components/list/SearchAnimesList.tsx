@@ -1,36 +1,36 @@
 import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import type { KitsuMangaData } from '../api/KitsuTypes';
-import { WHITE } from '../globals/AppStyles';
-import type { Id } from '../globals/GlobalTypes';
-import type { SearchScreenNavigationProp } from '../navigations/NavigationsTypes';
-import MemoizedMangaItem, { MANGA_ITEM_HEIGHT } from './MangaItem';
-import type { FunctionSearchMangaArgs } from './SearchScreen';
+import type { KitsuMangaData } from '../../api/KitsuTypes';
+import { WHITE } from '../../globals/AppStyles';
+import type { Id } from '../../globals/GlobalTypes';
+import type { SearchAnimeScreenNavigationProp } from '../../navigations/NavigationsTypes';
+import MemoizedMangaItem, { MANGA_ITEM_HEIGHT } from '../MangaItem';
+import type { FunctionSearchMangaArgs } from '../../Screens/SearchMangaScreen';
 
 const SEPARATOR_HEIGHT = 5;
 
 type Props = {
-    navigation: SearchScreenNavigationProp;
-    mangas_list: KitsuMangaData[];
+    navigation: SearchAnimeScreenNavigationProp;
+    animes_list: KitsuMangaData[];
     last_page_reached?: boolean;
-    _searchMangas?: ({}: FunctionSearchMangaArgs) => Promise<void>;
+    _searchAnimes?: ({}: FunctionSearchMangaArgs) => Promise<void>;
 };
 
-export default function SearchMangasList(props: Props) {
+export default function SearchAnimesList(props: Props) {
     const {
         navigation,
-        mangas_list,
+        animes_list,
         last_page_reached = true,
-        _searchMangas,
+        _searchAnimes,
     } = props;
 
-    function _navigateToMangaDetails(id: Id) {
-        navigation.navigate('MangaDetails', { id });
+    function _navigateToMangaDetails({ id }: { id: Id }) {
+        navigation.navigate('AnimeDetails', { id });
     }
 
     return (
         <FlatList
-            data={mangas_list}
+            data={animes_list}
             keyExtractor={(item) => item.id.toString()}
             ItemSeparatorComponent={() => (
                 <View style={styles.separator_container}></View>
@@ -43,16 +43,16 @@ export default function SearchMangasList(props: Props) {
             renderItem={({ item }) => (
                 <MemoizedMangaItem
                     manga={item}
-                    _navigateToMangaDetails={_navigateToMangaDetails}
+                    _navigateToItemDetails={_navigateToMangaDetails}
                 />
             )}
             onEndReachedThreshold={0.5}
             onEndReached={() => {
                 if (
                     last_page_reached === false &&
-                    _searchMangas !== undefined
+                    _searchAnimes !== undefined
                 ) {
-                    _searchMangas({});
+                    _searchAnimes({});
                 }
             }}
         />

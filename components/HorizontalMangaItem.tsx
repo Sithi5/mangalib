@@ -12,7 +12,7 @@ import { getMangaImageFromApi } from '../api/KitsuApi';
 import { KitsuMangaData } from '../api/KitsuTypes';
 import AppStyles from '../globals/AppStyles';
 import { Id } from '../globals/GlobalTypes';
-import getMangaTitle from './GetMangaTitle';
+import getMangaTitle from '../utils/GetMangaTitle';
 
 const WINDOWS_HEIGHT = Dimensions.get('window').height;
 const WINDOWS_WIDTH = Dimensions.get('window').height;
