@@ -14,7 +14,7 @@ const RootBottomTab = createBottomTabNavigator<RootBottomTabParamList>();
 export default function RootBottomTabNavigator() {
     return (
         <RootBottomTab.Navigator
-            initialRouteName="SearchTopTab"
+            initialRouteName="LibraryStack"
             screenOptions={() => ({
                 headerStyle: {
                     backgroundColor: WHITE,

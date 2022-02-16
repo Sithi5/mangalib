@@ -1,12 +1,12 @@
 import type { KitsuData } from 'api/KitsuTypes';
-import { WHITE } from 'globals/AppStyles';
+import AppStyles, { DEFAULT_MARGIN, WHITE } from 'globals/AppStyles';
 import type { Id } from 'globals/GlobalTypes';
 import type { LibraryScreenNavigationProp } from 'navigations/NavigationsTypes';
 import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import LibraryItem from '../LibraryItem';
 
-const SEPARATOR_WIDTH = 5;
+const SEPARATOR_HEIGHT = 15;
 
 type Props = {
     navigation: LibraryScreenNavigationProp;
@@ -21,16 +21,19 @@ export default function LibraryMangasList(props: Props) {
     }
 
     return (
-        <View>
+        <View style={AppStyles.main_container}>
             <FlatList
                 data={mangas_list}
+                horizontal={false}
                 keyExtractor={(item) => item.id.toString()}
+                numColumns={3}
                 ItemSeparatorComponent={() => (
                     <View style={styles.separator_container}></View>
                 )}
-                renderItem={({ item }) => (
+                renderItem={({ item, index }) => (
                     <LibraryItem
                         manga={item}
+                        index={index}
                         _navigateToMangaDetails={_navigateToMangaDetails}
                     />
                 )}
@@ -41,7 +44,6 @@ export default function LibraryMangasList(props: Props) {
 
 const styles = StyleSheet.create({
     separator_container: {
-        width: SEPARATOR_WIDTH,
-        backgroundColor: WHITE,
+        height: DEFAULT_MARGIN,
     },
 });

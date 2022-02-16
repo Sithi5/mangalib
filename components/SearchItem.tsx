@@ -71,6 +71,7 @@ export default React.memo(function SearchItem(props: Props) {
 
 const styles = StyleSheet.create({
     item_container: {
+        flex: 1,
         height: ITEM_HEIGHT,
         backgroundColor: WHITE,
         flexDirection: 'row',

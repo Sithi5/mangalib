@@ -1,14 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Button, StyleSheet, TextInput, View } from 'react-native';
 import { getMultipleItemsDetailsFromApi } from 'api/KitsuApi';
 import type { KitsuData } from 'api/KitsuTypes';
+import { SearchTextInput } from 'components/inputs';
+import { TextInputOnSubmitFunctionArgs } from 'components/inputs/SearchTextInput';
+import { LibraryMangasList } from 'components/lists';
+import Loading from 'components/Loading';
 import { RandomSearchMangasListIds } from 'data/MangasData';
-import AppStyles, { ORANGE } from 'globals/AppStyles';
+import AppStyles from 'globals/AppStyles';
 import type { LibraryStackScreenProps } from 'navigations/NavigationsTypes';
+import React, { useEffect, useRef, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import getMangaTitle from 'utils/GetKitsuItemTitle';
 import { replaceAll } from 'utils/StringsMethods';
-import Loading from 'components/Loading';
-import { LibraryMangasList } from 'components/lists';
 
 export default function LibraryScreen({
     navigation,
@@ -49,39 +51,38 @@ export default function LibraryScreen({
         _getManga();
     }, [library_list]);
 
-    function _filterMangas({}) {
-        let tmp_filtered_mangas_list: KitsuData[] = [];
-        const compared_search_title = replaceAll({
-            str: search_text.current.toLowerCase(),
-            find: ' ',
-            replace: '',
-        });
-        tmp_filtered_mangas_list = mangas_list.current.filter((manga) => {
-            const compared_manga_title = replaceAll({
-                str: getMangaTitle({
-                    item: manga,
-                }).toLowerCase(),
+    function _filterMangas({ clear_search }: TextInputOnSubmitFunctionArgs) {
+        if (search_text.current.length === 0 || clear_search) {
+            setFilteredMangasList(mangas_list.current);
+        } else {
+            let tmp_filtered_mangas_list: KitsuData[] = [];
+            const compared_search_title = replaceAll({
+                str: search_text.current.toLowerCase(),
                 find: ' ',
                 replace: '',
             });
-            if (compared_manga_title.includes(compared_search_title)) {
-                return manga;
-            }
-        });
-        setFilteredMangasList(tmp_filtered_mangas_list);
+            tmp_filtered_mangas_list = mangas_list.current.filter((manga) => {
+                const compared_manga_title = replaceAll({
+                    str: getMangaTitle({
+                        item: manga,
+                    }).toLowerCase(),
+                    find: ' ',
+                    replace: '',
+                });
+                if (compared_manga_title.includes(compared_search_title)) {
+                    return manga;
+                }
+            });
+            setFilteredMangasList(tmp_filtered_mangas_list);
+        }
     }
 
     return (
         <View style={AppStyles.main_container}>
-            <TextInput
-                style={AppStyles.search_text_input}
+            <SearchTextInput
                 placeholder="Manga title"
-                onChangeText={(text) => {
-                    search_text.current = text;
-                }}
-                onSubmitEditing={() => {
-                    _filterMangas({});
-                }}
+                search_text={search_text}
+                on_submit_function={_filterMangas}
             />
             <LibraryMangasList
                 navigation={navigation}

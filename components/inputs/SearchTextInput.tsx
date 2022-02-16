@@ -1,10 +1,17 @@
-import { DEFAULT_MARGIN, DEFAULT_RADIUS, GREY, WHITE } from 'globals/AppStyles';
+import {
+    BLACK,
+    DEFAULT_MARGIN,
+    DEFAULT_RADIUS,
+    GREY,
+    WHITE,
+} from 'globals/AppStyles';
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 export type TextInputOnSubmitFunctionArgs = {
     new_search?: boolean;
+    clear_search?: boolean;
 };
 
 type Props = {
@@ -22,6 +29,8 @@ export default function SearchTextInput(props: Props) {
             <TextInput
                 style={styles.search_text_input}
                 placeholder={placeholder}
+                placeholderTextColor={GREY}
+                selectionColor={GREY}
                 value={text}
                 onChangeText={(text) => {
                     search_text.current = text;
@@ -35,6 +44,10 @@ export default function SearchTextInput(props: Props) {
             <TouchableOpacity
                 onPress={() => {
                     setText('');
+                    search_text.current = '';
+                    on_submit_function({
+                        clear_search: true,
+                    });
                 }}
             >
                 <Icon
@@ -54,6 +67,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: WHITE,
+        margin: DEFAULT_MARGIN,
         borderRadius: DEFAULT_RADIUS,
     },
     search_icon: {
@@ -61,11 +75,10 @@ const styles = StyleSheet.create({
     },
     search_text_input: {
         flex: 1,
-        marginTop: DEFAULT_MARGIN,
-        height: 50,
+        height: 30,
         borderColor: WHITE,
         borderWidth: 1,
         paddingLeft: DEFAULT_MARGIN,
-        borderRadius: DEFAULT_RADIUS,
+        color: BLACK,
     },
 });

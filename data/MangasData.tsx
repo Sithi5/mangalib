@@ -8,6 +8,9 @@ export const RandomSearchMangasListIds: Id[] = [
     '7176',
     '57',
     '111',
+    '37',
+    '1173',
+    '766',
 ];
 
 const OnePieceSearchMangasList: KitsuData[] = [
