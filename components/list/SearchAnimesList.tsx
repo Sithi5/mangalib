@@ -1,18 +1,19 @@
-import type { KitsuMangaData } from 'api/KitsuTypes';
-import { ANIME_ITEM_HEIGHT } from 'components/AnimeItem';
+import type { KitsuData } from 'api/KitsuTypes';
 import { WHITE } from 'globals/AppStyles';
 import type { Id } from 'globals/GlobalTypes';
 import type { SearchAnimeScreenNavigationProp } from 'navigations/NavigationsTypes';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import type { FunctionSearchMangaArgs } from 'screens/SearchMangaScreen';
-import SearchItemsList from 'components/list/SearchItemsList'; // Not using the index.ts to avoid cycle import.
+import SearchItemsList, {
+    NavigateToItemDetailsArgs,
+} from 'components/list/SearchItemsList'; // Not using the index.ts to avoid cycle import.
 
 const SEPARATOR_HEIGHT = 5;
 
 type Props = {
     navigation: SearchAnimeScreenNavigationProp;
-    animes_list: KitsuMangaData[];
+    animes_list: KitsuData[];
     last_page_reached?: boolean;
     _searchAnimes?: ({}: FunctionSearchMangaArgs) => Promise<void>;
 };
@@ -25,7 +26,7 @@ export default function SearchAnimesList(props: Props) {
         _searchAnimes,
     } = props;
 
-    function _navigateToAnimeDetails({ id }: { id: Id }) {
+    function _navigateToAnimeDetails({ id }: NavigateToItemDetailsArgs) {
         navigation.navigate('AnimeDetails', { id });
     }
 
@@ -36,7 +37,6 @@ export default function SearchAnimesList(props: Props) {
             last_page_reached={last_page_reached}
             _navigateToItemDetails={_navigateToAnimeDetails}
             _searchItems={_searchAnimes}
-            item_height={ANIME_ITEM_HEIGHT}
         />
     );
 }

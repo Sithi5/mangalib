@@ -1,6 +1,5 @@
-import type { KitsuMangaData } from 'api/KitsuTypes';
-import AnimeItem from 'components/AnimeItem';
-import MangaItem from 'components/MangaItem';
+import type { KitsuData, KitsuItemType } from 'api/KitsuTypes';
+import DisplayItem, { ITEM_HEIGHT } from 'components/DisplayItem';
 import { WHITE } from 'globals/AppStyles';
 import type { Id } from 'globals/GlobalTypes';
 import React from 'react';
@@ -9,12 +8,15 @@ import type { FunctionSearchMangaArgs } from 'screens/SearchMangaScreen';
 
 const SEPARATOR_HEIGHT = 5;
 
+export type NavigateToItemDetailsArgs = {
+    id: Id;
+};
+
 type Props = {
-    item_type: 'manga' | 'anime';
-    items_list: KitsuMangaData[];
+    item_type: KitsuItemType;
+    items_list: KitsuData[];
     last_page_reached?: boolean;
-    item_height?: number;
-    _navigateToItemDetails: ({ id }: { id: Id }) => void;
+    _navigateToItemDetails: ({ id }: NavigateToItemDetailsArgs) => void;
     _searchItems?: ({}: FunctionSearchMangaArgs) => Promise<void>;
 };
 
@@ -25,7 +27,6 @@ export default function SearchItemsList(props: Props) {
         last_page_reached = true,
         _navigateToItemDetails,
         _searchItems,
-        item_height,
     } = props;
 
     return (
@@ -35,30 +36,18 @@ export default function SearchItemsList(props: Props) {
             ItemSeparatorComponent={() => (
                 <View style={styles.separator_container}></View>
             )}
-            getItemLayout={
-                item_height
-                    ? (data, index) => ({
-                          length: item_height + SEPARATOR_HEIGHT,
-                          offset: (item_height + SEPARATOR_HEIGHT) * index,
-                          index,
-                      })
-                    : undefined
-            }
-            renderItem={
-                item_type === 'manga'
-                    ? ({ item }) => (
-                          <MangaItem
-                              manga={item}
-                              _navigateToItemDetails={_navigateToItemDetails}
-                          />
-                      )
-                    : ({ item }) => (
-                          <AnimeItem
-                              anime={item}
-                              _navigateToItemDetails={_navigateToItemDetails}
-                          />
-                      )
-            }
+            getItemLayout={(data, index) => ({
+                length: ITEM_HEIGHT + SEPARATOR_HEIGHT,
+                offset: (ITEM_HEIGHT + SEPARATOR_HEIGHT) * index,
+                index,
+            })}
+            renderItem={({ item }) => (
+                <DisplayItem
+                    item={item}
+                    item_type={item_type}
+                    _navigateToItemDetails={_navigateToItemDetails}
+                />
+            )}
             onEndReachedThreshold={0.5}
             onEndReached={() => {
                 if (last_page_reached === false && _searchItems !== undefined) {

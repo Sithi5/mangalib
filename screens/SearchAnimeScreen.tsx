@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Button, StyleSheet, TextInput, View } from 'react-native';
-import { searchMangasFromApi } from 'api/KitsuApi';
-import type { KitsuMangaData } from 'api/KitsuTypes';
+import { searchFromApi } from 'api/KitsuApi';
+import type { KitsuData } from 'api/KitsuTypes';
 import AppStyles, { ORANGE } from 'globals/AppStyles';
 import type { SearchAnimeStackScreenProps } from 'navigations/NavigationsTypes';
 import DisplayLoading from 'components/DisplayLoading';
@@ -15,7 +15,7 @@ export default function SearchMangaScreen({
     navigation,
 }: SearchAnimeStackScreenProps<'SearchAnime'>) {
     const [is_loading, setLoading] = useState(false);
-    const [animes_list, setAnimesList] = useState<KitsuMangaData[]>([]);
+    const [animes_list, setAnimesList] = useState<KitsuData[]>([]);
     const search_text = useRef('');
     const next_page_url = useRef<string | undefined>();
     const last_page_reached = useRef<boolean>(false);
@@ -31,7 +31,8 @@ export default function SearchMangaScreen({
             if (last_page_reached.current === false) {
                 try {
                     setLoading(true);
-                    let response = await searchMangasFromApi({
+                    let response = await searchFromApi({
+                        search_type: 'anime',
                         search_text: search_text.current,
                         next_page_url: next_page_url.current,
                     });

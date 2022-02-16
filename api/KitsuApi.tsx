@@ -3,10 +3,10 @@ import {
     ArgsGetImageFromApi,
     ArgsGetMangaDetailsFromApi,
     ArgsGetMultipleMangasDetailsFromApi,
-    ArgsSearchMangasFromApi,
+    ArgsSearchFromApi,
     GetMangaDetailsKitsuResponse,
     GetMultipleMangasDetailsKitsuResponse,
-    SearchMangaKitsuResponse,
+    SearchKitsuResponse,
 } from './KitsuTypes';
 
 const API_BASE_URL = 'https://kitsu.io/api/edge/';
@@ -17,15 +17,17 @@ const HEADERS = {
     'Content-Type': 'application/vnd.api+json',
 };
 
-export async function searchMangasFromApi({
+export async function searchFromApi({
     search_text,
+    search_type = 'manga',
     next_page_url = undefined,
-}: ArgsSearchMangasFromApi): Promise<SearchMangaKitsuResponse | undefined> {
+}: ArgsSearchFromApi): Promise<SearchKitsuResponse | undefined> {
     const url = next_page_url
         ? next_page_url
         : encodeURI(
               API_BASE_URL +
-                  'manga?' +
+                  search_type +
+                  '?' +
                   'filter[text]=' +
                   search_text +
                   '&page[offset]=' +
