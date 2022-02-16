@@ -1,6 +1,6 @@
 import FadeIn from 'animations/FadeIn';
 import { getItemImageFromApi } from 'api/KitsuApi';
-import { KitsuMangaData } from 'api/KitsuTypes';
+import { KitsuData } from 'api/KitsuTypes';
 import { Id } from 'globals/GlobalTypes';
 import React from 'react';
 import {
@@ -18,11 +18,11 @@ const WINDOWS_WIDTH = Dimensions.get('window').height;
 export const HORIZONTAL_MANGA_ITEM_HEIGHT = WINDOWS_WIDTH / 2;
 
 type Props = {
-    manga: KitsuMangaData;
+    manga: KitsuData;
     _navigateToMangaDetails: (manga_id: Id) => void;
 };
 
-export default React.memo(function HorizontalMangaItem(props: Props) {
+export default React.memo(function LibraryItem(props: Props) {
     const { manga, _navigateToMangaDetails } = props;
 
     let manga_title = getMangaTitle({ item: manga });
@@ -39,14 +39,8 @@ export default React.memo(function HorizontalMangaItem(props: Props) {
                 style={styles.manga_item_container}
                 onPress={() => _navigateToMangaDetails(manga.id)}
             >
-                <View style={styles.content_top_container}>
-                    <Text style={styles.title_text}>{manga_title}</Text>
-                </View>
-
+                <Text>{manga_title}</Text>
                 <Image source={{ uri: image_url }} style={styles.manga_image} />
-                <View style={styles.content_bottom_container}>
-                    <Text style={styles.title_text}>{manga_title}</Text>
-                </View>
             </TouchableOpacity>
         </FadeIn>
     );
@@ -54,38 +48,14 @@ export default React.memo(function HorizontalMangaItem(props: Props) {
 
 const styles = StyleSheet.create({
     manga_item_container: {
-        height: HORIZONTAL_MANGA_ITEM_HEIGHT,
+        flex: 1,
         backgroundColor: 'lightgrey',
         flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     manga_image: {
-        width: 120,
-        height: 180,
-        margin: 5,
-        backgroundColor: 'grey',
+        width: 200,
+        height: 200,
     },
-    content_top_container: {
-        flexDirection: 'row',
-        flex: 3,
-    },
-    content_bottom_container: {
-        flexDirection: 'row',
-        flex: 3,
-    },
-    title_text: {
-        textAlign: 'center',
-        flex: 1,
-        flexWrap: 'wrap',
-        fontWeight: 'bold',
-        fontSize: 20,
-    },
-    rating_text: {
-        textAlign: 'right',
-        fontWeight: 'bold',
-        color: 'grey',
-        flex: 1,
-        fontSize: 25,
-    },
-    synopsis_text: { fontStyle: 'italic', color: 'grey' },
-    start_date_text: { textAlign: 'right' },
 });

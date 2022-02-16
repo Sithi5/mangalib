@@ -8,7 +8,7 @@ import type { LibraryStackScreenProps } from 'navigations/NavigationsTypes';
 import getMangaTitle from 'utils/GetKitsuItemTitle';
 import { replaceAll } from 'utils/StringsMethods';
 import Loading from 'components/Loading';
-import LibraryMangasList from 'components/LibraryMangasList';
+import { LibraryMangasList } from 'components/list';
 
 export default function LibraryScreen({
     navigation,
@@ -86,10 +86,6 @@ export default function LibraryScreen({
             <View style={AppStyles.button_search}>
                 <Button color={ORANGE} title="Search" onPress={() => {}} />
             </View>
-            <LibraryMangasList
-                navigation={navigation}
-                mangas_list={filtered_mangas_list}
-            />
             <LibraryMangasList
                 navigation={navigation}
                 mangas_list={filtered_mangas_list}
