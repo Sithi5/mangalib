@@ -1,7 +1,7 @@
 import FadeIn from 'animations/FadeIn';
 import { getItemImageFromApi } from 'api/KitsuApi';
 import { KitsuData, KitsuItemType } from 'api/KitsuTypes';
-import AppStyles from 'globals/AppStyles';
+import AppStyles, { WHITE } from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -30,7 +30,7 @@ export default React.memo(function SearchItem(props: Props) {
         <View style={AppStyles.main_container}>
             <FadeIn>
                 <TouchableOpacity
-                    style={styles.item_item_container}
+                    style={styles.item_container}
                     onPress={() => _navigateToItemDetails({ id: item.id })}
                 >
                     <Image
@@ -66,10 +66,11 @@ export default React.memo(function SearchItem(props: Props) {
 });
 
 const styles = StyleSheet.create({
-    item_item_container: {
+    item_container: {
         height: ITEM_HEIGHT,
-        backgroundColor: 'lightgrey',
+        backgroundColor: WHITE,
         flexDirection: 'row',
+        borderRadius: 15,
     },
     item_image: {
         width: 120,

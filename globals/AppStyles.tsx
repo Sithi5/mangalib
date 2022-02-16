@@ -7,12 +7,14 @@ export const LIGHTGREY = '#e6e6e6';
 export const DEFAULT_MARGIN = 5;
 
 export default StyleSheet.create({
-    main_container: { flex: 1, backgroundColor: WHITE },
+    main_container: { flex: 1, backgroundColor: LIGHTGREY },
     text_input: {
         marginLeft: DEFAULT_MARGIN,
         marginRight: DEFAULT_MARGIN,
+        marginTop: DEFAULT_MARGIN,
         height: 50,
         borderColor: WHITE,
+        backgroundColor: WHITE,
         borderWidth: 1,
         paddingLeft: DEFAULT_MARGIN,
     },
