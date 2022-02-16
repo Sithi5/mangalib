@@ -1,7 +1,7 @@
 import type { KitsuData } from 'api/KitsuTypes';
 import SearchItemsList, {
     NavigateToItemDetailsArgs,
-} from 'components/list/SearchItemsList';
+} from 'components/lists/SearchItemsList';
 import { WHITE } from 'globals/AppStyles';
 import type { SearchAnimeScreenNavigationProp } from 'navigations/NavigationsTypes';
 import React from 'react';

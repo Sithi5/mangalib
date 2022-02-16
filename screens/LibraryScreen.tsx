@@ -8,7 +8,7 @@ import type { LibraryStackScreenProps } from 'navigations/NavigationsTypes';
 import getMangaTitle from 'utils/GetKitsuItemTitle';
 import { replaceAll } from 'utils/StringsMethods';
 import Loading from 'components/Loading';
-import { LibraryMangasList } from 'components/list';
+import { LibraryMangasList } from 'components/lists';
 
 export default function LibraryScreen({
     navigation,

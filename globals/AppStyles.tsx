@@ -9,15 +9,6 @@ export const DEFAULT_RADIUS = 10;
 
 export default StyleSheet.create({
     main_container: { flex: 1, backgroundColor: LIGHTGREY },
-    search_text_input: {
-        marginTop: DEFAULT_MARGIN,
-        height: 50,
-        borderColor: WHITE,
-        backgroundColor: WHITE,
-        borderWidth: 1,
-        paddingLeft: DEFAULT_MARGIN,
-        borderRadius: DEFAULT_RADIUS,
-    },
     button_search: {
         marginLeft: DEFAULT_MARGIN,
         marginRight: DEFAULT_MARGIN,

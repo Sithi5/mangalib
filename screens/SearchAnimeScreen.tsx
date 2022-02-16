@@ -1,11 +1,12 @@
 import { searchFromApi } from 'api/KitsuApi';
 import type { KitsuData } from 'api/KitsuTypes';
-import { SearchAnimesList } from 'components/list';
+import { SearchTextInput } from 'components/inputs';
+import { SearchAnimesList } from 'components/lists';
 import Loading from 'components/Loading';
-import AppStyles, { ORANGE } from 'globals/AppStyles';
+import AppStyles from 'globals/AppStyles';
 import type { SearchAnimeStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useRef, useState } from 'react';
-import { Button, StyleSheet, TextInput, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import SearchStyles from './SearchStyles';
 
 export type FunctionSearchAnimeArgs = {
@@ -61,15 +62,10 @@ export default function SearchMangaScreen({
 
     return (
         <View style={AppStyles.main_container}>
-            <TextInput
-                style={AppStyles.search_text_input}
+            <SearchTextInput
                 placeholder="Anime title"
-                onChangeText={(text) => {
-                    search_text.current = text;
-                }}
-                onSubmitEditing={() => {
-                    _searchAnimes({ new_search: true });
-                }}
+                search_text={search_text}
+                on_submit_function={_searchAnimes}
             />
             <View style={SearchStyles.list_container}>
                 <SearchAnimesList

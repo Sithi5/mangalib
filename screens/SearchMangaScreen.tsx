@@ -1,11 +1,12 @@
-import React, { useRef, useState } from 'react';
-import { Button, StyleSheet, TextInput, View } from 'react-native';
 import { searchFromApi } from 'api/KitsuApi';
 import type { KitsuData } from 'api/KitsuTypes';
-import AppStyles, { ORANGE } from 'globals/AppStyles';
-import type { SearchMangaStackScreenProps } from 'navigations/NavigationsTypes';
+import { SearchTextInput } from 'components/inputs';
+import { SearchMangasList } from 'components/lists';
 import Loading from 'components/Loading';
-import { SearchMangasList } from 'components/list';
+import AppStyles from 'globals/AppStyles';
+import type { SearchMangaStackScreenProps } from 'navigations/NavigationsTypes';
+import React, { useRef, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import SearchStyles from './SearchStyles';
 
 export type FunctionSearchMangaArgs = {
@@ -61,15 +62,10 @@ export default function SearchMangaScreen({
 
     return (
         <View style={AppStyles.main_container}>
-            <TextInput
-                style={AppStyles.search_text_input}
+            <SearchTextInput
                 placeholder="Manga title"
-                onChangeText={(text) => {
-                    search_text.current = text;
-                }}
-                onSubmitEditing={() => {
-                    _searchMangas({ new_search: true });
-                }}
+                search_text={search_text}
+                on_submit_function={_searchMangas}
             />
             <View style={SearchStyles.list_container}>
                 <SearchMangasList

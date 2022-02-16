@@ -7,7 +7,7 @@ import { StyleSheet } from 'react-native';
 import type { FunctionSearchMangaArgs } from 'screens/SearchMangaScreen';
 import SearchItemsList, {
     NavigateToItemDetailsArgs,
-} from 'components/list/SearchItemsList'; // Not using the index.ts to avoid cycle import.
+} from 'components/lists/SearchItemsList'; // Not using the index.ts to avoid cycle import.
 
 const SEPARATOR_HEIGHT = 5;
 
