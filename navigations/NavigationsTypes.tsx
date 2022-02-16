@@ -19,9 +19,9 @@ import { Id } from 'globals/GlobalTypes';
 
 // Param list
 export type RootBottomTabParamList = {
-    Test: undefined;
     SearchTopTab: undefined;
     LibraryStack: undefined;
+    WatchListStack: undefined;
 };
 
 export type SearchTopTabParamList = {
@@ -40,6 +40,11 @@ export type SearchAnimeStackParamList = {
 };
 
 export type LibraryStackParamList = {
+    Library: undefined;
+    ItemDetails: { id: Id; item_type: KitsuItemType };
+};
+
+export type WatchListStackParamList = {
     Library: undefined;
     ItemDetails: { id: Id; item_type: KitsuItemType };
 };

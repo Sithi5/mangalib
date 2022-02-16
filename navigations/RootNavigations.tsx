@@ -1,48 +1,20 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // Components
 import { GREY, LIGHTGREY, ORANGE, WHITE } from 'globals/AppStyles';
 import * as React from 'react';
 import { Image, StyleSheet } from 'react-native';
-import { LibraryScreen, ItemDetailsScreen, TestScreen } from 'screens';
+import LibraryStackNavigator from './LibraryStackNavigator';
 // Type
-import type {
-    LibraryStackParamList,
-    RootBottomTabParamList,
-} from './NavigationsTypes';
+import type { RootBottomTabParamList } from './NavigationsTypes';
 import SearchTopTabNavigator from './SearchTopTabNavigator';
-
-const LibraryStack = createNativeStackNavigator<LibraryStackParamList>();
-
-function LibraryStackNavigator() {
-    return (
-        <LibraryStack.Navigator initialRouteName="Library">
-            <LibraryStack.Screen
-                name="Library"
-                component={LibraryScreen}
-                options={{
-                    headerShown: false,
-                    title: 'Library',
-                }}
-            />
-            <LibraryStack.Screen
-                name="ItemDetails"
-                component={ItemDetailsScreen}
-                options={{
-                    headerShown: true,
-                    title: 'Details',
-                }}
-            />
-        </LibraryStack.Navigator>
-    );
-}
+import WatchListStackNavigator from './WatchListStackNavigator';
 
 const RootBottomTab = createBottomTabNavigator<RootBottomTabParamList>();
 
 export default function RootBottomTabNavigator() {
     return (
         <RootBottomTab.Navigator
-            initialRouteName="SearchTopTab"
+            initialRouteName="LibraryStack"
             screenOptions={() => ({
                 headerStyle: {
                     backgroundColor: WHITE,
@@ -79,7 +51,7 @@ export default function RootBottomTabNavigator() {
                 name="LibraryStack"
                 component={LibraryStackNavigator}
                 options={{
-                    title: 'Library',
+                    title: 'My Library',
                     tabBarIcon: ({ color }) => {
                         const image_name = '../images/icon_open_book.png';
                         return (
@@ -95,12 +67,12 @@ export default function RootBottomTabNavigator() {
                 }}
             />
             <RootBottomTab.Screen
-                name="Test"
-                component={TestScreen}
+                name="WatchListStack"
+                component={WatchListStackNavigator}
                 options={{
-                    title: 'Test',
+                    title: 'My WatchList',
                     tabBarIcon: ({ color }) => {
-                        const image_name = '../images/icon_testing.png';
+                        const image_name = '../images/icon_open_book.png';
                         return (
                             <Image
                                 style={[
