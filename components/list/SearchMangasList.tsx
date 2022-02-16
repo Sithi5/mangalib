@@ -26,16 +26,18 @@ export default function SearchMangasList(props: Props) {
         _searchMangas,
     } = props;
 
-    function _navigateToMangaDetails({ id }: NavigateToItemDetailsArgs) {
-        navigation.navigate('MangaDetails', { id });
+    const item_type = 'manga';
+
+    function _navigateToItemDetails({ id }: NavigateToItemDetailsArgs) {
+        navigation.navigate('ItemDetails', { id: id, item_type: item_type });
     }
 
     return (
         <SearchItemsList
-            item_type="manga"
+            item_type={item_type}
             items_list={mangas_list}
             last_page_reached={last_page_reached}
-            _navigateToItemDetails={_navigateToMangaDetails}
+            _navigateToItemDetails={_navigateToItemDetails}
             _searchItems={_searchMangas}
         />
     );

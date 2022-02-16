@@ -1,10 +1,11 @@
 import type { KitsuData, KitsuItemType } from 'api/KitsuTypes';
-import DisplayItem, { ITEM_HEIGHT } from 'components/DisplayItem';
+import Item, { ITEM_HEIGHT } from 'components/Item';
 import { WHITE } from 'globals/AppStyles';
 import type { Id } from 'globals/GlobalTypes';
 import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import type { FunctionSearchMangaArgs } from 'screens/SearchMangaScreen';
+import { FunctionSearchAnimeArgs } from 'Screens/SearchAnimeScreen';
+import { FunctionSearchMangaArgs } from 'screens/SearchMangaScreen';
 
 const SEPARATOR_HEIGHT = 5;
 
@@ -17,7 +18,9 @@ type Props = {
     items_list: KitsuData[];
     last_page_reached?: boolean;
     _navigateToItemDetails: ({ id }: NavigateToItemDetailsArgs) => void;
-    _searchItems?: ({}: FunctionSearchMangaArgs) => Promise<void>;
+    _searchItems?: ({}:
+        | FunctionSearchMangaArgs
+        | FunctionSearchAnimeArgs) => Promise<void>;
 };
 
 export default function SearchItemsList(props: Props) {
@@ -42,7 +45,7 @@ export default function SearchItemsList(props: Props) {
                 index,
             })}
             renderItem={({ item }) => (
-                <DisplayItem
+                <Item
                     item={item}
                     item_type={item_type}
                     _navigateToItemDetails={_navigateToItemDetails}

@@ -4,7 +4,7 @@ import { searchFromApi } from 'api/KitsuApi';
 import type { KitsuData } from 'api/KitsuTypes';
 import AppStyles, { ORANGE } from 'globals/AppStyles';
 import type { SearchMangaStackScreenProps } from 'navigations/NavigationsTypes';
-import DisplayLoading from 'components/DisplayLoading';
+import Loading from 'components/Loading';
 import { SearchMangasList } from 'components/list';
 
 export type FunctionSearchMangaArgs = {
@@ -85,7 +85,7 @@ export default function SearchMangaScreen({
                 last_page_reached={last_page_reached.current}
                 _searchMangas={_searchMangas}
             />
-            <DisplayLoading is_loading={is_loading} />
+            <Loading is_loading={is_loading} />
         </View>
     );
 }

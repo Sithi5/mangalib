@@ -4,7 +4,7 @@ import { GREY, LIGHTGREY, ORANGE, WHITE } from 'globals/AppStyles';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import {
-    MangaDetailsScreen,
+    ItemDetailsScreen,
     SearchAnimeScreen,
     SearchMangaScreen,
 } from 'screens';
@@ -30,11 +30,11 @@ function SearchMangaStackNavigator() {
                 }}
             />
             <SearchMangaStack.Screen
-                name="MangaDetails"
-                component={MangaDetailsScreen}
+                name="ItemDetails"
+                component={ItemDetailsScreen}
                 options={{
                     headerShown: true,
-                    title: 'Manga Details',
+                    title: 'Details',
                     headerTitleStyle: { color: GREY },
                 }}
             />
@@ -57,8 +57,8 @@ function SearchAnimeStackNavigator() {
                 }}
             />
             <SearchAnimeStack.Screen
-                name="AnimeDetails"
-                component={MangaDetailsScreen}
+                name="ItemDetails"
+                component={ItemDetailsScreen}
                 options={{
                     headerShown: true,
                     title: 'Details',

@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, StyleSheet, TextInput, View } from 'react-native';
-import { getMultipleMangasDetailsFromApi } from 'api/KitsuApi';
-import type { KitsuMangaData } from 'api/KitsuTypes';
+import { getMultipleItemsDetailsFromApi } from 'api/KitsuApi';
+import type { KitsuData } from 'api/KitsuTypes';
 import { RandomSearchMangasListIds } from 'data/MangasData';
 import AppStyles, { ORANGE } from 'globals/AppStyles';
 import type { LibraryStackScreenProps } from 'navigations/NavigationsTypes';
 import getMangaTitle from 'utils/GetKitsuItemTitle';
 import { replaceAll } from 'utils/StringsMethods';
-import DisplayLoading from 'components/DisplayLoading';
+import Loading from 'components/Loading';
 import LibraryMangasList from 'components/LibraryMangasList';
 
 export default function LibraryScreen({
@@ -16,17 +16,18 @@ export default function LibraryScreen({
     const [is_loading, setLoading] = useState(false);
     const search_text = useRef('');
     const library_list = RandomSearchMangasListIds;
-    const mangas_list = useRef<KitsuMangaData[]>([]);
-    const [filtered_mangas_list, setFilteredMangasList] = useState<
-        KitsuMangaData[]
-    >([]);
+    const mangas_list = useRef<KitsuData[]>([]);
+    const [filtered_mangas_list, setFilteredMangasList] = useState<KitsuData[]>(
+        []
+    );
 
     useEffect(() => {
         async function _getManga() {
             try {
-                let tmp_mangas_list: KitsuMangaData[] = [];
-                const responses = await getMultipleMangasDetailsFromApi({
-                    manga_id_list: library_list,
+                let tmp_mangas_list: KitsuData[] = [];
+                const responses = await getMultipleItemsDetailsFromApi({
+                    item_id_list: library_list,
+                    item_type: 'manga',
                 });
                 if (responses) {
                     responses.forEach((manga_details_kitsu_response) => {
@@ -49,7 +50,7 @@ export default function LibraryScreen({
     }, [library_list]);
 
     function _filterMangas({}) {
-        let tmp_filtered_mangas_list: KitsuMangaData[] = [];
+        let tmp_filtered_mangas_list: KitsuData[] = [];
         const compared_search_title = replaceAll({
             str: search_text.current.toLowerCase(),
             find: ' ',
@@ -93,7 +94,7 @@ export default function LibraryScreen({
                 navigation={navigation}
                 mangas_list={filtered_mangas_list}
             />
-            <DisplayLoading is_loading={is_loading} />
+            <Loading is_loading={is_loading} />
         </View>
     );
 }

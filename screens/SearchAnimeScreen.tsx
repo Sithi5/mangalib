@@ -4,10 +4,10 @@ import { searchFromApi } from 'api/KitsuApi';
 import type { KitsuData } from 'api/KitsuTypes';
 import AppStyles, { ORANGE } from 'globals/AppStyles';
 import type { SearchAnimeStackScreenProps } from 'navigations/NavigationsTypes';
-import DisplayLoading from 'components/DisplayLoading';
+import Loading from 'components/Loading';
 import { SearchAnimesList } from 'components/list';
 
-export type FunctionSearchMangaArgs = {
+export type FunctionSearchAnimeArgs = {
     new_search?: boolean;
 };
 
@@ -22,7 +22,7 @@ export default function SearchMangaScreen({
 
     async function _searchAnimes({
         new_search = false,
-    }: FunctionSearchMangaArgs) {
+    }: FunctionSearchAnimeArgs) {
         if (search_text.current.length > 0) {
             if (new_search === true) {
                 next_page_url.current = undefined;
@@ -85,7 +85,7 @@ export default function SearchMangaScreen({
                 last_page_reached={last_page_reached.current}
                 _searchAnimes={_searchAnimes}
             />
-            <DisplayLoading is_loading={is_loading} />
+            <Loading is_loading={is_loading} />
         </View>
     );
 }

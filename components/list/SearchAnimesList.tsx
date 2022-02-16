@@ -1,13 +1,12 @@
 import type { KitsuData } from 'api/KitsuTypes';
+import SearchItemsList, {
+    NavigateToItemDetailsArgs,
+} from 'components/list/SearchItemsList';
 import { WHITE } from 'globals/AppStyles';
-import type { Id } from 'globals/GlobalTypes';
 import type { SearchAnimeScreenNavigationProp } from 'navigations/NavigationsTypes';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import type { FunctionSearchMangaArgs } from 'screens/SearchMangaScreen';
-import SearchItemsList, {
-    NavigateToItemDetailsArgs,
-} from 'components/list/SearchItemsList'; // Not using the index.ts to avoid cycle import.
+import { FunctionSearchAnimeArgs } from 'Screens/SearchAnimeScreen';
 
 const SEPARATOR_HEIGHT = 5;
 
@@ -15,7 +14,7 @@ type Props = {
     navigation: SearchAnimeScreenNavigationProp;
     animes_list: KitsuData[];
     last_page_reached?: boolean;
-    _searchAnimes?: ({}: FunctionSearchMangaArgs) => Promise<void>;
+    _searchAnimes?: ({}: FunctionSearchAnimeArgs) => Promise<void>;
 };
 
 export default function SearchAnimesList(props: Props) {
@@ -26,16 +25,18 @@ export default function SearchAnimesList(props: Props) {
         _searchAnimes,
     } = props;
 
-    function _navigateToAnimeDetails({ id }: NavigateToItemDetailsArgs) {
-        navigation.navigate('AnimeDetails', { id });
+    const item_type = 'anime';
+
+    function _navigateToItemDetails({ id }: NavigateToItemDetailsArgs) {
+        navigation.navigate('ItemDetails', { id, item_type: item_type });
     }
 
     return (
         <SearchItemsList
-            item_type="anime"
+            item_type={item_type}
             items_list={animes_list}
             last_page_reached={last_page_reached}
-            _navigateToItemDetails={_navigateToAnimeDetails}
+            _navigateToItemDetails={_navigateToItemDetails}
             _searchItems={_searchAnimes}
         />
     );

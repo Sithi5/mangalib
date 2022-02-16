@@ -1,26 +1,37 @@
-import { getItemImageFromApi, getMangaDetailsFromApi } from 'api/KitsuApi';
-import { KitsuMangaData } from 'api/KitsuTypes';
-import DisplayLoading from 'components/DisplayLoading';
+import { getItemImageFromApi, getItemDetailsFromApi } from 'api/KitsuApi';
+import { KitsuData, KitsuItemType } from 'api/KitsuTypes';
+import Loading from 'components/Loading';
 import AppStyles from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
-import { SearchMangaStackScreenProps } from 'navigations/NavigationsTypes';
+import {
+    LibraryStackScreenProps,
+    SearchAnimeStackScreenProps,
+    SearchMangaStackScreenProps,
+} from 'navigations/NavigationsTypes';
 import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
-import getMangaTitle from 'utils/GetKitsuItemTitle';
+import getKitsuItemTitle from 'utils/GetKitsuItemTitle';
 
-export default function MangaDetailsScreen({
+export default function ItemDetailsScreen({
     route,
-}: SearchMangaStackScreenProps<'MangaDetails'>) {
+}:
+    | SearchMangaStackScreenProps<'ItemDetails'>
+    | SearchAnimeStackScreenProps<'ItemDetails'>
+    | LibraryStackScreenProps<'ItemDetails'>) {
     const [is_loading, setLoading] = useState(true);
-    const [manga, setManga] = useState<KitsuMangaData>();
+    const [item, setItem] = useState<KitsuData>();
     const id: Id = route.params.id;
+    const item_type: KitsuItemType = route.params.item_type;
 
     useEffect(() => {
-        async function _getMangaDetails() {
+        async function _getItemDetails() {
             try {
-                const response = await getMangaDetailsFromApi({ manga_id: id });
+                const response = await getItemDetailsFromApi({
+                    id: id,
+                    item_type: item_type,
+                });
                 if (response) {
-                    setManga(response.data);
+                    setItem(response.data);
                 }
             } catch (error) {
                 console.error(error);
@@ -28,14 +39,14 @@ export default function MangaDetailsScreen({
                 setLoading(false);
             }
         }
-        _getMangaDetails();
+        _getItemDetails();
     }, [id]);
 
-    function _displayMangaDetails() {
-        if (manga != undefined) {
+    function _ItemDetails() {
+        if (item != undefined) {
             const image_url = getItemImageFromApi({
                 id: id,
-                item_type: 'manga',
+                item_type: item_type,
                 format: 'small',
             });
 
@@ -43,12 +54,12 @@ export default function MangaDetailsScreen({
                 <ScrollView style={styles.scrollview_container}>
                     <Image
                         source={{ uri: image_url }}
-                        style={styles.manga_image}
+                        style={styles.item_image}
                     />
                     <View style={styles.content_main_container}>
                         <View style={styles.content_title_container}>
                             <Text style={styles.title_text}>
-                                {getMangaTitle({ item: manga })}
+                                {getKitsuItemTitle({ item: item })}
                             </Text>
                             {/* <TouchableOpacity
                                 onPress={() => {
@@ -60,7 +71,7 @@ export default function MangaDetailsScreen({
                         </View>
                         <View style={styles.content_overview_container}>
                             <Text style={styles.overview_text}>
-                                {manga.attributes.synopsis}
+                                {item.attributes.synopsis}
                             </Text>
                         </View>
                         <View style={styles.content_bottom_container}>
@@ -68,7 +79,7 @@ export default function MangaDetailsScreen({
                                 Released: {_displayDate()}
                             </Text> */}
                             <Text style={styles.bottom_text}>
-                                Vote: {manga.attributes.averageRating} / 100
+                                Vote: {item.attributes.averageRating} / 100
                             </Text>
                             {/* <Text style={styles.bottom_text}>
                                 Budget: {_displayBudget()}
@@ -90,8 +101,8 @@ export default function MangaDetailsScreen({
 
     return (
         <View style={AppStyles.main_container}>
-            <DisplayLoading is_loading={is_loading} />
-            {_displayMangaDetails()}
+            <Loading is_loading={is_loading} />
+            {_ItemDetails()}
         </View>
     );
 }
@@ -100,7 +111,7 @@ const styles = StyleSheet.create({
     scrollview_container: {
         flex: 1,
     },
-    manga_image: {
+    item_image: {
         flex: 3,
         height: 150,
         margin: 5,

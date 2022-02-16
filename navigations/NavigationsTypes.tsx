@@ -14,6 +14,7 @@ import type {
     NativeStackNavigationProp,
     NativeStackScreenProps,
 } from '@react-navigation/native-stack';
+import { KitsuItemType } from 'api/KitsuTypes';
 import { Id } from 'globals/GlobalTypes';
 
 // Param list
@@ -30,17 +31,17 @@ export type SearchTopTabParamList = {
 
 export type SearchMangaStackParamList = {
     SearchManga: undefined;
-    MangaDetails: { id: Id };
+    ItemDetails: { id: Id; item_type: KitsuItemType };
 };
 
 export type SearchAnimeStackParamList = {
     SearchAnime: undefined;
-    AnimeDetails: { id: Id };
+    ItemDetails: { id: Id; item_type: KitsuItemType };
 };
 
 export type LibraryStackParamList = {
     Library: undefined;
-    MangaDetails: { id: Id };
+    ItemDetails: { id: Id; item_type: KitsuItemType };
 };
 
 // Screen props

@@ -9,7 +9,7 @@ type Props = {
     size?: number | 'large' | 'small';
 };
 
-export default function DisplayLoading(props: Props) {
+export default function Loading(props: Props) {
     const { is_loading, loading_container_style, color, size } = props;
     if (is_loading) {
         return (
