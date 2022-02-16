@@ -62,7 +62,7 @@ export default function SearchMangaScreen({
     return (
         <View style={AppStyles.main_container}>
             <TextInput
-                style={AppStyles.text_input}
+                style={AppStyles.search_text_input}
                 placeholder="Manga title"
                 onChangeText={(text) => {
                     search_text.current = text;
@@ -71,15 +71,6 @@ export default function SearchMangaScreen({
                     _searchMangas({ new_search: true });
                 }}
             />
-            <View style={AppStyles.button_search}>
-                <Button
-                    color={ORANGE}
-                    title="Search"
-                    onPress={() => {
-                        _searchMangas({ new_search: true });
-                    }}
-                />
-            </View>
             <View style={SearchStyles.list_container}>
                 <SearchMangasList
                     navigation={navigation}

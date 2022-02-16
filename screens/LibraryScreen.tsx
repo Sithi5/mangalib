@@ -74,7 +74,7 @@ export default function LibraryScreen({
     return (
         <View style={AppStyles.main_container}>
             <TextInput
-                style={AppStyles.text_input}
+                style={AppStyles.search_text_input}
                 placeholder="Manga title"
                 onChangeText={(text) => {
                     search_text.current = text;
@@ -83,9 +83,6 @@ export default function LibraryScreen({
                     _filterMangas({});
                 }}
             />
-            <View style={AppStyles.button_search}>
-                <Button color={ORANGE} title="Search" onPress={() => {}} />
-            </View>
             <LibraryMangasList
                 navigation={navigation}
                 mangas_list={filtered_mangas_list}

@@ -3,19 +3,8 @@ import { getItemImageFromApi } from 'api/KitsuApi';
 import { KitsuData } from 'api/KitsuTypes';
 import { Id } from 'globals/GlobalTypes';
 import React from 'react';
-import {
-    Dimensions,
-    Image,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import getMangaTitle from 'utils/GetKitsuItemTitle';
-
-const WINDOWS_HEIGHT = Dimensions.get('window').height;
-const WINDOWS_WIDTH = Dimensions.get('window').height;
-export const HORIZONTAL_MANGA_ITEM_HEIGHT = WINDOWS_WIDTH / 2;
 
 type Props = {
     manga: KitsuData;
