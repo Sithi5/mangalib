@@ -22,7 +22,7 @@ export type SearchKitsuResponse = {
     meta: Nullable<number>;
 };
 
-export type GetMangaDetailsKitsuResponse = {
+export type GetItemDetailsKitsuResponse = {
     data: KitsuData;
     links: {
         first: Nullable<string>;
@@ -33,8 +33,8 @@ export type GetMangaDetailsKitsuResponse = {
     meta: Nullable<number>;
 };
 
-export type GetMultipleMangasDetailsKitsuResponse = (
-    | GetMangaDetailsKitsuResponse
+export type GetMultipleItemsDetailsKitsuResponse = (
+    | GetItemDetailsKitsuResponse
     | undefined
 )[];
 
@@ -51,12 +51,14 @@ export type ArgsSearchFromApi = {
     next_page_url?: string;
 };
 
-export type ArgsGetMangaDetailsFromApi = {
-    manga_id: Id;
+export type ArgsGetItemDetailsFromApi = {
+    id: Id;
+    item_type: KitsuItemType;
 };
 
 export type ArgsGetMultipleMangasDetailsFromApi = {
-    manga_id_list: Id[];
+    item_id_list: Id[];
+    item_type: KitsuItemType;
 };
 
 export type KitsuMangaAttributes = {

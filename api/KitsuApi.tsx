@@ -1,11 +1,11 @@
 import { KITSU_PAGE_LIMIT } from '../globals/API';
 import {
     ArgsGetImageFromApi,
-    ArgsGetMangaDetailsFromApi,
+    ArgsGetItemDetailsFromApi,
     ArgsGetMultipleMangasDetailsFromApi,
     ArgsSearchFromApi,
-    GetMangaDetailsKitsuResponse,
-    GetMultipleMangasDetailsKitsuResponse,
+    GetItemDetailsKitsuResponse,
+    GetMultipleItemsDetailsKitsuResponse,
     SearchKitsuResponse,
 } from './KitsuTypes';
 
@@ -66,12 +66,13 @@ export function getItemImageFromApi({
     return url;
 }
 
-export async function getMangaDetailsFromApi({
-    manga_id,
-}: ArgsGetMangaDetailsFromApi): Promise<
-    GetMangaDetailsKitsuResponse | undefined
+export async function getItemDetailsFromApi({
+    id,
+    item_type,
+}: ArgsGetItemDetailsFromApi): Promise<
+    GetItemDetailsKitsuResponse | undefined
 > {
-    const url = encodeURI(API_BASE_URL + 'manga/' + manga_id);
+    const url = encodeURI(API_BASE_URL + item_type + '/' + id);
     // console.log('\nKITSU GET REQUEST: ', url);
     try {
         const response = await fetch(url, {
@@ -85,15 +86,16 @@ export async function getMangaDetailsFromApi({
     }
 }
 
-export async function getMultipleMangasDetailsFromApi({
-    manga_id_list,
+export async function getMultipleItemsDetailsFromApi({
+    item_id_list,
+    item_type,
 }: ArgsGetMultipleMangasDetailsFromApi): Promise<
-    GetMultipleMangasDetailsKitsuResponse | undefined
+    GetMultipleItemsDetailsKitsuResponse | undefined
 > {
     try {
         const responses = await Promise.all(
-            manga_id_list.map(async (id) =>
-                getMangaDetailsFromApi({ manga_id: id })
+            item_id_list.map(async (id) =>
+                getItemDetailsFromApi({ id: id, item_type: item_type })
             )
         );
         return responses;
