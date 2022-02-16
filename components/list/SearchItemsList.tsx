@@ -1,5 +1,5 @@
 import type { KitsuData, KitsuItemType } from 'api/KitsuTypes';
-import Item, { ITEM_HEIGHT } from 'components/Item';
+import SearchItem, { ITEM_HEIGHT } from 'components/SearchItem';
 import { WHITE } from 'globals/AppStyles';
 import type { Id } from 'globals/GlobalTypes';
 import React from 'react';
@@ -45,7 +45,7 @@ export default function SearchItemsList(props: Props) {
                 index,
             })}
             renderItem={({ item }) => (
-                <Item
+                <SearchItem
                     item={item}
                     item_type={item_type}
                     _navigateToItemDetails={_navigateToItemDetails}

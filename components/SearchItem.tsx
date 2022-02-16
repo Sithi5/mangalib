@@ -15,7 +15,7 @@ type Props = {
     _navigateToItemDetails: ({ id }: { id: Id }) => void;
 };
 
-export default React.memo(function Item(props: Props) {
+export default React.memo(function SearchItem(props: Props) {
     const { item, item_type, _navigateToItemDetails } = props;
 
     let item_title = getMangaTitle({ item: item });
