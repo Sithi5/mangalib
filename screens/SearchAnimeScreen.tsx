@@ -1,11 +1,12 @@
-import React, { useRef, useState } from 'react';
-import { Button, StyleSheet, TextInput, View } from 'react-native';
 import { searchFromApi } from 'api/KitsuApi';
 import type { KitsuData } from 'api/KitsuTypes';
-import AppStyles, { LIGHTGREY, ORANGE } from 'globals/AppStyles';
-import type { SearchAnimeStackScreenProps } from 'navigations/NavigationsTypes';
-import Loading from 'components/Loading';
 import { SearchAnimesList } from 'components/list';
+import Loading from 'components/Loading';
+import AppStyles, { ORANGE } from 'globals/AppStyles';
+import type { SearchAnimeStackScreenProps } from 'navigations/NavigationsTypes';
+import React, { useRef, useState } from 'react';
+import { Button, StyleSheet, TextInput, View } from 'react-native';
+import SearchStyles from './SearchStyles';
 
 export type FunctionSearchAnimeArgs = {
     new_search?: boolean;
@@ -79,7 +80,7 @@ export default function SearchMangaScreen({
                     }}
                 />
             </View>
-            <View style={styles.list_container}>
+            <View style={SearchStyles.list_container}>
                 <SearchAnimesList
                     navigation={navigation}
                     animes_list={animes_list}
@@ -92,6 +93,4 @@ export default function SearchMangaScreen({
     );
 }
 
-const styles = StyleSheet.create({
-    list_container: { backgroundColor: LIGHTGREY },
-});
+const styles = StyleSheet.create({});

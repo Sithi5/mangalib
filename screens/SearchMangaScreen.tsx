@@ -6,6 +6,7 @@ import AppStyles, { ORANGE } from 'globals/AppStyles';
 import type { SearchMangaStackScreenProps } from 'navigations/NavigationsTypes';
 import Loading from 'components/Loading';
 import { SearchMangasList } from 'components/list';
+import SearchStyles from './SearchStyles';
 
 export type FunctionSearchMangaArgs = {
     new_search?: boolean;
@@ -79,12 +80,14 @@ export default function SearchMangaScreen({
                     }}
                 />
             </View>
-            <SearchMangasList
-                navigation={navigation}
-                mangas_list={mangas_list}
-                last_page_reached={last_page_reached.current}
-                _searchMangas={_searchMangas}
-            />
+            <View style={SearchStyles.list_container}>
+                <SearchMangasList
+                    navigation={navigation}
+                    mangas_list={mangas_list}
+                    last_page_reached={last_page_reached.current}
+                    _searchMangas={_searchMangas}
+                />
+            </View>
             <Loading is_loading={is_loading} />
         </View>
     );

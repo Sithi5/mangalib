@@ -1,13 +1,14 @@
 import FadeIn from 'animations/FadeIn';
 import { getItemImageFromApi } from 'api/KitsuApi';
 import { KitsuData, KitsuItemType } from 'api/KitsuTypes';
-import AppStyles, { WHITE } from 'globals/AppStyles';
+import AppStyles, { DEFAULT_MARGIN, WHITE } from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import getMangaTitle from 'utils/GetKitsuItemTitle';
 
 export const ITEM_HEIGHT = 190;
+export const ITEM_RADIUS = 15;
 
 type Props = {
     item: KitsuData;
@@ -70,18 +71,19 @@ const styles = StyleSheet.create({
         height: ITEM_HEIGHT,
         backgroundColor: WHITE,
         flexDirection: 'row',
-        borderRadius: 15,
+        borderRadius: ITEM_RADIUS,
     },
     item_image: {
         width: 120,
-        height: 180,
-        margin: 5,
+        marginRight: DEFAULT_MARGIN,
         backgroundColor: 'grey',
+        borderTopLeftRadius: ITEM_RADIUS,
+        borderBottomLeftRadius: ITEM_RADIUS,
     },
     content_main_container: {
         flexDirection: 'column',
         flex: 1,
-        margin: 5,
+        margin: DEFAULT_MARGIN,
     },
     content_top_container: {
         flexDirection: 'row',
