@@ -1,4 +1,4 @@
-import type { KitsuMangaData } from 'api/KitsuTypes';
+import type { KitsuData } from 'api/KitsuTypes';
 import { WHITE } from 'globals/AppStyles';
 import type { Id } from 'globals/GlobalTypes';
 import type { LibraryScreenNavigationProp } from 'navigations/NavigationsTypes';
@@ -11,7 +11,7 @@ const SEPARATOR_WIDTH = 5;
 
 type Props = {
     navigation: LibraryScreenNavigationProp;
-    mangas_list: KitsuMangaData[];
+    mangas_list: KitsuData[];
     last_page_reached?: boolean;
     _searchMangas?: ({}: FunctionSearchMangaArgs) => Promise<void>;
 };
@@ -25,7 +25,7 @@ export default function LibraryMangasList(props: Props) {
     } = props;
 
     function _navigateToMangaDetails(id: Id) {
-        navigation.navigate('MangaDetails', { id });
+        navigation.navigate('ItemDetails', { id: id, item_type: 'manga' });
     }
 
     return (
