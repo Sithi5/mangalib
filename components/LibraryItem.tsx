@@ -1,7 +1,12 @@
 import FadeIn from 'animations/FadeIn';
 import { getItemImageFromApi } from 'api/KitsuApi';
 import { KitsuData } from 'api/KitsuTypes';
-import { DEFAULT_MARGIN, DEFAULT_RADIUS, WHITE } from 'globals/AppStyles';
+import {
+    DEFAULT_MARGIN,
+    DEFAULT_RADIUS,
+    ORANGE,
+    WHITE,
+} from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
 import React from 'react';
 import { Dimensions } from 'react-native';
@@ -34,7 +39,9 @@ export default React.memo(function LibraryItem(props: Props) {
                 style={styles.item_container}
                 onPress={() => _navigateToMangaDetails(manga.id)}
             >
-                <Text style={styles.title_text}>{manga_title}</Text>
+                <Text adjustsFontSizeToFit={true} style={styles.title_text}>
+                    {manga_title}
+                </Text>
                 <Image source={{ uri: image_url }} style={styles.manga_image} />
             </TouchableOpacity>
         </FadeIn>
@@ -51,15 +58,17 @@ const styles = StyleSheet.create({
         borderRadius: DEFAULT_RADIUS,
     },
     manga_image: {
-        height: LIBRARY_ITEM_HEIGHT - 20,
+        flex: 4,
         borderBottomLeftRadius: DEFAULT_RADIUS,
         borderBottomRightRadius: DEFAULT_RADIUS,
     },
     title_text: {
+        textAlignVertical: 'center',
         textAlign: 'center',
         flex: 1,
         flexWrap: 'wrap',
         fontWeight: 'bold',
+        color: ORANGE,
         fontSize: 15,
     },
 });
