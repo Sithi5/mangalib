@@ -92,7 +92,7 @@ export default function RootBottomTabNavigator() {
                 options={{
                     title: 'Login',
                     tabBarIcon: ({ color }) => {
-                        const image_name = '../images/icon_checklist.png';
+                        const image_name = '../images/icon_profil.png';
                         return (
                             <Image
                                 style={[
