@@ -1,4 +1,4 @@
-import {
+import AppStyles, {
     BLACK,
     DEFAULT_MARGIN,
     DEFAULT_RADIUS,

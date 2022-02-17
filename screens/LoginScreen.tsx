@@ -1,4 +1,6 @@
+import { LoginInput } from 'components/inputs';
 import AppStyles, {
+    BLACK,
     DEFAULT_MARGIN,
     DEFAULT_RADIUS,
     GREY,
@@ -10,11 +12,12 @@ import {
     KeyboardAvoidingView,
     StyleSheet,
     Text,
+    TextInput,
     TouchableOpacity,
     View,
 } from 'react-native';
+
 import { AntDesign } from '@expo/vector-icons';
-import { TextInput } from 'react-native-gesture-handler';
 
 // import {
 //     getAuth,
@@ -57,21 +60,38 @@ export default function LoginScreen() {
         //     console.error(error);
         // }
     }
+
     return (
-        <KeyboardAvoidingView style={styles.main_container} behavior="padding">
-            <View style={styles.inputs_container}>
-                <TextInput
-                    placeholder="Email"
-                    value={email}
-                    onChangeText={(text) => setEmail(text)}
-                    style={styles.input_text}
-                />
-                <View style={styles.input_and_icon_container}>
+        <KeyboardAvoidingView
+            style={AppStyles.main_container}
+            behavior="padding"
+        >
+            <View style={styles.inputs_and_buttons_container}>
+                <View style={styles.text_input_container}>
                     <TextInput
-                        placeholder="Password"
+                        style={styles.search_text_input}
+                        placeholder={'Email'}
+                        placeholderTextColor={GREY}
+                        selectionColor={GREY}
+                        value={email}
+                        onChangeText={(text) => setEmail(text)}
+                        onSubmitEditing={() => {}}
+                    />
+                </View>
+                <View
+                    style={[
+                        styles.text_input_container,
+                        styles.text_input_and_icon_container,
+                    ]}
+                >
+                    <TextInput
+                        style={styles.search_text_input}
+                        placeholder={'Password'}
+                        placeholderTextColor={GREY}
+                        selectionColor={GREY}
                         value={password}
                         onChangeText={(text) => setPassword(text)}
-                        style={styles.input_text}
+                        onSubmitEditing={() => {}}
                         secureTextEntry={secure_password}
                     />
                     <TouchableOpacity
@@ -80,7 +100,7 @@ export default function LoginScreen() {
                         }}
                     >
                         <AntDesign
-                            style={styles.password_eye_icon}
+                            style={styles.search_cross_icon}
                             name={secure_password ? 'eyeo' : 'eye'}
                             size={20}
                             color={GREY}
@@ -88,10 +108,9 @@ export default function LoginScreen() {
                     </TouchableOpacity>
                 </View>
             </View>
-
-            <View style={styles.buttons_container}>
+            {/* <View style={styles.buttons_container}>
                 <TouchableOpacity onPress={_handleLogin} style={styles.button}>
-                    <Text style={styles.buttonText}>Login</Text>
+                    <Text style={styles.button_text}>Login</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={_handleSignUp}
@@ -99,63 +118,68 @@ export default function LoginScreen() {
                 >
                     <Text style={styles.button_outline_text}>Register</Text>
                 </TouchableOpacity>
-            </View>
+            </View> */}
         </KeyboardAvoidingView>
+
+        // <KeyboardAvoidingView style={styles.main_container} behavior="padding">
+        //     <View style={styles.inputs_container}>
+        //         <TextInput
+        //             placeholder="Email"
+        //             value={email}
+        //             onChangeText={(text) => setEmail(text)}
+        //             style={styles.input_text}
+        //         />
+        //         <View style={styles.input_and_icon_container}>
+        //             <TextInput
+        //                 placeholder="Password"
+        //                 value={password}
+        //                 onChangeText={(text) => setPassword(text)}
+        //                 style={styles.input_text}
+        //                 secureTextEntry={secure_password}
+        //             />
+        //             <TouchableOpacity
+        //                 onPress={() => {
+        //                     setSecurePassword(!secure_password);
+        //                 }}
+        //             >
+        //                 <AntDesign
+        //                     style={styles.password_eye_icon}
+        //                     name={secure_password ? 'eyeo' : 'eye'}
+        //                     size={20}
+        //                     color={GREY}
+        //                 />
+        //             </TouchableOpacity>
+        //         </View>
+        //     </View>
     );
 }
-
 const styles = StyleSheet.create({
-    main_container: {
-        ...AppStyles.main_container,
+    inputs_and_buttons_container: {
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
-    inputs_container: {
-        width: '80%',
-    },
-    input_text: {
-        backgroundColor: WHITE,
-        paddingHorizontal: 15,
-        paddingVertical: 10,
-        borderRadius: DEFAULT_RADIUS,
-        marginTop: 5,
-    },
-    buttons_container: {
-        width: '60%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 40,
-    },
-    button: {
-        backgroundColor: ORANGE,
-        width: '100%',
-        padding: 15,
-        borderRadius: DEFAULT_RADIUS,
-        alignItems: 'center',
-    },
-    button_outline: {
-        backgroundColor: WHITE,
-        marginTop: 5,
-        borderColor: ORANGE,
-        borderWidth: 2,
-    },
-    buttonText: {
-        color: WHITE,
-        fontWeight: '700',
-        fontSize: 16,
-    },
-    button_outline_text: {
-        color: ORANGE,
-        fontWeight: '700',
-        fontSize: 16,
-    },
-    input_and_icon_container: {
-        flexDirection: 'row',
+    text_input_container: {
         backgroundColor: WHITE,
         margin: DEFAULT_MARGIN,
         borderRadius: DEFAULT_RADIUS,
+        height: 40,
+        width: '80%',
     },
-    password_eye_icon: {
+    text_input_and_icon_container: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    search_cross_icon: {
         padding: 10,
+    },
+    search_text_input: {
+        flex: 1,
+        height: 30,
+        borderColor: WHITE,
+        borderWidth: 1,
+        paddingLeft: DEFAULT_MARGIN,
+        color: BLACK,
     },
 });
