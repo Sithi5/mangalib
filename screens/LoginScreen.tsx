@@ -1,4 +1,10 @@
-import AppStyles, { DEFAULT_RADIUS, ORANGE, WHITE } from 'globals/AppStyles';
+import AppStyles, {
+    DEFAULT_MARGIN,
+    DEFAULT_RADIUS,
+    GREY,
+    ORANGE,
+    WHITE,
+} from 'globals/AppStyles';
 import React, { useState } from 'react';
 import {
     KeyboardAvoidingView,
@@ -7,14 +13,50 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 import { TextInput } from 'react-native-gesture-handler';
+
+// import {
+//     getAuth,
+//     createUserWithEmailAndPassword,
+//     signInWithEmailAndPassword,
+// } from 'firebase/auth';
+
+// const auth = getAuth();
 
 export default function LoginScreen() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [secure_password, setSecurePassword] = useState(true);
 
-    function _handleLogin() {}
-    function _handleSignUp() {}
+    async function _handleLogin() {
+        // try {
+        //     if (email !== '' && password !== '') {
+        //         const response = await signInWithEmailAndPassword(
+        //             auth,
+        //             email,
+        //             password
+        //         );
+        //         const user = response.user;
+        //         console.log('user = ', user);
+        //     }
+        // } catch (error) {
+        //     console.error(error);
+        // }
+    }
+    async function _handleSignUp() {
+        // try {
+        //     const response = await createUserWithEmailAndPassword(
+        //         auth,
+        //         email,
+        //         password
+        //     );
+        //     const user = response.user;
+        //     console.log('user = ', user);
+        // } catch (error) {
+        //     console.error(error);
+        // }
+    }
     return (
         <KeyboardAvoidingView style={styles.main_container} behavior="padding">
             <View style={styles.inputs_container}>
@@ -24,13 +66,27 @@ export default function LoginScreen() {
                     onChangeText={(text) => setEmail(text)}
                     style={styles.input_text}
                 />
-                <TextInput
-                    placeholder="Password"
-                    value={password}
-                    onChangeText={(text) => setPassword(text)}
-                    style={styles.input_text}
-                    secureTextEntry
-                />
+                <View style={styles.input_and_icon_container}>
+                    <TextInput
+                        placeholder="Password"
+                        value={password}
+                        onChangeText={(text) => setPassword(text)}
+                        style={styles.input_text}
+                        secureTextEntry={secure_password}
+                    />
+                    <TouchableOpacity
+                        onPress={() => {
+                            setSecurePassword(!secure_password);
+                        }}
+                    >
+                        <AntDesign
+                            style={styles.password_eye_icon}
+                            name={secure_password ? 'eyeo' : 'eye'}
+                            size={20}
+                            color={GREY}
+                        />
+                    </TouchableOpacity>
+                </View>
             </View>
 
             <View style={styles.buttons_container}>
@@ -92,5 +148,14 @@ const styles = StyleSheet.create({
         color: ORANGE,
         fontWeight: '700',
         fontSize: 16,
+    },
+    input_and_icon_container: {
+        flexDirection: 'row',
+        backgroundColor: WHITE,
+        margin: DEFAULT_MARGIN,
+        borderRadius: DEFAULT_RADIUS,
+    },
+    password_eye_icon: {
+        padding: 10,
     },
 });

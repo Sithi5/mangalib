@@ -7,7 +7,7 @@ import {
 } from 'globals/AppStyles';
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
-import { Icon } from 'react-native-elements';
+import { Ionicons } from '@expo/vector-icons';
 
 export type TextInputOnSubmitFunctionArgs = {
     new_search?: boolean;
@@ -25,7 +25,7 @@ export default function SearchTextInput(props: Props) {
     const [text, setText] = useState('');
 
     return (
-        <View style={styles.search_input_container}>
+        <View style={styles.search_input_and_icon_container}>
             <TextInput
                 style={styles.search_text_input}
                 placeholder={placeholder}
@@ -50,9 +50,9 @@ export default function SearchTextInput(props: Props) {
                     });
                 }}
             >
-                <Icon
-                    style={styles.search_icon}
-                    name="close"
+                <Ionicons
+                    style={styles.search_cross_icon}
+                    name="eye"
                     size={20}
                     color={GREY}
                 />
@@ -62,7 +62,7 @@ export default function SearchTextInput(props: Props) {
 }
 
 const styles = StyleSheet.create({
-    search_input_container: {
+    search_input_and_icon_container: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
         margin: DEFAULT_MARGIN,
         borderRadius: DEFAULT_RADIUS,
     },
-    search_icon: {
+    search_cross_icon: {
         padding: 10,
     },
     search_text_input: {
