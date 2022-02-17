@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { GREY, LIGHTGREY, ORANGE, WHITE } from 'globals/AppStyles';
 import * as React from 'react';
 import { Image, StyleSheet } from 'react-native';
+import LoginScreen from 'screens/LoginScreen';
 import LibraryStackNavigator from './LibraryStackNavigator';
 // Type
 import type { RootBottomTabParamList } from './NavigationsTypes';
@@ -72,7 +73,26 @@ export default function RootBottomTabNavigator() {
                 options={{
                     title: 'My WatchList',
                     tabBarIcon: ({ color }) => {
-                        const image_name = '../images/icon_open_book.png';
+                        const image_name = '../images/icon_checklist.png';
+                        return (
+                            <Image
+                                style={[
+                                    styles.tab_bar_icon,
+                                    { tintColor: color },
+                                ]}
+                                source={require(image_name)}
+                            ></Image>
+                        );
+                    },
+                }}
+            />
+            <RootBottomTab.Screen
+                name="Login"
+                component={LoginScreen}
+                options={{
+                    title: 'Login',
+                    tabBarIcon: ({ color }) => {
+                        const image_name = '../images/icon_checklist.png';
                         return (
                             <Image
                                 style={[

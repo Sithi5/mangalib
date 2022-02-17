@@ -22,6 +22,7 @@ export type RootBottomTabParamList = {
     SearchTopTab: undefined;
     LibraryStack: undefined;
     WatchListStack: undefined;
+    Login: undefined;
 };
 
 export type SearchTopTabParamList = {
