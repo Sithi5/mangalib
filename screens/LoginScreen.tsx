@@ -1,4 +1,8 @@
-import { LoginInput } from 'components/inputs';
+import { AntDesign } from '@expo/vector-icons';
+import {
+    ButtonBorderColor,
+    ButtonFullBackgroundColor,
+} from 'components/buttons';
 import AppStyles, {
     BLACK,
     DEFAULT_MARGIN,
@@ -11,25 +15,20 @@ import React, { useState } from 'react';
 import {
     KeyboardAvoidingView,
     StyleSheet,
-    Text,
     TextInput,
     TouchableOpacity,
     View,
 } from 'react-native';
 
-import { AntDesign } from '@expo/vector-icons';
-import {
-    ButtonBorderColor,
-    ButtonFullBackgroundColor,
-} from 'components/buttons';
+// Ignore annoying warning comming from firebase
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs([
+    "AsyncStorage has been extracted from react-native core and will be removed in a future release. It can now be installed and imported from '@react-native-async-storage/async-storage' instead of 'react-native'. See https://github.com/react-native-async-storage/async-storage",
+]);
 
-// import {
-//     getAuth,
-//     createUserWithEmailAndPassword,
-//     signInWithEmailAndPassword,
-// } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 
-// const auth = getAuth();
+const auth = getAuth();
 
 export default function LoginScreen() {
     const [email, setEmail] = useState('');
@@ -37,7 +36,6 @@ export default function LoginScreen() {
     const [secure_password, setSecurePassword] = useState(true);
 
     async function _handleLogin() {
-        console.log('handleLogin');
         // try {
         //     if (email !== '' && password !== '') {
         //         const response = await signInWithEmailAndPassword(
@@ -53,17 +51,18 @@ export default function LoginScreen() {
         // }
     }
     async function _handleSignUp() {
-        // try {
-        //     const response = await createUserWithEmailAndPassword(
-        //         auth,
-        //         email,
-        //         password
-        //     );
-        //     const user = response.user;
-        //     console.log('user = ', user);
-        // } catch (error) {
-        //     console.error(error);
-        // }
+        try {
+            await createUserWithEmailAndPassword(auth, email, password);
+            //     const response = await createUserWithEmailAndPassword(
+            //         auth,
+            //         email,
+            //         password
+            //     );
+            //     const user = response.user;
+            //     console.log('user = ', user);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     return (
