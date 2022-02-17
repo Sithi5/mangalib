@@ -28,7 +28,7 @@ export const LibrarySlice = createSlice({
                 state.list.push(action.payload);
             }
         },
-        removeInLibrary: (state, action: PayloadAction<string>) => {
+        removeFromLibrary: (state, action: PayloadAction<string>) => {
             let index = state.list.indexOf(action.payload);
             if (index > -1) {
                 state.list.splice(index, 1);
@@ -38,7 +38,7 @@ export const LibrarySlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { addToLibrary, removeInLibrary, updateLibrary } =
+export const { addToLibrary, removeFromLibrary, updateLibrary } =
     LibrarySlice.actions;
 
 export default LibrarySlice.reducer;
