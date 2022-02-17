@@ -1,5 +1,4 @@
-import SearchAnimesList from './SearchAnimesList';
-import SearchMangasList from './SearchMangasList';
-import LibraryMangasList from './LibraryMangasList';
+import ButtonFullBackgroundColor from './ButtonFullBackgroundColor';
+import ButtonBorderColor from './ButtonBorderColor';
 
-export { SearchAnimesList, SearchMangasList, LibraryMangasList };
+export { ButtonFullBackgroundColor, ButtonBorderColor };
