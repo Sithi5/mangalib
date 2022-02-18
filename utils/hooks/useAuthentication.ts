@@ -3,7 +3,7 @@ import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 
 const auth = getAuth();
 
-export function useAuthentication() {
+export function useAuthentication(): User | undefined {
     const [user, setUser] = useState<User>();
 
     useEffect(() => {
@@ -24,7 +24,5 @@ export function useAuthentication() {
         return unsubscribeFromAuthStatuChanged;
     });
 
-    return {
-        user,
-    };
+    return user;
 }

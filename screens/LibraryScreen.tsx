@@ -5,18 +5,18 @@ import { TextInputOnSubmitFunctionArgs } from 'components/inputs/SearchTextInput
 import { LibraryMangasList } from 'components/lists';
 import Loading from 'components/Loading';
 import { RandomSearchMangasListIds } from 'data/MangasData';
-import AppStyles from 'globals/AppStyles';
+import AppStyles, { ORANGE } from 'globals/AppStyles';
 import type { LibraryStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import getMangaTitle from 'utils/GetKitsuItemTitle';
 import { replaceAll } from 'utils/StringsMethods';
 import { useAuthentication } from 'utils/hooks/useAuthentication';
+import { ButtonFullBackgroundColor } from 'components/buttons';
 
 export default function LibraryScreen({
     navigation,
 }: LibraryStackScreenProps<'Library'>) {
-    const { user } = useAuthentication();
     const [is_loading, setLoading] = useState(false);
     const search_text = useRef('');
     const library_list = RandomSearchMangasListIds;
@@ -79,20 +79,37 @@ export default function LibraryScreen({
         }
     }
 
-    return (
-        <View style={AppStyles.main_container}>
-            <SearchTextInput
-                placeholder="Manga title"
-                search_text={search_text}
-                on_submit_function={_filterMangas}
-            />
-            <LibraryMangasList
-                navigation={navigation}
-                mangas_list={filtered_mangas_list}
-            />
-            <Loading is_loading={is_loading} />
-        </View>
-    );
+    const user = useAuthentication();
+
+    if (user) {
+        return (
+            <View style={AppStyles.main_container}>
+                <SearchTextInput
+                    placeholder="Manga title"
+                    search_text={search_text}
+                    on_submit_function={_filterMangas}
+                />
+                <LibraryMangasList
+                    navigation={navigation}
+                    mangas_list={filtered_mangas_list}
+                />
+                <Loading is_loading={is_loading} />
+            </View>
+        );
+    } else {
+        return (
+            <View style={AppStyles.main_container}>
+                <Text>You need to be connected to see your library.</Text>
+                <ButtonFullBackgroundColor
+                    color={ORANGE}
+                    text={'Go to login'}
+                    onPressFunction={() => {
+                        navigation.navigate('Login');
+                    }}
+                ></ButtonFullBackgroundColor>
+            </View>
+        );
+    }
 }
 
 const styles = StyleSheet.create({});
