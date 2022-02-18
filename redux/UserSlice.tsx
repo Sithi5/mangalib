@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { getUserData } from 'api/FireBase';
 import {
     createUserWithEmailAndPassword,
     getAuth,
@@ -22,7 +23,14 @@ export const signInUser = createAsyncThunk(
             password
         );
         const uid = response.user.uid;
-        return { email, uid };
+        const snapshot = await getUserData({ uid: uid });
+        let user_data: UserData;
+        if (snapshot.exists()) {
+            user_data = snapshot.data();
+        } else {
+            throw "User data doesn't exist.";
+        }
+        return { email, uid, user_data };
     }
 );
 
@@ -45,6 +53,12 @@ export const signUpUser = createAsyncThunk(
         return { email, uid, username };
     }
 );
+
+export type UserData = {
+    email?: string | undefined;
+    username?: string | undefined;
+    mangas_list?: Id[];
+};
 
 export type UserState = {
     email?: string | undefined;
@@ -96,6 +110,7 @@ export const userSlice = createSlice({
             state.logged = true;
             state.uid = action.payload.uid;
             state.email = action.payload.email;
+            state.username = action.payload.user_data['username'];
         });
         builder.addCase(signUpUser.fulfilled, (state, action) => {
             state.logged = true;

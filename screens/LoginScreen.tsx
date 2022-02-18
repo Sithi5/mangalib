@@ -110,7 +110,7 @@ export default function LoginScreen({
                     alignItems: 'center',
                 }}
             >
-                <Text>Welcome {}</Text>
+                <Text>Welcome {user.username}</Text>
                 <ButtonSignOut color={ORANGE}></ButtonSignOut>
             </View>
         );
