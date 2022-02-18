@@ -2,6 +2,7 @@ import { AntDesign } from '@expo/vector-icons';
 import {
     ButtonBorderColor,
     ButtonFullBackgroundColor,
+    ButtonSignOut,
 } from 'components/buttons';
 import AppStyles, {
     BLACK,
@@ -14,62 +15,59 @@ import AppStyles, {
 import React, { useState } from 'react';
 import {
     KeyboardAvoidingView,
+    Platform,
     StyleSheet,
+    Text,
     TextInput,
     TouchableOpacity,
     View,
 } from 'react-native';
 
-// Ignore annoying warning comming from firebase
-import { LogBox } from 'react-native';
-LogBox.ignoreLogs([
-    "AsyncStorage has been extracted from react-native core and will be removed in a future release. It can now be installed and imported from '@react-native-async-storage/async-storage' instead of 'react-native'. See https://github.com/react-native-async-storage/async-storage",
-]);
-
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+} from 'firebase/auth';
 
 const auth = getAuth();
 
 export default function LoginScreen() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [secure_password, setSecurePassword] = useState(true);
+    const [value, setValue] = useState({
+        email: '',
+        password: '',
+        error: '',
+        secure_password: false,
+    });
 
     async function _handleLogin() {
-        // try {
-        //     if (email !== '' && password !== '') {
-        //         const response = await signInWithEmailAndPassword(
-        //             auth,
-        //             email,
-        //             password
-        //         );
-        //         const user = response.user;
-        //         console.log('user = ', user);
-        //     }
-        // } catch (error) {
-        //     console.error(error);
-        // }
+        try {
+            await signInWithEmailAndPassword(auth, value.email, value.password);
+        } catch (error: any) {
+            setValue({ ...value, error: error.message });
+        }
     }
     async function _handleSignUp() {
         try {
-            await createUserWithEmailAndPassword(auth, email, password);
-            //     const response = await createUserWithEmailAndPassword(
-            //         auth,
-            //         email,
-            //         password
-            //     );
-            //     const user = response.user;
-            //     console.log('user = ', user);
-        } catch (error) {
-            console.error(error);
+            await createUserWithEmailAndPassword(
+                auth,
+                value.email,
+                value.password
+            );
+        } catch (error: any) {
+            setValue({ ...value, error: error.message });
         }
     }
 
     return (
         <KeyboardAvoidingView
             style={AppStyles.main_container}
-            behavior="padding"
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
+            {!!value.error && (
+                <View style={styles.error}>
+                    <Text>{value.error}</Text>
+                </View>
+            )}
             <View style={styles.inputs_and_buttons_container}>
                 <View style={styles.text_input_container}>
                     <TextInput
@@ -77,8 +75,10 @@ export default function LoginScreen() {
                         placeholder={'Email'}
                         placeholderTextColor={GREY}
                         selectionColor={GREY}
-                        value={email}
-                        onChangeText={(text) => setEmail(text)}
+                        value={value.email}
+                        onChangeText={(text) =>
+                            setValue({ ...value, email: text })
+                        }
                         onSubmitEditing={() => {}}
                     />
                 </View>
@@ -93,19 +93,24 @@ export default function LoginScreen() {
                         placeholder={'Password'}
                         placeholderTextColor={GREY}
                         selectionColor={GREY}
-                        value={password}
-                        onChangeText={(text) => setPassword(text)}
+                        value={value.password}
+                        onChangeText={(text) =>
+                            setValue({ ...value, password: text })
+                        }
                         onSubmitEditing={() => {}}
-                        secureTextEntry={secure_password}
+                        secureTextEntry={value.secure_password}
                     />
                     <TouchableOpacity
                         onPress={() => {
-                            setSecurePassword(!secure_password);
+                            setValue({
+                                ...value,
+                                secure_password: !value.secure_password,
+                            });
                         }}
                     >
                         <AntDesign
                             style={styles.eye_icon}
-                            name={secure_password ? 'eyeo' : 'eye'}
+                            name={value.secure_password ? 'eyeo' : 'eye'}
                             size={20}
                             color={GREY}
                         />
@@ -142,8 +147,6 @@ const styles = StyleSheet.create({
     },
     buttons_container: {
         width: '60%',
-        justifyContent: 'center',
-        alignItems: 'center',
     },
     text_input_and_icon_container: {
         flexDirection: 'row',
@@ -160,5 +163,11 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         paddingLeft: DEFAULT_MARGIN,
         color: BLACK,
+    },
+    error: {
+        marginTop: 10,
+        padding: 10,
+        color: 'red',
+        backgroundColor: 'red',
     },
 });

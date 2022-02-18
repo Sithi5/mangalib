@@ -11,10 +11,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import getMangaTitle from 'utils/GetKitsuItemTitle';
 import { replaceAll } from 'utils/StringsMethods';
+import { useAuthentication } from 'utils/hooks/useAuthentication';
 
 export default function LibraryScreen({
     navigation,
 }: LibraryStackScreenProps<'Library'>) {
+    const { user } = useAuthentication();
     const [is_loading, setLoading] = useState(false);
     const search_text = useRef('');
     const library_list = RandomSearchMangasListIds;

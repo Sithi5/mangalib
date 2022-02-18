@@ -52,7 +52,7 @@ export default function SearchTextInput(props: Props) {
             >
                 <Ionicons
                     style={styles.search_cross_icon}
-                    name="eye"
+                    name="close"
                     size={20}
                     color={GREY}
                 />
