@@ -4,6 +4,12 @@ import {
     ButtonFullBackgroundColor,
     ButtonSignOut,
 } from 'components/buttons';
+import {
+    createUserWithEmailAndPassword,
+    getAuth,
+    signInWithEmailAndPassword,
+} from 'firebase/auth';
+import { collection, doc, getFirestore, setDoc } from 'firebase/firestore';
 import AppStyles, {
     BLACK,
     DEFAULT_MARGIN,
@@ -12,6 +18,7 @@ import AppStyles, {
     ORANGE,
     WHITE,
 } from 'globals/AppStyles';
+import { RootBottomTabScreenProps } from 'navigations/NavigationsTypes';
 import React, { useState } from 'react';
 import {
     KeyboardAvoidingView,
@@ -22,24 +29,25 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import { useAppDispatch, useAppSelector } from 'redux/Hooks';
+import { updateUserUid, UserState } from 'redux/UserSlice';
 
-import {
-    getAuth,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-} from 'firebase/auth';
-import { useAuthentication } from 'utils/hooks/useAuthentication';
-
+const firestore = getFirestore();
 const auth = getAuth();
 
-export default function LoginScreen() {
+export default function LoginScreen({
+    navigation,
+}: RootBottomTabScreenProps<'Login'>) {
     const [value, setValue] = useState({
+        username: '',
         email: '',
         password: '',
         error: '',
         secure_password: true,
     });
-    const user = useAuthentication();
+    const user = useAppSelector((state) => state.User);
+
+    const dispatch = useAppDispatch();
 
     async function _handleLogin() {
         if (value.email === '' || value.password === '') {
@@ -49,12 +57,13 @@ export default function LoginScreen() {
             });
         } else {
             try {
-                await signInWithEmailAndPassword(
+                const response = await signInWithEmailAndPassword(
                     auth,
                     value.email,
                     value.password
                 );
                 setValue({ ...value, error: '' });
+                dispatch(updateUserUid(response?.user.uid));
             } catch (error: any) {
                 setValue({ ...value, error: error.message });
             }
@@ -62,18 +71,35 @@ export default function LoginScreen() {
     }
 
     async function _handleSignUp() {
-        if (value.email === '' || value.password === '') {
+        if (
+            value.email === '' ||
+            value.password === '' ||
+            value.username === ''
+        ) {
             setValue({
                 ...value,
-                error: 'Email and password are mandatory.',
+                error: 'All fields are mandatory.',
             });
         } else {
             try {
-                await createUserWithEmailAndPassword(
+                const response = await createUserWithEmailAndPassword(
                     auth,
                     value.email,
                     value.password
                 );
+                console.log(response);
+                await setDoc(
+                    doc(collection(firestore, 'users'), response?.user.uid),
+                    {
+                        email: value.email,
+                        username: value.username,
+                    }
+                );
+                const user_state: UserState = {
+                    user_uid: response?.user.uid,
+                    mangas_list: [],
+                };
+                dispatch(updateUserUid(response?.user.uid));
                 setValue({ ...value, error: '' });
             } catch (error: any) {
                 setValue({ ...value, error: error.message });
@@ -81,8 +107,19 @@ export default function LoginScreen() {
         }
     }
 
-    if (user) {
-        return <ButtonSignOut color={ORANGE}></ButtonSignOut>;
+    if (user.user_uid !== undefined) {
+        return (
+            <View
+                style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}
+            >
+                <Text>Welcome {}</Text>
+                <ButtonSignOut color={ORANGE}></ButtonSignOut>
+            </View>
+        );
     } else {
         return (
             <KeyboardAvoidingView
@@ -95,6 +132,19 @@ export default function LoginScreen() {
                     </View>
                 )}
                 <View style={styles.inputs_and_buttons_container}>
+                    <View style={styles.text_input_container}>
+                        <TextInput
+                            style={styles.text_input}
+                            placeholder={'Username'}
+                            placeholderTextColor={GREY}
+                            selectionColor={GREY}
+                            value={value.username}
+                            onChangeText={(text) =>
+                                setValue({ ...value, username: text })
+                            }
+                            onSubmitEditing={() => {}}
+                        />
+                    </View>
                     <View style={styles.text_input_container}>
                         <TextInput
                             style={styles.text_input}
@@ -159,6 +209,7 @@ export default function LoginScreen() {
         );
     }
 }
+
 const styles = StyleSheet.create({
     inputs_and_buttons_container: {
         flex: 1,

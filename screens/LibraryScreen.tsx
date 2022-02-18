@@ -1,5 +1,6 @@
 import { getMultipleItemsDetailsFromApi } from 'api/KitsuApi';
 import type { KitsuData } from 'api/KitsuTypes';
+import { ButtonFullBackgroundColor } from 'components/buttons';
 import { SearchTextInput } from 'components/inputs';
 import { TextInputOnSubmitFunctionArgs } from 'components/inputs/SearchTextInput';
 import { LibraryMangasList } from 'components/lists';
@@ -9,10 +10,9 @@ import AppStyles, { ORANGE } from 'globals/AppStyles';
 import type { LibraryStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { useAppSelector } from 'redux/Hooks';
 import getMangaTitle from 'utils/GetKitsuItemTitle';
 import { replaceAll } from 'utils/StringsMethods';
-import { useAuthentication } from 'utils/hooks/useAuthentication';
-import { ButtonFullBackgroundColor } from 'components/buttons';
 
 export default function LibraryScreen({
     navigation,
@@ -24,6 +24,7 @@ export default function LibraryScreen({
     const [filtered_mangas_list, setFilteredMangasList] = useState<KitsuData[]>(
         []
     );
+    const user = useAppSelector((state) => state.User);
 
     useEffect(() => {
         async function _getManga() {
@@ -79,9 +80,7 @@ export default function LibraryScreen({
         }
     }
 
-    const user = useAuthentication();
-
-    if (user) {
+    if (user.user_uid !== undefined) {
         return (
             <View style={AppStyles.main_container}>
                 <SearchTextInput
