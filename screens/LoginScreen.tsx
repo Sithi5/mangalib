@@ -30,7 +30,12 @@ import {
     View,
 } from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
-import { updateUserUid, UserState } from 'redux/UserSlice';
+import {
+    signInUser,
+    signUpUser,
+    updateUserUid,
+    UserState,
+} from 'redux/UserSlice';
 
 const firestore = getFirestore();
 const auth = getAuth();
@@ -57,13 +62,13 @@ export default function LoginScreen({
             });
         } else {
             try {
-                const response = await signInWithEmailAndPassword(
-                    auth,
-                    value.email,
-                    value.password
-                );
+                await dispatch(
+                    signInUser({
+                        email: value.email,
+                        password: value.password,
+                    })
+                ).unwrap(); //Unwrap to raise error.
                 setValue({ ...value, error: '' });
-                dispatch(updateUserUid(response?.user.uid));
             } catch (error: any) {
                 setValue({ ...value, error: error.message });
             }
@@ -82,24 +87,13 @@ export default function LoginScreen({
             });
         } else {
             try {
-                const response = await createUserWithEmailAndPassword(
-                    auth,
-                    value.email,
-                    value.password
-                );
-                console.log(response);
-                await setDoc(
-                    doc(collection(firestore, 'users'), response?.user.uid),
-                    {
+                await dispatch(
+                    signUpUser({
                         email: value.email,
+                        password: value.password,
                         username: value.username,
-                    }
-                );
-                const user_state: UserState = {
-                    user_uid: response?.user.uid,
-                    mangas_list: [],
-                };
-                dispatch(updateUserUid(response?.user.uid));
+                    })
+                ).unwrap(); //Unwrap to raise error.
                 setValue({ ...value, error: '' });
             } catch (error: any) {
                 setValue({ ...value, error: error.message });
@@ -107,7 +101,7 @@ export default function LoginScreen({
         }
     }
 
-    if (user.user_uid !== undefined) {
+    if (user.logged === true) {
         return (
             <View
                 style={{

@@ -1,22 +1,83 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+    createUserWithEmailAndPassword,
+    getAuth,
+    signInWithEmailAndPassword,
+    signOut,
+} from 'firebase/auth';
+import { collection, doc, getFirestore, setDoc } from 'firebase/firestore';
 import { Id } from '../globals/GlobalTypes';
 
+const auth = getAuth();
+const firestore = getFirestore();
+
+export const signInUser = createAsyncThunk(
+    'user/signIn',
+    async (args: { email: string; password: string }) => {
+        const email = args.email;
+        const password = args.password;
+        const response = await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
+        const uid = response.user.uid;
+        return { email, uid };
+    }
+);
+
+export const signUpUser = createAsyncThunk(
+    'user/signUp',
+    async (args: { email: string; password: string; username: string }) => {
+        const email = args.email;
+        const password = args.password;
+        const username = args.username;
+        const response = await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
+        const uid = response.user.uid;
+        await setDoc(doc(collection(firestore, 'users'), uid), {
+            email: email,
+            username: username,
+        });
+        return { email, uid, username };
+    }
+);
+
 export type UserState = {
-    user_uid: string | undefined;
+    email?: string | undefined;
+    username?: string | undefined;
+    uid: string | undefined;
     mangas_list: Id[];
+    logged: boolean;
 };
 
 const initialState: UserState = {
-    user_uid: undefined,
+    uid: undefined,
+    logged: false,
     mangas_list: [],
 };
 
-export const UserSlice = createSlice({
+export const userSlice = createSlice({
     name: 'User',
     initialState,
     reducers: {
+        fetchUserData: (state, action: PayloadAction<void>) => {
+            if (state.uid) {
+            } else {
+                console.error("can't fetch user data without uid.");
+            }
+        },
+        signOutUser: (state, action: PayloadAction<void>) => {
+            state.uid = undefined;
+            state.logged = false;
+            signOut(auth);
+        },
         updateUserUid: (state, action: PayloadAction<string | undefined>) => {
-            state.user_uid = action.payload;
+            state.uid = action.payload;
+            state.logged = state.uid === undefined ? false : true;
         },
         addUserManga: (state, action: PayloadAction<string>) => {
             if (!state.mangas_list.includes(action.payload)) {
@@ -30,10 +91,23 @@ export const UserSlice = createSlice({
             }
         },
     },
+    extraReducers: (builder) => {
+        builder.addCase(signInUser.fulfilled, (state, action) => {
+            state.logged = true;
+            state.uid = action.payload.uid;
+            state.email = action.payload.email;
+        });
+        builder.addCase(signUpUser.fulfilled, (state, action) => {
+            state.logged = true;
+            state.uid = action.payload.uid;
+            state.username = action.payload.username;
+            state.email = action.payload.email;
+        });
+    },
 });
 
 // Action creators are generated for each case reducer function
-export const { addUserManga, removeFromUser, updateUserUid } =
-    UserSlice.actions;
+export const { addUserManga, removeFromUser, updateUserUid, signOutUser } =
+    userSlice.actions;
 
-export default UserSlice.reducer;
+export default userSlice.reducer;

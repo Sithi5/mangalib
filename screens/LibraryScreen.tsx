@@ -80,7 +80,7 @@ export default function LibraryScreen({
         }
     }
 
-    if (user.user_uid !== undefined) {
+    if (user.logged === true) {
         return (
             <View style={AppStyles.main_container}>
                 <SearchTextInput

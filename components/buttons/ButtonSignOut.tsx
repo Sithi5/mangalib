@@ -4,7 +4,7 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 import { getAuth, signOut } from 'firebase/auth';
 import { useAppDispatch } from 'redux/Hooks';
-import { updateUserUid } from 'redux/UserSlice';
+import { signOutUser, updateUserUid } from 'redux/UserSlice';
 
 const auth = getAuth();
 
@@ -20,8 +20,7 @@ export default function ButtonSignOut(props: Props) {
     return (
         <TouchableOpacity
             onPress={() => {
-                dispatch(updateUserUid(undefined));
-                signOut(auth);
+                dispatch(signOutUser());
             }}
             style={[styles.button, { backgroundColor: color }]}
         >
