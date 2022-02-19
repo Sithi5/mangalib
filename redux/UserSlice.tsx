@@ -8,6 +8,7 @@ import {
     createUserWithEmailAndPassword,
     getAuth,
     signInWithEmailAndPassword,
+    signOut,
 } from 'firebase/auth';
 import { collection, doc, getFirestore, setDoc } from 'firebase/firestore';
 import { Id } from '../globals/GlobalTypes';
@@ -37,6 +38,31 @@ export const signInUser = createAsyncThunk(
     }
 );
 
+export const signUpUser = createAsyncThunk(
+    'user/signUpUser',
+    async (args: { email: string; password: string; username: string }) => {
+        const email = args.email;
+        const password = args.password;
+        const username = args.username;
+        const response = await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
+        const uid = response.user.uid;
+        await setDoc(doc(collection(firestore, 'users'), uid), {
+            email: email,
+            username: username,
+            mangas_list: [],
+        });
+        return { email, uid, username };
+    }
+);
+
+export const signOutUser = createAsyncThunk('user/signOutUser', async () => {
+    await signOut(auth);
+});
+
 export const addMangaToUserLibrary = createAsyncThunk(
     'user/addMangaToUserLibrary',
     async (args: { uid: string; manga_id: Id }) => {
@@ -60,27 +86,6 @@ export const removeMangaFromUserLibrary = createAsyncThunk(
             uid: uid,
         });
         return { manga_id };
-    }
-);
-
-export const signUpUser = createAsyncThunk(
-    'user/signUpUser',
-    async (args: { email: string; password: string; username: string }) => {
-        const email = args.email;
-        const password = args.password;
-        const username = args.username;
-        const response = await createUserWithEmailAndPassword(
-            auth,
-            email,
-            password
-        );
-        const uid = response.user.uid;
-        await setDoc(doc(collection(firestore, 'users'), uid), {
-            email: email,
-            username: username,
-            mangas_list: [],
-        });
-        return { email, uid, username };
     }
 );
 
@@ -112,6 +117,10 @@ export const userSlice = createSlice({
             state.email = action.payload.email;
             state.username = action.payload.user_data['username'];
             state.mangas_list = action.payload.user_data['mangas_list'];
+        });
+        builder.addCase(signOutUser.fulfilled, (state) => {
+            state.uid = undefined;
+            state.logged = false;
         });
         builder.addCase(signUpUser.fulfilled, (state, action) => {
             state.logged = true;

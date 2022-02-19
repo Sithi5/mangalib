@@ -5,7 +5,6 @@ import { SearchTextInput } from 'components/inputs';
 import { TextInputOnSubmitFunctionArgs } from 'components/inputs/SearchTextInput';
 import { LibraryMangasList } from 'components/lists';
 import Loading from 'components/Loading';
-import { RandomSearchMangasListIds } from 'tests/data/MangasData';
 import AppStyles, { ORANGE } from 'globals/AppStyles';
 import type { LibraryStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useEffect, useRef, useState } from 'react';
@@ -19,7 +18,6 @@ export default function LibraryScreen({
 }: LibraryStackScreenProps<'Library'>) {
     const [is_loading, setLoading] = useState(false);
     const search_text = useRef('');
-    const library_list = RandomSearchMangasListIds;
     const mangas_list = useRef<KitsuData[]>([]);
     const [filtered_mangas_list, setFilteredMangasList] = useState<KitsuData[]>(
         []
@@ -31,7 +29,7 @@ export default function LibraryScreen({
             try {
                 let tmp_mangas_list: KitsuData[] = [];
                 const responses = await kitsuGetMultipleItemsDetails({
-                    item_id_list: library_list,
+                    item_id_list: user.mangas_list,
                     item_type: 'manga',
                 });
                 if (responses) {
@@ -52,7 +50,7 @@ export default function LibraryScreen({
             }
         }
         _getManga();
-    }, [library_list]);
+    }, [user.mangas_list]);
 
     function _filterMangas({ clear_search }: TextInputOnSubmitFunctionArgs) {
         if (search_text.current.length === 0 || clear_search) {

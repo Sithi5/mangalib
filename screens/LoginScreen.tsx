@@ -17,6 +17,7 @@ import AppStyles, {
 import { RootBottomTabScreenProps } from 'navigations/NavigationsTypes';
 import React, { useState } from 'react';
 import {
+    Alert,
     KeyboardAvoidingView,
     Platform,
     StyleSheet,
@@ -38,7 +39,6 @@ export default function LoginScreen({
         username: '',
         email: '',
         password: '',
-        error: '',
         secure_password: true,
     });
     const user = useAppSelector((state) => state.user);
@@ -47,10 +47,11 @@ export default function LoginScreen({
 
     async function _handleLogin() {
         if (value.email === '' || value.password === '') {
-            setValue({
-                ...value,
-                error: 'Email and password are mandatory.',
-            });
+            Alert.alert('error:', 'email or password is missing.', [
+                {
+                    text: 'ok',
+                },
+            ]);
         } else {
             try {
                 await dispatch(
@@ -59,9 +60,12 @@ export default function LoginScreen({
                         password: value.password,
                     })
                 ).unwrap(); //Unwrap to raise error.
-                setValue({ ...value, error: '' });
             } catch (error: any) {
-                setValue({ ...value, error: error.message });
+                Alert.alert('error:', error.message, [
+                    {
+                        text: 'ok',
+                    },
+                ]);
             }
         }
     }
@@ -72,10 +76,11 @@ export default function LoginScreen({
             value.password === '' ||
             value.username === ''
         ) {
-            setValue({
-                ...value,
-                error: 'All fields are mandatory.',
-            });
+            Alert.alert('error:', 'all field are mandatory.', [
+                {
+                    text: 'ok',
+                },
+            ]);
         } else {
             try {
                 await dispatch(
@@ -85,9 +90,12 @@ export default function LoginScreen({
                         username: value.username,
                     })
                 ).unwrap(); //Unwrap to raise error.
-                setValue({ ...value, error: '' });
             } catch (error: any) {
-                setValue({ ...value, error: error.message });
+                Alert.alert('error:', error.message, [
+                    {
+                        text: 'ok',
+                    },
+                ]);
             }
         }
     }
@@ -113,11 +121,6 @@ export default function LoginScreen({
                 style={AppStyles.main_container}
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             >
-                {!!value.error && (
-                    <View style={styles.error}>
-                        <Text>{value.error}</Text>
-                    </View>
-                )}
                 <View style={styles.inputs_and_buttons_container}>
                     <View style={styles.text_input_container}>
                         <TextInput

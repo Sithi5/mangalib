@@ -11,7 +11,14 @@ import AppStyles, {
 } from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+    Alert,
+    Image,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
 import {
     addMangaToUserLibrary,
@@ -72,7 +79,21 @@ export default React.memo(function SearchItem(props: Props) {
             }
         }
         if (manga_is_in_library) {
-            _removeMangaFromLibrary();
+            Alert.alert(
+                'Remove manga from library',
+                'Are you sure you want to remove this manga from your library?',
+                [
+                    {
+                        text: 'No',
+                        onPress: () => {},
+                        style: 'cancel',
+                    },
+                    {
+                        text: 'Yes',
+                        onPress: _removeMangaFromLibrary,
+                    },
+                ]
+            );
         } else {
             _addMangaToLibrary();
         }

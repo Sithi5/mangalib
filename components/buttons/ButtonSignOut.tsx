@@ -1,10 +1,9 @@
+import { getAuth } from 'firebase/auth';
 import { DEFAULT_MARGIN, DEFAULT_RADIUS, WHITE } from 'globals/AppStyles';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
-
-import { getAuth, signOut } from 'firebase/auth';
 import { useAppDispatch } from 'redux/Hooks';
-import { signOutUser, updateUserUid } from 'redux/UserSlice';
+import { signOutUser } from 'redux/UserSlice';
 
 const auth = getAuth();
 
