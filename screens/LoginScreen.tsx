@@ -4,12 +4,8 @@ import {
     ButtonFullBackgroundColor,
     ButtonSignOut,
 } from 'components/buttons';
-import {
-    createUserWithEmailAndPassword,
-    getAuth,
-    signInWithEmailAndPassword,
-} from 'firebase/auth';
-import { collection, doc, getFirestore, setDoc } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 import AppStyles, {
     BLACK,
     DEFAULT_MARGIN,
@@ -30,12 +26,7 @@ import {
     View,
 } from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
-import {
-    signInUser,
-    signUpUser,
-    updateUserUid,
-    UserState,
-} from 'redux/UserSlice';
+import { signInUser, signUpUser } from 'redux/UserSlice';
 
 const firestore = getFirestore();
 const auth = getAuth();
@@ -50,7 +41,7 @@ export default function LoginScreen({
         error: '',
         secure_password: true,
     });
-    const user = useAppSelector((state) => state.User);
+    const user = useAppSelector((state) => state.user);
 
     const dispatch = useAppDispatch();
 
@@ -111,6 +102,8 @@ export default function LoginScreen({
                 }}
             >
                 <Text>Welcome {user.username}</Text>
+                <Text>email: {user.email}</Text>
+                <Text>mangas_list: {user.mangas_list}</Text>
                 <ButtonSignOut color={ORANGE}></ButtonSignOut>
             </View>
         );

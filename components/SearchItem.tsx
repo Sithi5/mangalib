@@ -4,12 +4,15 @@ import { KitsuData, KitsuItemType } from 'api/KitsuTypes';
 import AppStyles, {
     DEFAULT_MARGIN,
     DEFAULT_RADIUS,
+    ORANGE,
     WHITE,
 } from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useAppSelector } from 'redux/Hooks';
 import getMangaTitle from 'utils/GetKitsuItemTitle';
+import { Ionicons } from '@expo/vector-icons';
 
 export const ITEM_HEIGHT = 190;
 
@@ -21,6 +24,7 @@ type Props = {
 
 export default React.memo(function SearchItem(props: Props) {
     const { item, item_type, _navigateToItemDetails } = props;
+    const user = useAppSelector((state) => state.user);
 
     let item_title = getMangaTitle({ item: item });
 
@@ -29,6 +33,15 @@ export default React.memo(function SearchItem(props: Props) {
         item_type: item_type,
         format: 'small',
     });
+
+    function _displayAddToLibraryImage() {
+        return (
+            <Image
+                style={styles.add_icon}
+                source={require('../images/icon_add.png')}
+            />
+        );
+    }
 
     return (
         <View style={AppStyles.main_container}>
@@ -47,6 +60,7 @@ export default React.memo(function SearchItem(props: Props) {
                             <Text style={styles.rating_text}>
                                 {item.attributes.averageRating}
                             </Text>
+                            {_displayAddToLibraryImage()}
                         </View>
 
                         <View style={styles.content_middle_container}>
@@ -114,4 +128,9 @@ const styles = StyleSheet.create({
     },
     synopsis_text: { fontStyle: 'italic', color: 'grey' },
     start_date_text: { textAlign: 'right' },
+    add_icon: {
+        color: ORANGE,
+        width: 25,
+        height: 25,
+    },
 });

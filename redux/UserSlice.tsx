@@ -26,7 +26,7 @@ export const signInUser = createAsyncThunk(
         const snapshot = await getUserData({ uid: uid });
         let user_data: UserData;
         if (snapshot.exists()) {
-            user_data = snapshot.data();
+            user_data = snapshot.data() as UserData;
         } else {
             throw "User data doesn't exist.";
         }
@@ -49,6 +49,7 @@ export const signUpUser = createAsyncThunk(
         await setDoc(doc(collection(firestore, 'users'), uid), {
             email: email,
             username: username,
+            mangas_list: [],
         });
         return { email, uid, username };
     }
@@ -57,14 +58,11 @@ export const signUpUser = createAsyncThunk(
 export type UserData = {
     email?: string | undefined;
     username?: string | undefined;
-    mangas_list?: Id[];
+    mangas_list: Id[];
 };
 
-export type UserState = {
-    email?: string | undefined;
-    username?: string | undefined;
+export type UserState = UserData & {
     uid: string | undefined;
-    mangas_list: Id[];
     logged: boolean;
 };
 
@@ -75,7 +73,7 @@ const initialState: UserState = {
 };
 
 export const userSlice = createSlice({
-    name: 'User',
+    name: 'user',
     initialState,
     reducers: {
         fetchUserData: (state, action: PayloadAction<void>) => {
@@ -84,7 +82,7 @@ export const userSlice = createSlice({
                 console.error("can't fetch user data without uid.");
             }
         },
-        signOutUser: (state, action: PayloadAction<void>) => {
+        signOutUser: (state) => {
             state.uid = undefined;
             state.logged = false;
             signOut(auth);
@@ -111,6 +109,7 @@ export const userSlice = createSlice({
             state.uid = action.payload.uid;
             state.email = action.payload.email;
             state.username = action.payload.user_data['username'];
+            state.mangas_list = action.payload.user_data['mangas_list'];
         });
         builder.addCase(signUpUser.fulfilled, (state, action) => {
             state.logged = true;
