@@ -1,11 +1,11 @@
-import { getMultipleItemsDetailsFromApi } from 'api/KitsuApi';
+import { kitsuGetMultipleItemsDetails } from 'api/KitsuApi';
 import type { KitsuData } from 'api/KitsuTypes';
 import { ButtonFullBackgroundColor } from 'components/buttons';
 import { SearchTextInput } from 'components/inputs';
 import { TextInputOnSubmitFunctionArgs } from 'components/inputs/SearchTextInput';
 import { LibraryMangasList } from 'components/lists';
 import Loading from 'components/Loading';
-import { RandomSearchMangasListIds } from 'data/MangasData';
+import { RandomSearchMangasListIds } from 'tests/data/MangasData';
 import AppStyles, { ORANGE } from 'globals/AppStyles';
 import type { LibraryStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useEffect, useRef, useState } from 'react';
@@ -24,13 +24,13 @@ export default function LibraryScreen({
     const [filtered_mangas_list, setFilteredMangasList] = useState<KitsuData[]>(
         []
     );
-    const user = useAppSelector((state) => state.User);
+    const user = useAppSelector((state) => state.user);
 
     useEffect(() => {
         async function _getManga() {
             try {
                 let tmp_mangas_list: KitsuData[] = [];
-                const responses = await getMultipleItemsDetailsFromApi({
+                const responses = await kitsuGetMultipleItemsDetails({
                     item_id_list: library_list,
                     item_type: 'manga',
                 });

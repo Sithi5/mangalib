@@ -1,4 +1,4 @@
-import { searchFromApi } from 'api/KitsuApi';
+import { kitsuSearch } from 'api/KitsuApi';
 import type { KitsuData } from 'api/KitsuTypes';
 import { SearchTextInput } from 'components/inputs';
 import { SearchMangasList } from 'components/lists';
@@ -33,7 +33,7 @@ export default function SearchMangaScreen({
             if (last_page_reached.current === false) {
                 try {
                     setLoading(true);
-                    let response = await searchFromApi({
+                    let response = await kitsuSearch({
                         search_type: 'manga',
                         search_text: search_text.current,
                         next_page_url: next_page_url.current,

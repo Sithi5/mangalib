@@ -1,10 +1,13 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { getUserData } from 'api/FireBase';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import {
+    firestoreAddMangaToUserMangasList,
+    firestoreGetUserData,
+    firestoreRemoveMangaFromUserMangasList,
+} from 'api/FireBase';
 import {
     createUserWithEmailAndPassword,
     getAuth,
     signInWithEmailAndPassword,
-    signOut,
 } from 'firebase/auth';
 import { collection, doc, getFirestore, setDoc } from 'firebase/firestore';
 import { Id } from '../globals/GlobalTypes';
@@ -13,7 +16,7 @@ const auth = getAuth();
 const firestore = getFirestore();
 
 export const signInUser = createAsyncThunk(
-    'user/signIn',
+    'user/signInUser',
     async (args: { email: string; password: string }) => {
         const email = args.email;
         const password = args.password;
@@ -23,7 +26,7 @@ export const signInUser = createAsyncThunk(
             password
         );
         const uid = response.user.uid;
-        const snapshot = await getUserData({ uid: uid });
+        const snapshot = await firestoreGetUserData({ uid: uid });
         let user_data: UserData;
         if (snapshot.exists()) {
             user_data = snapshot.data() as UserData;
@@ -34,8 +37,34 @@ export const signInUser = createAsyncThunk(
     }
 );
 
+export const addMangaToUserLibrary = createAsyncThunk(
+    'user/addMangaToUserLibrary',
+    async (args: { uid: string; manga_id: Id }) => {
+        const manga_id = args.manga_id;
+        const uid = args.uid;
+        const response = await firestoreAddMangaToUserMangasList({
+            manga_id: manga_id,
+            uid: uid,
+        });
+        return { manga_id };
+    }
+);
+
+export const removeMangaFromUserLibrary = createAsyncThunk(
+    'user/removeMangaFromUserLibrary',
+    async (args: { uid: string; manga_id: Id }) => {
+        const manga_id = args.manga_id;
+        const uid = args.uid;
+        const response = await firestoreRemoveMangaFromUserMangasList({
+            manga_id: manga_id,
+            uid: uid,
+        });
+        return { manga_id };
+    }
+);
+
 export const signUpUser = createAsyncThunk(
-    'user/signUp',
+    'user/signUpUser',
     async (args: { email: string; password: string; username: string }) => {
         const email = args.email;
         const password = args.password;
@@ -75,34 +104,7 @@ const initialState: UserState = {
 export const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {
-        fetchUserData: (state, action: PayloadAction<void>) => {
-            if (state.uid) {
-            } else {
-                console.error("can't fetch user data without uid.");
-            }
-        },
-        signOutUser: (state) => {
-            state.uid = undefined;
-            state.logged = false;
-            signOut(auth);
-        },
-        updateUserUid: (state, action: PayloadAction<string | undefined>) => {
-            state.uid = action.payload;
-            state.logged = state.uid === undefined ? false : true;
-        },
-        addUserManga: (state, action: PayloadAction<string>) => {
-            if (!state.mangas_list.includes(action.payload)) {
-                state.mangas_list.push(action.payload);
-            }
-        },
-        removeFromUser: (state, action: PayloadAction<string>) => {
-            const index = state.mangas_list.indexOf(action.payload);
-            if (index > -1) {
-                state.mangas_list.splice(index, 1);
-            }
-        },
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder.addCase(signInUser.fulfilled, (state, action) => {
             state.logged = true;
@@ -117,11 +119,26 @@ export const userSlice = createSlice({
             state.username = action.payload.username;
             state.email = action.payload.email;
         });
+        builder.addCase(addMangaToUserLibrary.fulfilled, (state, action) => {
+            if (!state.mangas_list.includes(action.payload.manga_id)) {
+                state.mangas_list.push(action.payload.manga_id);
+            }
+        });
+        builder.addCase(
+            removeMangaFromUserLibrary.fulfilled,
+            (state, action) => {
+                const index = state.mangas_list.indexOf(
+                    action.payload.manga_id
+                );
+                if (index > -1) {
+                    state.mangas_list.splice(index, 1);
+                }
+            }
+        );
     },
 });
 
 // Action creators are generated for each case reducer function
-export const { addUserManga, removeFromUser, updateUserUid, signOutUser } =
-    userSlice.actions;
+export const {} = userSlice.actions;
 
 export default userSlice.reducer;

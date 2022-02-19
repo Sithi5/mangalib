@@ -51,7 +51,7 @@ export default function SearchTextInput(props: Props) {
                 }}
             >
                 <Ionicons
-                    style={styles.search_cross_icon}
+                    style={styles.icon}
                     name="close"
                     size={20}
                     color={GREY}
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
         margin: DEFAULT_MARGIN,
         borderRadius: DEFAULT_RADIUS,
     },
-    search_cross_icon: {
+    icon: {
         padding: 10,
     },
     search_text_input: {

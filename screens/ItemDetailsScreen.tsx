@@ -1,4 +1,4 @@
-import { getItemImageFromApi, getItemDetailsFromApi } from 'api/KitsuApi';
+import { kitsuGetItemImage, kitsuGetItemDetails } from 'api/KitsuApi';
 import { KitsuData, KitsuItemType } from 'api/KitsuTypes';
 import Loading from 'components/Loading';
 import AppStyles from 'globals/AppStyles';
@@ -26,7 +26,7 @@ export default function ItemDetailsScreen({
     useEffect(() => {
         async function _getItemDetails() {
             try {
-                const response = await getItemDetailsFromApi({
+                const response = await kitsuGetItemDetails({
                     id: id,
                     item_type: item_type,
                 });
@@ -44,7 +44,7 @@ export default function ItemDetailsScreen({
 
     function _ItemDetails() {
         if (item != undefined) {
-            const image_url = getItemImageFromApi({
+            const image_url = kitsuGetItemImage({
                 id: id,
                 item_type: item_type,
                 format: 'small',

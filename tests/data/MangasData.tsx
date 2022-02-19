@@ -1,5 +1,5 @@
-import { KitsuData } from '../api/KitsuTypes';
-import { Id } from '../globals/GlobalTypes';
+import { KitsuData } from 'api/KitsuTypes';
+import { Id } from 'globals/GlobalTypes';
 
 export const RandomSearchMangasListIds: Id[] = [
     '38',

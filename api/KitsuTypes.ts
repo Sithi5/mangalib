@@ -11,7 +11,7 @@ export type KitsuData = {
 };
 
 // Functions returns
-export type SearchKitsuResponse = {
+export type KitsuSearchResponse = {
     data: KitsuData[];
     links: {
         first: Nullable<string>;
@@ -22,7 +22,7 @@ export type SearchKitsuResponse = {
     meta: Nullable<number>;
 };
 
-export type GetItemDetailsKitsuResponse = {
+export type KitsuGetItemDetailsResponse = {
     data: KitsuData;
     links: {
         first: Nullable<string>;
@@ -33,30 +33,30 @@ export type GetItemDetailsKitsuResponse = {
     meta: Nullable<number>;
 };
 
-export type GetMultipleItemsDetailsKitsuResponse = (
-    | GetItemDetailsKitsuResponse
+export type KitsuGetMultipleItemsDetailsResponse = (
+    | KitsuGetItemDetailsResponse
     | undefined
 )[];
 
 // Functions args
-export type ArgsGetImageFromApi = {
+export type ArgsKitsuGetImage = {
     id: Id;
     item_type: KitsuItemType;
     format: 'original' | 'small' | 'tiny' | 'medium' | 'large';
 };
 
-export type ArgsSearchFromApi = {
+export type ArgsKitsuSearch = {
     search_text: string;
     search_type: KitsuItemType;
     next_page_url?: string;
 };
 
-export type ArgsGetItemDetailsFromApi = {
+export type ArgsKitsuGetItemDetails = {
     id: Id;
     item_type: KitsuItemType;
 };
 
-export type ArgsGetMultipleMangasDetailsFromApi = {
+export type ArgsKitsuGetMultipleMangasDetails = {
     item_id_list: Id[];
     item_type: KitsuItemType;
 };

@@ -1,5 +1,5 @@
 import FadeIn from 'animations/FadeIn';
-import { getItemImageFromApi } from 'api/KitsuApi';
+import { kitsuGetItemImage } from 'api/KitsuApi';
 import { KitsuData } from 'api/KitsuTypes';
 import {
     DEFAULT_MARGIN,
@@ -27,7 +27,7 @@ export default React.memo(function LibraryItem(props: Props) {
 
     let manga_title = getMangaTitle({ item: manga });
 
-    const image_url = getItemImageFromApi({
+    const image_url = kitsuGetItemImage({
         id: manga.id,
         item_type: 'manga',
         format: 'small',

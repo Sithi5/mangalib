@@ -1,18 +1,23 @@
+import { Ionicons } from '@expo/vector-icons';
 import FadeIn from 'animations/FadeIn';
-import { getItemImageFromApi } from 'api/KitsuApi';
+import { kitsuGetItemImage } from 'api/KitsuApi';
 import { KitsuData, KitsuItemType } from 'api/KitsuTypes';
 import AppStyles, {
     DEFAULT_MARGIN,
     DEFAULT_RADIUS,
+    GREY,
     ORANGE,
     WHITE,
 } from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useAppSelector } from 'redux/Hooks';
+import { useAppDispatch, useAppSelector } from 'redux/Hooks';
+import {
+    addMangaToUserLibrary,
+    removeMangaFromUserLibrary,
+} from 'redux/UserSlice';
 import getMangaTitle from 'utils/GetKitsuItemTitle';
-import { Ionicons } from '@expo/vector-icons';
 
 export const ITEM_HEIGHT = 190;
 
@@ -25,22 +30,73 @@ type Props = {
 export default React.memo(function SearchItem(props: Props) {
     const { item, item_type, _navigateToItemDetails } = props;
     const user = useAppSelector((state) => state.user);
+    const dispatch = useAppDispatch();
 
     let item_title = getMangaTitle({ item: item });
 
-    const image_url = getItemImageFromApi({
+    const image_url = kitsuGetItemImage({
         id: item.id,
         item_type: item_type,
         format: 'small',
     });
 
+    function _addOrRemoveMangaFromLibrary() {
+        const manga_is_in_library = user.mangas_list.includes(item.id);
+        async function _addMangaToLibrary() {
+            if (user.logged && user.uid !== undefined) {
+                try {
+                    await dispatch(
+                        addMangaToUserLibrary({
+                            uid: user.uid,
+                            manga_id: item.id,
+                        })
+                    );
+                } catch (error: any) {
+                    console.error(error.message);
+                }
+            }
+        }
+
+        async function _removeMangaFromLibrary() {
+            if (user.logged && user.uid !== undefined) {
+                try {
+                    await dispatch(
+                        removeMangaFromUserLibrary({
+                            uid: user.uid,
+                            manga_id: item.id,
+                        })
+                    );
+                } catch (error: any) {
+                    console.error(error.message);
+                }
+            }
+        }
+        if (manga_is_in_library) {
+            _removeMangaFromLibrary();
+        } else {
+            _addMangaToLibrary();
+        }
+    }
+
     function _displayAddToLibraryImage() {
-        return (
-            <Image
-                style={styles.add_icon}
-                source={require('../images/icon_add.png')}
-            />
-        );
+        if (item_type === 'manga' && user.logged) {
+            const manga_is_in_library = user.mangas_list.includes(item.id);
+            const color = manga_is_in_library ? ORANGE : GREY;
+            return (
+                <TouchableOpacity
+                    onPress={async () => {
+                        await _addOrRemoveMangaFromLibrary();
+                    }}
+                >
+                    <Ionicons
+                        style={styles.icon}
+                        name="add-circle-outline"
+                        size={20}
+                        color={color}
+                    />
+                </TouchableOpacity>
+            );
+        }
     }
 
     return (
@@ -126,11 +182,12 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 25,
     },
+    icon: {
+        padding: 10,
+    },
     synopsis_text: { fontStyle: 'italic', color: 'grey' },
     start_date_text: { textAlign: 'right' },
-    add_icon: {
-        color: ORANGE,
-        width: 25,
-        height: 25,
-    },
 });
+function dispatch(arg0: any) {
+    throw new Error('Function not implemented.');
+}

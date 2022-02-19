@@ -1,12 +1,12 @@
 import { KITSU_PAGE_LIMIT } from '../globals/API';
 import {
-    ArgsGetImageFromApi,
-    ArgsGetItemDetailsFromApi,
-    ArgsGetMultipleMangasDetailsFromApi,
-    ArgsSearchFromApi,
-    GetItemDetailsKitsuResponse,
-    GetMultipleItemsDetailsKitsuResponse,
-    SearchKitsuResponse,
+    ArgsKitsuGetImage,
+    ArgsKitsuGetItemDetails,
+    ArgsKitsuGetMultipleMangasDetails,
+    ArgsKitsuSearch,
+    KitsuGetItemDetailsResponse,
+    KitsuGetMultipleItemsDetailsResponse,
+    KitsuSearchResponse,
 } from './KitsuTypes';
 
 const API_BASE_URL = 'https://kitsu.io/api/edge/';
@@ -17,11 +17,11 @@ const HEADERS = {
     'Content-Type': 'application/vnd.api+json',
 };
 
-export async function searchFromApi({
+export async function kitsuSearch({
     search_text,
     search_type = 'manga',
     next_page_url = undefined,
-}: ArgsSearchFromApi): Promise<SearchKitsuResponse | undefined> {
+}: ArgsKitsuSearch): Promise<KitsuSearchResponse | undefined> {
     const url = next_page_url
         ? next_page_url
         : encodeURI(
@@ -48,11 +48,11 @@ export async function searchFromApi({
     }
 }
 
-export function getItemImageFromApi({
+export function kitsuGetItemImage({
     id,
     item_type,
     format = 'original',
-}: ArgsGetImageFromApi): string {
+}: ArgsKitsuGetImage): string {
     const url = encodeURI(
         API_MEDIA_BASE_URL +
             item_type +
@@ -66,12 +66,10 @@ export function getItemImageFromApi({
     return url;
 }
 
-export async function getItemDetailsFromApi({
+export async function kitsuGetItemDetails({
     id,
     item_type,
-}: ArgsGetItemDetailsFromApi): Promise<
-    GetItemDetailsKitsuResponse | undefined
-> {
+}: ArgsKitsuGetItemDetails): Promise<KitsuGetItemDetailsResponse | undefined> {
     const url = encodeURI(API_BASE_URL + item_type + '/' + id);
     // console.log('\nKITSU GET REQUEST: ', url);
     try {
@@ -86,16 +84,16 @@ export async function getItemDetailsFromApi({
     }
 }
 
-export async function getMultipleItemsDetailsFromApi({
+export async function kitsuGetMultipleItemsDetails({
     item_id_list,
     item_type,
-}: ArgsGetMultipleMangasDetailsFromApi): Promise<
-    GetMultipleItemsDetailsKitsuResponse | undefined
+}: ArgsKitsuGetMultipleMangasDetails): Promise<
+    KitsuGetMultipleItemsDetailsResponse | undefined
 > {
     try {
         const responses = await Promise.all(
             item_id_list.map(async (id) =>
-                getItemDetailsFromApi({ id: id, item_type: item_type })
+                kitsuGetItemDetails({ id: id, item_type: item_type })
             )
         );
         return responses;
