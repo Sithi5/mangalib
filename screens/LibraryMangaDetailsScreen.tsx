@@ -1,33 +1,32 @@
-import { kitsuGetItemImage, kitsuGetItemDetails } from 'api/KitsuApi';
-import { KitsuData, KitsuItemType } from 'api/KitsuTypes';
+import { kitsuGetItemDetails, kitsuGetItemImage } from 'api/KitsuApi';
+import { KitsuData } from 'api/KitsuTypes';
+import { ButtonFullBackgroundColor } from 'components/buttons';
 import Loading from 'components/Loading';
-import AppStyles from 'globals/AppStyles';
+import AppStyles, { RED } from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
-import {
-    LibraryStackScreenProps,
-    SearchAnimeStackScreenProps,
-    SearchMangaStackScreenProps,
-} from 'navigations/NavigationsTypes';
+import { LibraryStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useEffect, useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useAppDispatch, useAppSelector } from 'redux/Hooks';
+import { removeMangaFromUserLibrary } from 'redux/UserSlice';
 import getKitsuItemTitle from 'utils/GetKitsuItemTitle';
 
-export default function ItemDetailsScreen({
+export default function LibraryMangaDetailsScreen({
+    navigation,
     route,
-}:
-    | SearchMangaStackScreenProps<'ItemDetails'>
-    | SearchAnimeStackScreenProps<'ItemDetails'>) {
+}: LibraryStackScreenProps<'LibraryMangaDetails'>) {
     const [is_loading, setLoading] = useState(true);
     const [item, setItem] = useState<KitsuData>();
     const id: Id = route.params.id;
-    const item_type: KitsuItemType = route.params.item_type;
+    const user = useAppSelector((state) => state.user);
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         async function _getItemDetails() {
             try {
                 const response = await kitsuGetItemDetails({
                     id: id,
-                    item_type: item_type,
+                    item_type: 'manga',
                 });
                 if (response) {
                     setItem(response.data);
@@ -41,11 +40,47 @@ export default function ItemDetailsScreen({
         _getItemDetails();
     }, [id]);
 
+    function _removeMangaFromLibrary() {
+        async function _asyncRemoveMangaFromLibrary() {
+            try {
+                if (user.logged && user.uid !== undefined) {
+                    await dispatch(
+                        removeMangaFromUserLibrary({
+                            uid: user.uid,
+                            manga_id: id,
+                        })
+                    );
+                    navigation.goBack();
+                }
+            } catch (error: any) {
+                console.error(error.message);
+            }
+        }
+        const manga_is_in_library = user.mangas_list.includes(id);
+        if (manga_is_in_library) {
+            Alert.alert(
+                'Remove manga from library',
+                'Are you sure you want to remove this manga from your library?',
+                [
+                    {
+                        text: 'No',
+                        onPress: () => {},
+                        style: 'cancel',
+                    },
+                    {
+                        text: 'Yes',
+                        onPress: _asyncRemoveMangaFromLibrary,
+                    },
+                ]
+            );
+        }
+    }
+
     function _ItemDetails() {
         if (item != undefined) {
             const image_url = kitsuGetItemImage({
                 id: id,
-                item_type: item_type,
+                item_type: 'manga',
                 format: 'small',
             });
 
@@ -61,16 +96,13 @@ export default function ItemDetailsScreen({
                                 {getKitsuItemTitle({ item: item })}
                             </Text>
                         </View>
-                        <View style={styles.content_overview_container}>
-                            <Text style={styles.overview_text}>
-                                {item.attributes.synopsis}
-                            </Text>
-                        </View>
-                        <View style={styles.content_bottom_container}>
-                            <Text style={styles.bottom_text}>
-                                Vote: {item.attributes.averageRating} / 100
-                            </Text>
-                        </View>
+                        <ButtonFullBackgroundColor
+                            color={RED}
+                            onPressFunction={async () => {
+                                await _removeMangaFromLibrary();
+                            }}
+                            text={'Remove manga from library'}
+                        />
                     </View>
                 </ScrollView>
             );

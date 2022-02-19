@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import { ItemDetailsScreen, LibraryScreen } from 'screens';
+import { LibraryScreen } from 'screens';
+import LibraryMangaDetailsScreen from 'screens/LibraryMangaDetailsScreen';
 import { LibraryStackParamList } from './NavigationsTypes';
 
 const LibraryStack = createNativeStackNavigator<LibraryStackParamList>();
@@ -17,8 +18,8 @@ export default function LibraryStackNavigator() {
                 }}
             />
             <LibraryStack.Screen
-                name="ItemDetails"
-                component={ItemDetailsScreen}
+                name="LibraryMangaDetails"
+                component={LibraryMangaDetailsScreen}
                 options={{
                     headerShown: true,
                     title: 'Details',
