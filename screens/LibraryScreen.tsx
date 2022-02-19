@@ -10,6 +10,7 @@ import type { LibraryStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useAppSelector } from 'redux/Hooks';
+import getMangasIdsListFromUsersMangasList from 'utils/firebase/getMangasIdsListFromUsersMangasList';
 import getMangaTitle from 'utils/kitsu/GetKitsuItemTitle';
 import { replaceAll } from 'utils/strings/replaceAll';
 
@@ -28,10 +29,11 @@ export default function LibraryScreen({
         async function _getManga() {
             try {
                 let tmp_mangas_list: KitsuData[] = [];
+                const mangas_ids_list = getMangasIdsListFromUsersMangasList({
+                    user: user,
+                });
                 const responses = await kitsuGetMultipleItemsDetails({
-                    item_id_list: user.user_mangas_list.map((user_manga) => {
-                        return user_manga.manga_id;
-                    }),
+                    item_id_list: mangas_ids_list,
                     item_type: 'manga',
                 });
                 if (responses) {
