@@ -1,7 +1,7 @@
-import { KitsuMangaData } from 'api/KitsuTypes';
+import { KitsuData } from 'api/KitsuTypes';
 
 type Args = {
-    item: KitsuMangaData;
+    item: KitsuData;
 };
 
 export default function getMangaTitle({ item }: Args): string {

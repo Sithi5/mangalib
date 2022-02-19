@@ -9,9 +9,14 @@ import {
 } from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
 import React from 'react';
-import { Dimensions } from 'react-native';
-import { Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import getMangaTitle from 'utils/GetKitsuItemTitle';
+import {
+    Dimensions,
+    Image,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+} from 'react-native';
+import getMangaTitle from 'utils/kitsu/GetKitsuItemTitle';
 
 export const LIBRARY_ITEM_WIDTH = Dimensions.get('window').width / 3.2;
 export const LIBRARY_ITEM_HEIGHT = 200;

@@ -2,12 +2,27 @@ import { Id, Nullable } from 'globals/GlobalTypes';
 
 export type KitsuItemType = 'manga' | 'anime';
 
-export type KitsuData = {
-    attributes: KitsuMangaAttributes | KitsuAnimeAttributes;
+// Functions args
+export type ArgsKitsuGetImage = {
     id: Id;
-    links: {};
-    relationships: {};
-    type: Nullable<string>;
+    item_type: KitsuItemType;
+    format: 'original' | 'small' | 'tiny' | 'medium' | 'large';
+};
+
+export type ArgsKitsuSearch = {
+    search_text: string;
+    search_type: KitsuItemType;
+    next_page_url?: string;
+};
+
+export type ArgsKitsuGetItemDetails = {
+    id: Id;
+    item_type: KitsuItemType;
+};
+
+export type ArgsKitsuGetMultipleMangasDetails = {
+    item_id_list: Id[];
+    item_type: KitsuItemType;
 };
 
 // Functions returns
@@ -38,27 +53,14 @@ export type KitsuGetMultipleItemsDetailsResponse = (
     | undefined
 )[];
 
-// Functions args
-export type ArgsKitsuGetImage = {
+//Data type
+
+export type KitsuData = {
+    attributes: KitsuMangaAttributes | KitsuAnimeAttributes;
     id: Id;
-    item_type: KitsuItemType;
-    format: 'original' | 'small' | 'tiny' | 'medium' | 'large';
-};
-
-export type ArgsKitsuSearch = {
-    search_text: string;
-    search_type: KitsuItemType;
-    next_page_url?: string;
-};
-
-export type ArgsKitsuGetItemDetails = {
-    id: Id;
-    item_type: KitsuItemType;
-};
-
-export type ArgsKitsuGetMultipleMangasDetails = {
-    item_id_list: Id[];
-    item_type: KitsuItemType;
+    links: {};
+    relationships: {};
+    type: Nullable<string>;
 };
 
 export type KitsuMangaAttributes = {

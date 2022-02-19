@@ -7,14 +7,18 @@ import {
     getFirestore,
     updateDoc,
 } from 'firebase/firestore';
-import { Id } from 'globals/GlobalTypes';
+import {
+    ArgsAddMangaToUserMangasList,
+    ArgsFireforceGetUserData,
+    ArgsRemoveMangaFromUserMangasList,
+    ArgsUpdateUserEmail,
+    ArgsUpdateUserMangasList,
+    ArgsUpdateUserUsername,
+} from './FirebaseTypes';
 
 const firestore = getFirestore();
 
-export type GetUserDataArgs = {
-    uid: string;
-};
-export async function firestoreGetUserData({ uid }: GetUserDataArgs) {
+export async function firestoreGetUserData({ uid }: ArgsFireforceGetUserData) {
     try {
         const users_doc = doc(collection(firestore, 'users'), uid);
         const response = await getDoc(users_doc);
@@ -24,15 +28,10 @@ export async function firestoreGetUserData({ uid }: GetUserDataArgs) {
     }
 }
 
-export type UpdateUserEmailArgs = {
-    uid: string;
-    email: string;
-};
-
 export async function firestoreUpdateUserEmail({
     uid,
     email,
-}: UpdateUserEmailArgs) {
+}: ArgsUpdateUserEmail) {
     try {
         const users_doc = doc(collection(firestore, 'users'), uid);
         const response = await updateDoc(users_doc, { email: email });
@@ -42,15 +41,10 @@ export async function firestoreUpdateUserEmail({
     }
 }
 
-export type UpdateUserUsernameArgs = {
-    uid: string;
-    username: string;
-};
-
 export async function firestoreUpdateUserUsername({
     uid,
     username,
-}: UpdateUserUsernameArgs) {
+}: ArgsUpdateUserUsername) {
     try {
         const users_doc = doc(collection(firestore, 'users'), uid);
         const response = await updateDoc(users_doc, { username: username });
@@ -60,39 +54,29 @@ export async function firestoreUpdateUserUsername({
     }
 }
 
-export type UpdateUserMangasListArgs = {
-    uid: string;
-    mangas_list: Id[];
-};
-
 export async function firestoreUpdateUserMangasList({
     uid,
-    mangas_list,
-}: UpdateUserMangasListArgs) {
+    user_mangas_list,
+}: ArgsUpdateUserMangasList) {
     try {
         const users_doc = doc(collection(firestore, 'users'), uid);
         const response = await updateDoc(users_doc, {
-            mangas_list: mangas_list,
+            user_mangas_list: user_mangas_list,
         });
         return response;
     } catch (error) {
         throw error;
     }
 }
-
-export type AddMangaToUserMangasListArgs = {
-    uid: string;
-    manga_id: Id;
-};
 
 export async function firestoreAddMangaToUserMangasList({
     uid,
-    manga_id,
-}: AddMangaToUserMangasListArgs) {
+    user_manga,
+}: ArgsAddMangaToUserMangasList) {
     try {
         const users_doc = doc(collection(firestore, 'users'), uid);
         const response = await updateDoc(users_doc, {
-            mangas_list: arrayUnion(manga_id),
+            user_mangas_list: arrayUnion(user_manga),
         });
         return response;
     } catch (error) {
@@ -100,19 +84,14 @@ export async function firestoreAddMangaToUserMangasList({
     }
 }
 
-export type RemoveMangaFromUserMangasListArgs = {
-    uid: string;
-    manga_id: Id;
-};
-
 export async function firestoreRemoveMangaFromUserMangasList({
     uid,
-    manga_id,
-}: RemoveMangaFromUserMangasListArgs) {
+    user_manga,
+}: ArgsRemoveMangaFromUserMangasList) {
     try {
         const users_doc = doc(collection(firestore, 'users'), uid);
         const response = await updateDoc(users_doc, {
-            mangas_list: arrayRemove(manga_id),
+            user_mangas_list: arrayRemove(user_manga),
         });
         return response;
     } catch (error) {

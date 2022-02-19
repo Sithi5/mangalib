@@ -10,8 +10,8 @@ import type { LibraryStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useAppSelector } from 'redux/Hooks';
-import getMangaTitle from 'utils/GetKitsuItemTitle';
-import { replaceAll } from 'utils/StringsMethods';
+import getMangaTitle from 'utils/kitsu/GetKitsuItemTitle';
+import { replaceAll } from 'utils/strings/replaceAll';
 
 export default function LibraryScreen({
     navigation,
@@ -29,7 +29,9 @@ export default function LibraryScreen({
             try {
                 let tmp_mangas_list: KitsuData[] = [];
                 const responses = await kitsuGetMultipleItemsDetails({
-                    item_id_list: user.mangas_list,
+                    item_id_list: user.user_mangas_list.map((user_manga) => {
+                        return user_manga.manga_id;
+                    }),
                     item_type: 'manga',
                 });
                 if (responses) {
@@ -50,7 +52,7 @@ export default function LibraryScreen({
             }
         }
         _getManga();
-    }, [user.mangas_list]);
+    }, [user.user_mangas_list]);
 
     function _filterMangas({ clear_search }: TextInputOnSubmitFunctionArgs) {
         if (search_text.current.length === 0 || clear_search) {

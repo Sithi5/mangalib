@@ -24,7 +24,9 @@ import {
     addMangaToUserLibrary,
     removeMangaFromUserLibrary,
 } from 'redux/UserSlice';
-import getMangaTitle from 'utils/GetKitsuItemTitle';
+import createNewFirestoreUserManga from 'utils/firebase/CreateNewUserManga';
+import getFirestoreUserMangaById from 'utils/firebase/GetUserMangaById';
+import getMangaTitle from 'utils/kitsu/GetKitsuItemTitle';
 
 export const ITEM_HEIGHT = 190;
 
@@ -48,14 +50,21 @@ export default React.memo(function SearchItem(props: Props) {
     });
 
     function _addOrRemoveMangaFromLibrary() {
-        const manga_is_in_library = user.mangas_list.includes(item.id);
+        const manga_is_in_library = user.user_mangas_list
+            .map((user_manga) => {
+                return user_manga.manga_id;
+            })
+            .includes(item.id);
+
         async function _addMangaToLibrary() {
             if (user.logged && user.uid !== undefined) {
                 try {
                     await dispatch(
                         addMangaToUserLibrary({
                             uid: user.uid,
-                            manga_id: item.id,
+                            user_manga: createNewFirestoreUserManga({
+                                id: item.id,
+                            }),
                         })
                     );
                 } catch (error: any) {
@@ -70,7 +79,10 @@ export default React.memo(function SearchItem(props: Props) {
                     await dispatch(
                         removeMangaFromUserLibrary({
                             uid: user.uid,
-                            manga_id: item.id,
+                            user_manga: getFirestoreUserMangaById({
+                                user: user,
+                                id: item.id,
+                            }),
                         })
                     );
                 } catch (error: any) {
@@ -101,7 +113,12 @@ export default React.memo(function SearchItem(props: Props) {
 
     function _displayAddToLibraryImage() {
         if (item_type === 'manga' && user.logged) {
-            const manga_is_in_library = user.mangas_list.includes(item.id);
+            const manga_is_in_library = user.user_mangas_list.includes(
+                getFirestoreUserMangaById({
+                    user: user,
+                    id: item.id,
+                })
+            );
             const color = manga_is_in_library ? ORANGE : GREY;
             return (
                 <TouchableOpacity

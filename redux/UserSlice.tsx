@@ -3,7 +3,8 @@ import {
     firestoreAddMangaToUserMangasList,
     firestoreGetUserData,
     firestoreRemoveMangaFromUserMangasList,
-} from 'api/FireBase';
+} from 'api/FirebaseApi';
+import { FirestoreUser, FirestoreUserManga } from 'api/FirebaseTypes';
 import {
     createUserWithEmailAndPassword,
     getAuth,
@@ -11,7 +12,6 @@ import {
     signOut,
 } from 'firebase/auth';
 import { collection, doc, getFirestore, setDoc } from 'firebase/firestore';
-import { Id } from '../globals/GlobalTypes';
 
 const auth = getAuth();
 const firestore = getFirestore();
@@ -28,9 +28,9 @@ export const signInUser = createAsyncThunk(
         );
         const uid = response.user.uid;
         const snapshot = await firestoreGetUserData({ uid: uid });
-        let user_data: UserData;
+        let user_data: FirestoreUser;
         if (snapshot.exists()) {
-            user_data = snapshot.data() as UserData;
+            user_data = snapshot.data() as FirestoreUser;
         } else {
             throw "User data doesn't exist.";
         }
@@ -50,11 +50,12 @@ export const signUpUser = createAsyncThunk(
             password
         );
         const uid = response.user.uid;
-        await setDoc(doc(collection(firestore, 'users'), uid), {
+        const new_user_data: FirestoreUser = {
             email: email,
             username: username,
-            mangas_list: [],
-        });
+            user_mangas_list: [],
+        };
+        await setDoc(doc(collection(firestore, 'users'), uid), new_user_data);
         return { email, uid, username };
     }
 );
@@ -65,37 +66,31 @@ export const signOutUser = createAsyncThunk('user/signOutUser', async () => {
 
 export const addMangaToUserLibrary = createAsyncThunk(
     'user/addMangaToUserLibrary',
-    async (args: { uid: string; manga_id: Id }) => {
-        const manga_id = args.manga_id;
+    async (args: { uid: string; user_manga: FirestoreUserManga }) => {
+        const user_manga = args.user_manga;
         const uid = args.uid;
         const response = await firestoreAddMangaToUserMangasList({
-            manga_id: manga_id,
+            user_manga: user_manga,
             uid: uid,
         });
-        return { manga_id };
+        return { user_manga };
     }
 );
 
 export const removeMangaFromUserLibrary = createAsyncThunk(
     'user/removeMangaFromUserLibrary',
-    async (args: { uid: string; manga_id: Id }) => {
-        const manga_id = args.manga_id;
+    async (args: { uid: string; user_manga: FirestoreUserManga }) => {
+        const user_manga = args.user_manga;
         const uid = args.uid;
         const response = await firestoreRemoveMangaFromUserMangasList({
-            manga_id: manga_id,
+            user_manga: user_manga,
             uid: uid,
         });
-        return { manga_id };
+        return { user_manga };
     }
 );
 
-export type UserData = {
-    email?: string | undefined;
-    username?: string | undefined;
-    mangas_list: Id[];
-};
-
-export type UserState = UserData & {
+export type UserState = FirestoreUser & {
     uid: string | undefined;
     logged: boolean;
 };
@@ -103,7 +98,7 @@ export type UserState = UserData & {
 const initialState: UserState = {
     uid: undefined,
     logged: false,
-    mangas_list: [],
+    user_mangas_list: [],
 };
 
 export const userSlice = createSlice({
@@ -116,7 +111,8 @@ export const userSlice = createSlice({
             state.uid = action.payload.uid;
             state.email = action.payload.email;
             state.username = action.payload.user_data['username'];
-            state.mangas_list = action.payload.user_data['mangas_list'];
+            state.user_mangas_list =
+                action.payload.user_data['user_mangas_list'];
         });
         builder.addCase(signOutUser.fulfilled, (state) => {
             state.uid = undefined;
@@ -129,18 +125,19 @@ export const userSlice = createSlice({
             state.email = action.payload.email;
         });
         builder.addCase(addMangaToUserLibrary.fulfilled, (state, action) => {
-            if (!state.mangas_list.includes(action.payload.manga_id)) {
-                state.mangas_list.push(action.payload.manga_id);
+            if (!state.user_mangas_list.includes(action.payload.user_manga)) {
+                const new_user_manga = action.payload.user_manga;
+                state.user_mangas_list.push(new_user_manga);
             }
         });
         builder.addCase(
             removeMangaFromUserLibrary.fulfilled,
             (state, action) => {
-                const index = state.mangas_list.indexOf(
-                    action.payload.manga_id
+                const index = state.user_mangas_list.indexOf(
+                    action.payload.user_manga
                 );
                 if (index > -1) {
-                    state.mangas_list.splice(index, 1);
+                    state.user_mangas_list.splice(index, 1);
                 }
             }
         );

@@ -111,7 +111,7 @@ export default function LoginScreen({
             >
                 <Text>Welcome {user.username}</Text>
                 <Text>email: {user.email}</Text>
-                <Text>mangas_list: {user.mangas_list}</Text>
+                <Text>mangas_list: {user.user_mangas_list}</Text>
                 <ButtonSignOut color={ORANGE}></ButtonSignOut>
             </View>
         );
@@ -139,6 +139,7 @@ export default function LoginScreen({
                         <TextInput
                             style={styles.text_input}
                             placeholder={'Email'}
+                            keyboardType={'email-address'}
                             placeholderTextColor={GREY}
                             selectionColor={GREY}
                             value={value.email}

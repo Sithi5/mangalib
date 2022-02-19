@@ -1,16 +1,15 @@
-import { kitsuGetItemImage, kitsuGetItemDetails } from 'api/KitsuApi';
+import { kitsuGetItemDetails, kitsuGetItemImage } from 'api/KitsuApi';
 import { KitsuData, KitsuItemType } from 'api/KitsuTypes';
 import Loading from 'components/Loading';
 import AppStyles from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
 import {
-    LibraryStackScreenProps,
     SearchAnimeStackScreenProps,
     SearchMangaStackScreenProps,
 } from 'navigations/NavigationsTypes';
 import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
-import getKitsuItemTitle from 'utils/GetKitsuItemTitle';
+import getKitsuItemTitle from 'utils/kitsu/GetKitsuItemTitle';
 
 export default function ItemDetailsScreen({
     route,

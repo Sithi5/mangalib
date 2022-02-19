@@ -9,7 +9,8 @@ import React, { useEffect, useState } from 'react';
 import { Alert, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
 import { removeMangaFromUserLibrary } from 'redux/UserSlice';
-import getKitsuItemTitle from 'utils/GetKitsuItemTitle';
+import getFirestoreUserMangaById from 'utils/firebase/GetUserMangaById';
+import getKitsuItemTitle from 'utils/kitsu/GetKitsuItemTitle';
 
 export default function LibraryMangaDetailsScreen({
     navigation,
@@ -20,6 +21,12 @@ export default function LibraryMangaDetailsScreen({
     const id: Id = route.params.id;
     const user = useAppSelector((state) => state.user);
     const dispatch = useAppDispatch();
+
+    const manga_is_in_library = user.user_mangas_list
+        .map((user_manga) => {
+            return user_manga.manga_id;
+        })
+        .includes(id);
 
     useEffect(() => {
         async function _getItemDetails() {
@@ -47,7 +54,10 @@ export default function LibraryMangaDetailsScreen({
                     await dispatch(
                         removeMangaFromUserLibrary({
                             uid: user.uid,
-                            manga_id: id,
+                            user_manga: getFirestoreUserMangaById({
+                                user: user,
+                                id: id,
+                            }),
                         })
                     );
                     navigation.goBack();
@@ -56,7 +66,6 @@ export default function LibraryMangaDetailsScreen({
                 console.error(error.message);
             }
         }
-        const manga_is_in_library = user.mangas_list.includes(id);
         if (manga_is_in_library) {
             Alert.alert(
                 'Remove manga from library',
