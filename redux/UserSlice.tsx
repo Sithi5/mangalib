@@ -87,6 +87,20 @@ export const addVolumeToUserMangaVolumes = createAsyncThunk(
     }
 );
 
+export const removeVolumeFromUserMangaVolumes = createAsyncThunk(
+    'user/removeVolumeFromUserMangaVolumes',
+    async (args: { volume_number: number; user_manga: FirestoreUserManga }) => {
+        const { user_manga, volume_number } = args;
+        if (volume_number > 1) {
+            const response = await firestoreAddVolumeToUserMangaVolumes({
+                user_manga: user_manga,
+                volume_number: volume_number,
+            });
+        }
+        return { user_manga, volume_number };
+    }
+);
+
 export const removeMangaFromUserLibrary = createAsyncThunk(
     'user/removeMangaFromUserLibrary',
     async (args: { uid: string; user_manga: FirestoreUserManga }) => {
@@ -174,6 +188,30 @@ export const userSlice = createSlice({
                     state.user_mangas_list[index].volumes.push(
                         action.payload.volume_number
                     );
+                }
+            }
+        );
+        builder.addCase(
+            removeVolumeFromUserMangaVolumes.fulfilled,
+            (state, action) => {
+                if (action.payload.volume_number > 1) {
+                    const index = getMangasIdsListFromFirestoreUsersMangasList({
+                        user_mangas_list: state.user_mangas_list,
+                    }).indexOf(action.payload.user_manga.manga_id);
+                    if (
+                        index > -1 &&
+                        state.user_mangas_list[index].volumes.includes(
+                            action.payload.volume_number
+                        )
+                    ) {
+                        const volume_index = state.user_mangas_list[
+                            index
+                        ].volumes.indexOf(action.payload.volume_number);
+                        state.user_mangas_list[index].volumes.splice(
+                            volume_index,
+                            1
+                        );
+                    }
                 }
             }
         );

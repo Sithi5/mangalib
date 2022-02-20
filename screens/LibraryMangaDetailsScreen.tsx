@@ -10,7 +10,11 @@ import { LibraryStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
-import { removeMangaFromUserLibrary } from 'redux/UserSlice';
+import {
+    addVolumeToUserMangaVolumes,
+    removeMangaFromUserLibrary,
+    removeVolumeFromUserMangaVolumes,
+} from 'redux/UserSlice';
 import { alertRemoveMangaFromLibrary } from 'utils/alerts';
 import { getFirestoreUserMangaById } from 'utils/firebase/';
 import { getKitsuItemTitle } from 'utils/kitsu/';
@@ -54,7 +58,35 @@ export default function LibraryMangaDetailsScreen({
         _getItemDetails();
     }, [id]);
 
-    function _addVolumeToManga() {}
+    async function _addVolumeToManga() {
+        try {
+            const last_volume = Math.max(...user_manga.volumes);
+            await dispatch(
+                addVolumeToUserMangaVolumes({
+                    user_manga: user_manga,
+                    volume_number: last_volume + 1,
+                })
+            );
+        } catch (error: any) {
+            console.error(error.message);
+        }
+    }
+
+    async function _removeVolumeFromManga() {
+        const last_volume = Math.max(...user_manga.volumes);
+        if (last_volume > 1) {
+            try {
+                await dispatch(
+                    removeVolumeFromUserMangaVolumes({
+                        user_manga: user_manga,
+                        volume_number: last_volume,
+                    })
+                );
+            } catch (error: any) {
+                console.error(error.message);
+            }
+        }
+    }
 
     function _removeMangaFromLibrary() {
         async function _removeUserManga() {
@@ -107,7 +139,11 @@ export default function LibraryMangaDetailsScreen({
                                 flexDirection: 'row',
                             }}
                         >
-                            <TouchableOpacity onPress={async () => {}}>
+                            <TouchableOpacity
+                                onPress={async () => {
+                                    _removeVolumeFromManga();
+                                }}
+                            >
                                 <Ionicons
                                     style={styles.icon}
                                     name="remove-circle-outline"
