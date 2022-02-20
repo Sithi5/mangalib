@@ -1,30 +1,50 @@
 import { Ionicons } from '@expo/vector-icons';
+import { FirestoreUserManga } from 'api/FirebaseTypes';
 import { kitsuGetItemDetails, kitsuGetItemImage } from 'api/KitsuApi';
 import { KitsuData } from 'api/KitsuTypes';
 import { ButtonFullBackgroundColor } from 'components/buttons';
-import UserMangaVolumesList from 'components/lists/UserMangaVolumesList';
 import Loading from 'components/Loading';
-import AppStyles, { BLACK, RED } from 'globals/AppStyles';
+import AppStyles, {
+    BLACK,
+    DEFAULT_MARGIN,
+    GREY,
+    ORANGE,
+    RED,
+    WHITE,
+} from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
 import { LibraryStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+    Dimensions,
+    FlatList,
+    Image,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
 import {
-    addVolumeToUserMangaVolumes,
-    removeMangaFromUserLibrary,
-    removeVolumeFromUserMangaVolumes,
+    removeMangaFromUserMangaList,
+    updateUserMangasList,
 } from 'redux/UserSlice';
 import { alertRemoveMangaFromLibrary } from 'utils/alerts';
-import { getFirestoreUserMangaById } from 'utils/firebase/';
+import {
+    getFirestoreUserMangaById,
+    getMangasIdsListFromFirestoreUsersMangasList,
+} from 'utils/firebase/';
 import { getKitsuItemTitle } from 'utils/kitsu/';
+import { deepCopy } from 'utils/objects';
+
+const window_width = Dimensions.get('window').width;
 
 export default function LibraryMangaDetailsScreen({
     navigation,
     route,
 }: LibraryStackScreenProps<'LibraryMangaDetails'>) {
     const [is_loading, setLoading] = useState(true);
-    const [item, setItem] = useState<KitsuData>();
+    const [manga, setManga] = useState<KitsuData>();
     const id: Id = route.params.id;
     const user = useAppSelector((state) => state.user);
     const dispatch = useAppDispatch();
@@ -33,6 +53,10 @@ export default function LibraryMangaDetailsScreen({
         user: user,
         id: id,
     });
+    const manga_index = getMangasIdsListFromFirestoreUsersMangasList({
+        user_mangas_list: user.user_mangas_list,
+    }).indexOf(user_manga.manga_id);
+
     const manga_is_in_library = user.user_mangas_list
         .map((user_manga) => {
             return user_manga.manga_id;
@@ -40,14 +64,14 @@ export default function LibraryMangaDetailsScreen({
         .includes(id);
 
     useEffect(() => {
-        async function _getItemDetails() {
+        async function _getMangaDetails() {
             try {
                 const response = await kitsuGetItemDetails({
                     id: id,
                     item_type: 'manga',
                 });
                 if (response) {
-                    setItem(response.data);
+                    setManga(response.data);
                 }
             } catch (error) {
                 console.error(error);
@@ -55,18 +79,25 @@ export default function LibraryMangaDetailsScreen({
                 setLoading(false);
             }
         }
-        _getItemDetails();
+        _getMangaDetails();
     }, [id]);
 
     async function _addVolumeToManga() {
         try {
-            const last_volume = Math.max(...user_manga.volumes);
-            await dispatch(
-                addVolumeToUserMangaVolumes({
-                    user_manga: user_manga,
-                    volume_number: last_volume + 1,
-                })
-            );
+            if (user.uid) {
+                const last_volume = Math.max(...user_manga.volumes);
+                user.user_mangas_list.indexOf(user_manga);
+                let new_user_mangas_list: FirestoreUserManga[] = deepCopy({
+                    source_object: user.user_mangas_list,
+                });
+                new_user_mangas_list[manga_index].volumes.push(last_volume + 1);
+                await dispatch(
+                    updateUserMangasList({
+                        uid: user.uid,
+                        user_mangas_list: new_user_mangas_list,
+                    })
+                );
+            }
         } catch (error: any) {
             console.error(error.message);
         }
@@ -76,12 +107,22 @@ export default function LibraryMangaDetailsScreen({
         const last_volume = Math.max(...user_manga.volumes);
         if (last_volume > 1) {
             try {
-                await dispatch(
-                    removeVolumeFromUserMangaVolumes({
-                        user_manga: user_manga,
-                        volume_number: last_volume,
-                    })
-                );
+                if (user.uid) {
+                    if (user.user_mangas_list[manga_index].volumes.length > 1) {
+                        user.user_mangas_list[manga_index].volumes.length;
+                        let new_user_mangas_list: FirestoreUserManga[] =
+                            deepCopy({
+                                source_object: user.user_mangas_list,
+                            });
+                        new_user_mangas_list[manga_index].volumes.length -= 1;
+                        await dispatch(
+                            updateUserMangasList({
+                                uid: user.uid,
+                                user_mangas_list: new_user_mangas_list,
+                            })
+                        );
+                    }
+                }
             } catch (error: any) {
                 console.error(error.message);
             }
@@ -93,7 +134,7 @@ export default function LibraryMangaDetailsScreen({
             try {
                 if (user.logged && user.uid !== undefined) {
                     await dispatch(
-                        removeMangaFromUserLibrary({
+                        removeMangaFromUserMangaList({
                             uid: user.uid,
                             user_manga,
                         })
@@ -111,16 +152,94 @@ export default function LibraryMangaDetailsScreen({
         }
     }
 
-    function _ItemDetails() {
-        if (item != undefined && user_manga) {
-            const image_url = kitsuGetItemImage({
-                id: id,
-                item_type: 'manga',
-                format: 'small',
-            });
+    function _addOrRemoveFromUserPossessedVolumes({
+        volume_number,
+    }: {
+        volume_number: number;
+    }) {
+        async function _addToUserPossessedVolumes() {
+            try {
+                if (user.uid) {
+                    let new_user_mangas_list: FirestoreUserManga[] = deepCopy({
+                        source_object: user.user_mangas_list,
+                    });
+                    if (
+                        !new_user_mangas_list[
+                            manga_index
+                        ].possessed_volumes.includes(volume_number)
+                    )
+                        new_user_mangas_list[
+                            manga_index
+                        ].possessed_volumes.push(volume_number);
+                    await dispatch(
+                        updateUserMangasList({
+                            uid: user.uid,
+                            user_mangas_list: new_user_mangas_list,
+                        })
+                    );
+                }
+            } catch (error: any) {
+                console.error(error.message);
+            }
+        }
 
+        async function _removeFromUserPossessedVolumes() {
+            try {
+                if (user.uid) {
+                    let new_user_mangas_list: FirestoreUserManga[] = deepCopy({
+                        source_object: user.user_mangas_list,
+                    });
+
+                    const index =
+                        new_user_mangas_list[
+                            manga_index
+                        ].possessed_volumes.indexOf(volume_number);
+                    if (index > -1) {
+                        new_user_mangas_list[
+                            manga_index
+                        ].possessed_volumes.splice(index, 1);
+                        await dispatch(
+                            updateUserMangasList({
+                                uid: user.uid,
+                                user_mangas_list: new_user_mangas_list,
+                            })
+                        );
+                    }
+                }
+            } catch (error: any) {
+                console.error(error.message);
+            }
+        }
+
+        if (user_manga.possessed_volumes.includes(volume_number)) {
+            _removeFromUserPossessedVolumes();
+        } else {
+            _addToUserPossessedVolumes();
+        }
+    }
+
+    function _listFooter() {
+        return (
+            <ButtonFullBackgroundColor
+                color={RED}
+                onPressFunction={() => {
+                    _removeMangaFromLibrary();
+                }}
+                text={'Remove manga from library'}
+            />
+        );
+    }
+
+    function _listHeader() {
+        const image_url = kitsuGetItemImage({
+            id: id,
+            item_type: 'manga',
+            format: 'small',
+        });
+
+        if (manga != undefined && user_manga) {
             return (
-                <View style={styles.scrollview_container}>
+                <View style={AppStyles.main_container}>
                     <Image
                         source={{ uri: image_url }}
                         style={styles.item_image}
@@ -128,7 +247,7 @@ export default function LibraryMangaDetailsScreen({
                     <View style={styles.content_main_container}>
                         <View style={styles.content_title_container}>
                             <Text style={styles.title_text}>
-                                {getKitsuItemTitle({ item: item })}
+                                {getKitsuItemTitle({ item: manga })}
                             </Text>
                         </View>
                         <View
@@ -164,17 +283,58 @@ export default function LibraryMangaDetailsScreen({
                                 />
                             </TouchableOpacity>
                         </View>
-
-                        <UserMangaVolumesList user_manga={user_manga} />
-                        <ButtonFullBackgroundColor
-                            color={RED}
-                            onPressFunction={() => {
-                                _removeMangaFromLibrary();
-                            }}
-                            text={'Remove manga from library'}
-                        />
                     </View>
                 </View>
+            );
+        }
+    }
+
+    function _UserMangaDetails() {
+        if (user.logged && manga != undefined && user_manga) {
+            return (
+                <FlatList
+                    ListFooterComponent={_listFooter()}
+                    ListHeaderComponent={_listHeader()}
+                    data={user_manga.volumes}
+                    horizontal={false}
+                    keyExtractor={(item) => item.toString()}
+                    numColumns={8}
+                    ItemSeparatorComponent={() => (
+                        <View style={styles.separator_container}></View>
+                    )}
+                    renderItem={({ item, index }) => (
+                        <TouchableOpacity
+                            onPress={() => {
+                                _addOrRemoveFromUserPossessedVolumes({
+                                    volume_number: item,
+                                });
+                            }}
+                            style={[
+                                styles.volume_bubble,
+                                {
+                                    backgroundColor:
+                                        user_manga.possessed_volumes.includes(
+                                            item
+                                        )
+                                            ? ORANGE
+                                            : WHITE,
+                                },
+                            ]}
+                        >
+                            <Text
+                                style={{
+                                    color: user_manga.possessed_volumes.includes(
+                                        item
+                                    )
+                                        ? WHITE
+                                        : BLACK,
+                                }}
+                            >
+                                {item}
+                            </Text>
+                        </TouchableOpacity>
+                    )}
+                />
             );
         }
     }
@@ -182,10 +342,12 @@ export default function LibraryMangaDetailsScreen({
     return (
         <View style={AppStyles.main_container}>
             <Loading is_loading={is_loading} />
-            {_ItemDetails()}
+            {_UserMangaDetails()}
         </View>
     );
 }
+
+const volume_bubble_size = window_width / 10;
 
 const styles = StyleSheet.create({
     scrollview_container: {
@@ -258,5 +420,18 @@ const styles = StyleSheet.create({
     },
     icon: {
         padding: 10,
+    },
+    separator_container: {
+        height: DEFAULT_MARGIN,
+    },
+    volume_bubble: {
+        margin: DEFAULT_MARGIN,
+        height: volume_bubble_size,
+        width: volume_bubble_size,
+        borderRadius: volume_bubble_size / 2,
+        backgroundColor: WHITE,
+        borderWidth: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });

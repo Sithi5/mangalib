@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
     firestoreAddMangaToUserMangasList,
-    firestoreAddVolumeToUserMangaVolumes,
     firestoreGetUserData,
     firestoreRemoveMangaFromUserMangasList,
+    firestoreUpdateUserMangasList,
 } from 'api/FirebaseApi';
 import { FirestoreUser, FirestoreUserManga } from 'api/FirebaseTypes';
 import {
@@ -63,8 +63,8 @@ export const signOutUser = createAsyncThunk('user/signOutUser', async () => {
     await signOut(auth);
 });
 
-export const addMangaToUserLibrary = createAsyncThunk(
-    'user/addMangaToUserLibrary',
+export const addMangaToUserMangaList = createAsyncThunk(
+    'user/addMangaToUserMangaList',
     async (args: { uid: string; user_manga: FirestoreUserManga }) => {
         const { user_manga, uid } = args;
         const response = await firestoreAddMangaToUserMangasList({
@@ -75,34 +75,8 @@ export const addMangaToUserLibrary = createAsyncThunk(
     }
 );
 
-export const addVolumeToUserMangaVolumes = createAsyncThunk(
-    'user/addVolumeToUserMangaVolumes',
-    async (args: { volume_number: number; user_manga: FirestoreUserManga }) => {
-        const { user_manga, volume_number } = args;
-        const response = await firestoreAddVolumeToUserMangaVolumes({
-            user_manga: user_manga,
-            volume_number: volume_number,
-        });
-        return { user_manga, volume_number };
-    }
-);
-
-export const removeVolumeFromUserMangaVolumes = createAsyncThunk(
-    'user/removeVolumeFromUserMangaVolumes',
-    async (args: { volume_number: number; user_manga: FirestoreUserManga }) => {
-        const { user_manga, volume_number } = args;
-        if (volume_number > 1) {
-            const response = await firestoreAddVolumeToUserMangaVolumes({
-                user_manga: user_manga,
-                volume_number: volume_number,
-            });
-        }
-        return { user_manga, volume_number };
-    }
-);
-
-export const removeMangaFromUserLibrary = createAsyncThunk(
-    'user/removeMangaFromUserLibrary',
+export const removeMangaFromUserMangaList = createAsyncThunk(
+    'user/removeMangaFromUserMangaList',
     async (args: { uid: string; user_manga: FirestoreUserManga }) => {
         const { user_manga, uid } = args;
         const response = await firestoreRemoveMangaFromUserMangasList({
@@ -110,6 +84,18 @@ export const removeMangaFromUserLibrary = createAsyncThunk(
             uid: uid,
         });
         return { user_manga };
+    }
+);
+
+export const updateUserMangasList = createAsyncThunk(
+    'user/updateUserMangasList',
+    async (args: { uid: string; user_mangas_list: FirestoreUserManga[] }) => {
+        const { user_mangas_list, uid } = args;
+        const response = await firestoreUpdateUserMangasList({
+            user_mangas_list: user_mangas_list,
+            uid: uid,
+        });
+        return { user_mangas_list };
     }
 );
 
@@ -152,7 +138,7 @@ export const userSlice = createSlice({
             state.username = action.payload.username;
             state.email = action.payload.email;
         });
-        builder.addCase(addMangaToUserLibrary.fulfilled, (state, action) => {
+        builder.addCase(addMangaToUserMangaList.fulfilled, (state, action) => {
             if (
                 !getMangasIdsListFromFirestoreUsersMangasList({
                     user_mangas_list: state.user_mangas_list,
@@ -163,7 +149,7 @@ export const userSlice = createSlice({
             }
         });
         builder.addCase(
-            removeMangaFromUserLibrary.fulfilled,
+            removeMangaFromUserMangaList.fulfilled,
             (state, action) => {
                 const index = getMangasIdsListFromFirestoreUsersMangasList({
                     user_mangas_list: state.user_mangas_list,
@@ -173,48 +159,9 @@ export const userSlice = createSlice({
                 }
             }
         );
-        builder.addCase(
-            addVolumeToUserMangaVolumes.fulfilled,
-            (state, action) => {
-                const index = getMangasIdsListFromFirestoreUsersMangasList({
-                    user_mangas_list: state.user_mangas_list,
-                }).indexOf(action.payload.user_manga.manga_id);
-                if (
-                    index > -1 &&
-                    !state.user_mangas_list[index].volumes.includes(
-                        action.payload.volume_number
-                    )
-                ) {
-                    state.user_mangas_list[index].volumes.push(
-                        action.payload.volume_number
-                    );
-                }
-            }
-        );
-        builder.addCase(
-            removeVolumeFromUserMangaVolumes.fulfilled,
-            (state, action) => {
-                if (action.payload.volume_number > 1) {
-                    const index = getMangasIdsListFromFirestoreUsersMangasList({
-                        user_mangas_list: state.user_mangas_list,
-                    }).indexOf(action.payload.user_manga.manga_id);
-                    if (
-                        index > -1 &&
-                        state.user_mangas_list[index].volumes.includes(
-                            action.payload.volume_number
-                        )
-                    ) {
-                        const volume_index = state.user_mangas_list[
-                            index
-                        ].volumes.indexOf(action.payload.volume_number);
-                        state.user_mangas_list[index].volumes.splice(
-                            volume_index,
-                            1
-                        );
-                    }
-                }
-            }
-        );
+        builder.addCase(updateUserMangasList.fulfilled, (state, action) => {
+            state.user_mangas_list = action.payload.user_mangas_list;
+        });
     },
 });
 

@@ -9,8 +9,6 @@ import {
 } from 'firebase/firestore';
 import {
     ArgsAddMangaToUserMangasList,
-    ArgsAddVolumeToUserMangaPossessedVolume,
-    ArgsAddVolumeToUserMangaVolumes,
     ArgsFireforceGetUserData,
     ArgsRemoveMangaFromUserMangasList,
     ArgsUpdateUserEmail,
@@ -81,25 +79,6 @@ export async function firestoreAddMangaToUserMangasList({
             user_mangas_list: arrayUnion(user_manga),
         });
         return response;
-    } catch (error) {
-        throw error;
-    }
-}
-
-export async function firestoreAddVolumeToUserPossessedVolume({
-    volume_number,
-    user_manga,
-}: ArgsAddVolumeToUserMangaPossessedVolume) {
-    try {
-    } catch (error) {
-        throw error;
-    }
-}
-export async function firestoreAddVolumeToUserMangaVolumes({
-    volume_number,
-    user_manga,
-}: ArgsAddVolumeToUserMangaVolumes) {
-    try {
     } catch (error) {
         throw error;
     }

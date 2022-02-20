@@ -36,16 +36,6 @@ export type ArgsAddMangaToUserMangasList = {
     user_manga: FirestoreUserManga;
 };
 
-export type ArgsAddVolumeToUserMangaPossessedVolume = {
-    volume_number: number;
-    user_manga: FirestoreUserManga;
-};
-
-export type ArgsAddVolumeToUserMangaVolumes = {
-    volume_number: number;
-    user_manga: FirestoreUserManga;
-};
-
 export type ArgsRemoveMangaFromUserMangasList = {
     uid: string;
     user_manga: FirestoreUserManga;

@@ -14,8 +14,8 @@ import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
 import {
-    addMangaToUserLibrary,
-    removeMangaFromUserLibrary,
+    addMangaToUserMangaList,
+    removeMangaFromUserMangaList,
 } from 'redux/UserSlice';
 import { alertRemoveMangaFromLibrary } from 'utils/alerts';
 import {
@@ -64,7 +64,7 @@ export default React.memo(function SearchItem(props: Props) {
                     );
                     try {
                         await dispatch(
-                            addMangaToUserLibrary({
+                            addMangaToUserMangaList({
                                 uid: user.uid,
                                 user_manga: createNewFirestoreUserManga({
                                     id: item.id,
@@ -81,7 +81,7 @@ export default React.memo(function SearchItem(props: Props) {
                 if (user.uid !== undefined) {
                     try {
                         await dispatch(
-                            removeMangaFromUserLibrary({
+                            removeMangaFromUserMangaList({
                                 uid: user.uid,
                                 user_manga: getFirestoreUserMangaById({
                                     user: user,
