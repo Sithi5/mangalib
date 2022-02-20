@@ -77,7 +77,7 @@ export default React.memo(function SearchItem(props: Props) {
                 }
             }
 
-            async function _removeMangaFromLibrary() {
+            async function _removeUserManga() {
                 if (user.uid !== undefined) {
                     try {
                         await dispatch(
@@ -97,7 +97,7 @@ export default React.memo(function SearchItem(props: Props) {
 
             if (manga_is_in_library) {
                 alertRemoveMangaFromLibrary({
-                    alertYesFunction: _removeMangaFromLibrary,
+                    alertYesFunction: _removeUserManga,
                 });
             } else {
                 _addMangaToLibrary();

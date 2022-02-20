@@ -10,8 +10,8 @@ export default function createNewFirestoreUserManga({
 }: Args): FirestoreUserManga {
     const new_user_manga: FirestoreUserManga = {
         manga_id: id,
-        total_books: 1,
-        possessed_books: [],
+        volumes: [{ volume_number: 1 }],
+        possessed_volumes: [],
     };
     return new_user_manga;
 }

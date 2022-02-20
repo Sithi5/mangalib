@@ -1,9 +1,13 @@
 import { Id } from 'globals/GlobalTypes';
 
+export type MangaVolume = {
+    volume_number: number;
+};
+
 export type FirestoreUserManga = {
     manga_id: Id;
-    total_books: number;
-    possessed_books: number[];
+    volumes: MangaVolume[];
+    possessed_volumes: number[];
 };
 
 export type FirestoreUser = {

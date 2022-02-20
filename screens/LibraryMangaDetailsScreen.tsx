@@ -1,17 +1,26 @@
 import { kitsuGetItemDetails, kitsuGetItemImage } from 'api/KitsuApi';
 import { KitsuData } from 'api/KitsuTypes';
 import { ButtonFullBackgroundColor } from 'components/buttons';
+import UserMangaVolumesList from 'components/lists/UserMangaVolumesList';
 import Loading from 'components/Loading';
-import AppStyles, { RED } from 'globals/AppStyles';
+import AppStyles, { BLACK, RED } from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
 import { LibraryStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useEffect, useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+    Image,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
 import { removeMangaFromUserLibrary } from 'redux/UserSlice';
 import { alertRemoveMangaFromLibrary } from 'utils/alerts';
 import { getFirestoreUserMangaById } from 'utils/firebase/';
 import { getKitsuItemTitle } from 'utils/kitsu/';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function LibraryMangaDetailsScreen({
     navigation,
@@ -23,6 +32,10 @@ export default function LibraryMangaDetailsScreen({
     const user = useAppSelector((state) => state.user);
     const dispatch = useAppDispatch();
 
+    const user_manga = getFirestoreUserMangaById({
+        user: user,
+        id: id,
+    });
     const manga_is_in_library = user.user_mangas_list
         .map((user_manga) => {
             return user_manga.manga_id;
@@ -49,16 +62,13 @@ export default function LibraryMangaDetailsScreen({
     }, [id]);
 
     function _removeMangaFromLibrary() {
-        async function _asyncRemoveMangaFromLibrary() {
+        async function _removeUserManga() {
             try {
                 if (user.logged && user.uid !== undefined) {
                     await dispatch(
                         removeMangaFromUserLibrary({
                             uid: user.uid,
-                            user_manga: getFirestoreUserMangaById({
-                                user: user,
-                                id: id,
-                            }),
+                            user_manga,
                         })
                     );
                     navigation.goBack();
@@ -69,13 +79,13 @@ export default function LibraryMangaDetailsScreen({
         }
         if (manga_is_in_library) {
             alertRemoveMangaFromLibrary({
-                alertYesFunction: _asyncRemoveMangaFromLibrary,
+                alertYesFunction: _removeUserManga,
             });
         }
     }
 
     function _ItemDetails() {
-        if (item != undefined) {
+        if (item != undefined && user_manga) {
             const image_url = kitsuGetItemImage({
                 id: id,
                 item_type: 'manga',
@@ -83,7 +93,7 @@ export default function LibraryMangaDetailsScreen({
             });
 
             return (
-                <ScrollView style={styles.scrollview_container}>
+                <View style={styles.scrollview_container}>
                     <Image
                         source={{ uri: image_url }}
                         style={styles.item_image}
@@ -94,15 +104,42 @@ export default function LibraryMangaDetailsScreen({
                                 {getKitsuItemTitle({ item: item })}
                             </Text>
                         </View>
+                        <View
+                            style={{
+                                flex: 1,
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                flexDirection: 'row',
+                            }}
+                        >
+                            <TouchableOpacity onPress={async () => {}}>
+                                <Ionicons
+                                    style={styles.icon}
+                                    name="remove-circle-outline"
+                                    size={20}
+                                    color={BLACK}
+                                />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={async () => {}}>
+                                <Ionicons
+                                    style={styles.icon}
+                                    name="add-circle-outline"
+                                    size={20}
+                                    color={BLACK}
+                                />
+                            </TouchableOpacity>
+                        </View>
+
+                        <UserMangaVolumesList user_manga={user_manga} />
                         <ButtonFullBackgroundColor
                             color={RED}
-                            onPressFunction={async () => {
-                                await _removeMangaFromLibrary();
+                            onPressFunction={() => {
+                                _removeMangaFromLibrary();
                             }}
                             text={'Remove manga from library'}
                         />
                     </View>
-                </ScrollView>
+                </View>
             );
         }
     }
@@ -183,5 +220,8 @@ const styles = StyleSheet.create({
     share_image: {
         width: 30,
         height: 30,
+    },
+    icon: {
+        padding: 10,
     },
 });
