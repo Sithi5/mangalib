@@ -46,7 +46,12 @@ export default function LibraryScreen({
                             );
                         }
                     });
-                    mangas_list.current = tmp_mangas_list;
+
+                    mangas_list.current = tmp_mangas_list.sort((a, b) =>
+                        getMangaTitle({ item: a }) > getMangaTitle({ item: b })
+                            ? 1
+                            : -1
+                    );
                     setFilteredMangasList(mangas_list.current);
                 }
             } catch (error) {
@@ -80,9 +85,6 @@ export default function LibraryScreen({
                     return manga;
                 }
             });
-            // tmp_filtered_mangas_list.sort((a, b) =>
-            //     getMangaTitle({ item: a }) > getMangaTitle({ item: b }) ? 1 : -1
-            // );
             setFilteredMangasList(tmp_filtered_mangas_list);
         }
     }
