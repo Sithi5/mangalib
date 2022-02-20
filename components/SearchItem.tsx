@@ -24,8 +24,8 @@ import {
     addMangaToUserLibrary,
     removeMangaFromUserLibrary,
 } from 'redux/UserSlice';
-import createNewFirestoreUserManga from 'utils/firebase/CreateNewUserManga';
-import getFirestoreUserMangaById from 'utils/firebase/GetUserMangaById';
+import createNewFirestoreUserManga from 'utils/firebase/CreateNewFirestoreUserManga';
+import getFirestoreUserMangaById from 'utils/firebase/GetFirestoreUserMangaById';
 import getMangaTitle from 'utils/kitsu/GetKitsuItemTitle';
 
 export const ITEM_HEIGHT = 190;
@@ -50,64 +50,74 @@ export default React.memo(function SearchItem(props: Props) {
     });
 
     function _addOrRemoveMangaFromLibrary() {
-        const manga_is_in_library = user.user_mangas_list
-            .map((user_manga) => {
-                return user_manga.manga_id;
-            })
-            .includes(item.id);
-
-        async function _addMangaToLibrary() {
-            if (user.logged && user.uid !== undefined) {
-                try {
-                    await dispatch(
-                        addMangaToUserLibrary({
-                            uid: user.uid,
-                            user_manga: createNewFirestoreUserManga({
-                                id: item.id,
-                            }),
-                        })
-                    );
-                } catch (error: any) {
-                    console.error(error.message);
-                }
-            }
-        }
-
-        async function _removeMangaFromLibrary() {
-            if (user.logged && user.uid !== undefined) {
-                try {
-                    await dispatch(
-                        removeMangaFromUserLibrary({
-                            uid: user.uid,
-                            user_manga: getFirestoreUserMangaById({
-                                user: user,
-                                id: item.id,
-                            }),
-                        })
-                    );
-                } catch (error: any) {
-                    console.error(error.message);
-                }
-            }
-        }
-        if (manga_is_in_library) {
-            Alert.alert(
-                'Remove manga from library',
-                'Are you sure you want to remove this manga from your library?',
-                [
-                    {
-                        text: 'No',
-                        onPress: () => {},
-                        style: 'cancel',
-                    },
-                    {
-                        text: 'Yes',
-                        onPress: _removeMangaFromLibrary,
-                    },
-                ]
+        if (user.logged) {
+            const manga_is_in_library = user.user_mangas_list.includes(
+                getFirestoreUserMangaById({
+                    user: user,
+                    id: item.id,
+                })
             );
-        } else {
-            _addMangaToLibrary();
+
+            async function _addMangaToLibrary() {
+                if (user.uid !== undefined) {
+                    const manga_is_in_library = user.user_mangas_list.includes(
+                        getFirestoreUserMangaById({
+                            user: user,
+                            id: item.id,
+                        })
+                    );
+                    try {
+                        await dispatch(
+                            addMangaToUserLibrary({
+                                uid: user.uid,
+                                user_manga: createNewFirestoreUserManga({
+                                    id: item.id,
+                                }),
+                            })
+                        );
+                    } catch (error: any) {
+                        console.error(error.message);
+                    }
+                }
+            }
+
+            async function _removeMangaFromLibrary() {
+                if (user.uid !== undefined) {
+                    try {
+                        await dispatch(
+                            removeMangaFromUserLibrary({
+                                uid: user.uid,
+                                user_manga: getFirestoreUserMangaById({
+                                    user: user,
+                                    id: item.id,
+                                }),
+                            })
+                        );
+                    } catch (error: any) {
+                        console.error(error.message);
+                    }
+                }
+            }
+
+            if (manga_is_in_library) {
+                Alert.alert(
+                    'Remove manga from library',
+                    'Are you sure you want to remove this manga from your library?',
+                    [
+                        {
+                            text: 'No',
+                            onPress: () => {},
+                            style: 'cancel',
+                        },
+                        {
+                            text: 'Yes',
+                            onPress: _removeMangaFromLibrary,
+                        },
+                    ]
+                );
+            } else {
+                _addMangaToLibrary();
+            }
         }
     }
 
@@ -226,6 +236,3 @@ const styles = StyleSheet.create({
     synopsis_text: { fontStyle: 'italic', color: 'grey' },
     start_date_text: { textAlign: 'right' },
 });
-function dispatch(arg0: any) {
-    throw new Error('Function not implemented.');
-}

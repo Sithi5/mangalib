@@ -111,7 +111,6 @@ export default function LoginScreen({
             >
                 <Text>Welcome {user.username}</Text>
                 <Text>email: {user.email}</Text>
-                <Text>mangas_list: {user.user_mangas_list}</Text>
                 <ButtonSignOut color={ORANGE}></ButtonSignOut>
             </View>
         );

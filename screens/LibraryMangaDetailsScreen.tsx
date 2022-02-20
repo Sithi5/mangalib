@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { Alert, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
 import { removeMangaFromUserLibrary } from 'redux/UserSlice';
-import getFirestoreUserMangaById from 'utils/firebase/GetUserMangaById';
+import getFirestoreUserMangaById from 'utils/firebase/GetFirestoreUserMangaById';
 import getKitsuItemTitle from 'utils/kitsu/GetKitsuItemTitle';
 
 export default function LibraryMangaDetailsScreen({

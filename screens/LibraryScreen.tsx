@@ -9,8 +9,9 @@ import AppStyles, { ORANGE } from 'globals/AppStyles';
 import type { LibraryStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { scrollTo } from 'react-native-reanimated';
 import { useAppSelector } from 'redux/Hooks';
-import getMangasIdsListFromUsersMangasList from 'utils/firebase/getMangasIdsListFromUsersMangasList';
+import getMangasIdsListFromFirestoreUsersMangasList from 'utils/firebase/getMangasIdsListFromFirestoreUsersMangasList';
 import getMangaTitle from 'utils/kitsu/GetKitsuItemTitle';
 import { replaceAll } from 'utils/strings/replaceAll';
 
@@ -29,9 +30,10 @@ export default function LibraryScreen({
         async function _getManga() {
             try {
                 let tmp_mangas_list: KitsuData[] = [];
-                const mangas_ids_list = getMangasIdsListFromUsersMangasList({
-                    user: user,
-                });
+                const mangas_ids_list =
+                    getMangasIdsListFromFirestoreUsersMangasList({
+                        user_mangas_list: user.user_mangas_list,
+                    });
                 const responses = await kitsuGetMultipleItemsDetails({
                     item_id_list: mangas_ids_list,
                     item_type: 'manga',
@@ -78,6 +80,9 @@ export default function LibraryScreen({
                     return manga;
                 }
             });
+            // tmp_filtered_mangas_list.sort((a, b) =>
+            //     getMangaTitle({ item: a }) > getMangaTitle({ item: b }) ? 1 : -1
+            // );
             setFilteredMangasList(tmp_filtered_mangas_list);
         }
     }

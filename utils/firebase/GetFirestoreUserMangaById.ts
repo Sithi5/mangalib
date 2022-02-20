@@ -6,7 +6,10 @@ type Args = {
     user: FirestoreUser;
 };
 
-export default function getFirestoreUserMangaById({ id, user }: Args) {
+export default function getFirestoreUserMangaById({
+    id,
+    user,
+}: Args): FirestoreUserManga {
     const index = user.user_mangas_list
         .map((user_manga) => {
             return user_manga.manga_id;

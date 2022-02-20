@@ -12,6 +12,7 @@ import {
     signOut,
 } from 'firebase/auth';
 import { collection, doc, getFirestore, setDoc } from 'firebase/firestore';
+import getMangasIdsListFromFirestoreUsersMangasList from 'utils/firebase/getMangasIdsListFromFirestoreUsersMangasList';
 
 const auth = getAuth();
 const firestore = getFirestore();
@@ -93,12 +94,14 @@ export const removeMangaFromUserLibrary = createAsyncThunk(
 export type UserState = FirestoreUser & {
     uid: string | undefined;
     logged: boolean;
+    // kitsu_mangas_list: KitsuMangaAttributes[];
 };
 
 const initialState: UserState = {
     uid: undefined,
     logged: false,
-    user_mangas_list: [],
+    user_mangas_list: [], //Refer to user_mangas_list in firestore
+    // kitsu_mangas_list: [], // Refer to corresponding mangas in Kitsu
 };
 
 export const userSlice = createSlice({
@@ -107,6 +110,7 @@ export const userSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(signInUser.fulfilled, (state, action) => {
+            // console.log('signInUser fullfilled');
             state.logged = true;
             state.uid = action.payload.uid;
             state.email = action.payload.email;
@@ -115,17 +119,23 @@ export const userSlice = createSlice({
                 action.payload.user_data['user_mangas_list'];
         });
         builder.addCase(signOutUser.fulfilled, (state) => {
+            // console.log('signOutUser fullfilled');
             state.uid = undefined;
             state.logged = false;
         });
         builder.addCase(signUpUser.fulfilled, (state, action) => {
+            // console.log('signUpUser fullfilled');
             state.logged = true;
             state.uid = action.payload.uid;
             state.username = action.payload.username;
             state.email = action.payload.email;
         });
         builder.addCase(addMangaToUserLibrary.fulfilled, (state, action) => {
-            if (!state.user_mangas_list.includes(action.payload.user_manga)) {
+            if (
+                !getMangasIdsListFromFirestoreUsersMangasList({
+                    user_mangas_list: state.user_mangas_list,
+                }).includes(action.payload.user_manga.manga_id)
+            ) {
                 const new_user_manga = action.payload.user_manga;
                 state.user_mangas_list.push(new_user_manga);
             }
@@ -133,9 +143,9 @@ export const userSlice = createSlice({
         builder.addCase(
             removeMangaFromUserLibrary.fulfilled,
             (state, action) => {
-                const index = state.user_mangas_list.indexOf(
-                    action.payload.user_manga
-                );
+                const index = getMangasIdsListFromFirestoreUsersMangasList({
+                    user_mangas_list: state.user_mangas_list,
+                }).indexOf(action.payload.user_manga.manga_id);
                 if (index > -1) {
                     state.user_mangas_list.splice(index, 1);
                 }
