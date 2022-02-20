@@ -22,6 +22,7 @@ export type RootBottomTabParamList = {
     SearchTopTab: undefined;
     LibraryStack: undefined;
     WatchListStack: undefined;
+    Login: undefined;
 };
 
 export type SearchTopTabParamList = {
@@ -41,7 +42,7 @@ export type SearchAnimeStackParamList = {
 
 export type LibraryStackParamList = {
     Library: undefined;
-    ItemDetails: { id: Id; item_type: KitsuItemType };
+    LibraryMangaDetails: { id: Id };
 };
 
 export type WatchListStackParamList = {

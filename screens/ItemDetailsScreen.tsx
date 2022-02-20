@@ -1,23 +1,21 @@
-import { getItemImageFromApi, getItemDetailsFromApi } from 'api/KitsuApi';
+import { kitsuGetItemDetails, kitsuGetItemImage } from 'api/KitsuApi';
 import { KitsuData, KitsuItemType } from 'api/KitsuTypes';
 import Loading from 'components/Loading';
 import AppStyles from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
 import {
-    LibraryStackScreenProps,
     SearchAnimeStackScreenProps,
     SearchMangaStackScreenProps,
 } from 'navigations/NavigationsTypes';
 import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
-import getKitsuItemTitle from 'utils/GetKitsuItemTitle';
+import getKitsuItemTitle from 'utils/kitsu/GetKitsuItemTitle';
 
 export default function ItemDetailsScreen({
     route,
 }:
     | SearchMangaStackScreenProps<'ItemDetails'>
-    | SearchAnimeStackScreenProps<'ItemDetails'>
-    | LibraryStackScreenProps<'ItemDetails'>) {
+    | SearchAnimeStackScreenProps<'ItemDetails'>) {
     const [is_loading, setLoading] = useState(true);
     const [item, setItem] = useState<KitsuData>();
     const id: Id = route.params.id;
@@ -26,7 +24,7 @@ export default function ItemDetailsScreen({
     useEffect(() => {
         async function _getItemDetails() {
             try {
-                const response = await getItemDetailsFromApi({
+                const response = await kitsuGetItemDetails({
                     id: id,
                     item_type: item_type,
                 });
@@ -44,7 +42,7 @@ export default function ItemDetailsScreen({
 
     function _ItemDetails() {
         if (item != undefined) {
-            const image_url = getItemImageFromApi({
+            const image_url = kitsuGetItemImage({
                 id: id,
                 item_type: item_type,
                 format: 'small',
@@ -61,13 +59,6 @@ export default function ItemDetailsScreen({
                             <Text style={styles.title_text}>
                                 {getKitsuItemTitle({ item: item })}
                             </Text>
-                            {/* <TouchableOpacity
-                                onPress={() => {
-                                    dispatch(updateFavorites(id));
-                                }}
-                            >
-                                {_displayFavoriteImage()}
-                            </TouchableOpacity> */}
                         </View>
                         <View style={styles.content_overview_container}>
                             <Text style={styles.overview_text}>
@@ -75,23 +66,9 @@ export default function ItemDetailsScreen({
                             </Text>
                         </View>
                         <View style={styles.content_bottom_container}>
-                            {/* <Text style={styles.bottom_text}>
-                                Released: {_displayDate()}
-                            </Text> */}
                             <Text style={styles.bottom_text}>
                                 Vote: {item.attributes.averageRating} / 100
                             </Text>
-                            {/* <Text style={styles.bottom_text}>
-                                Budget: {_displayBudget()}
-                            </Text>
-                            <Text style={styles.bottom_text}>
-                                Genres: {_displayGenres()}
-                            </Text>
-                            <Text style={styles.bottom_text}>
-                                Production companies:{' '}
-                                {_displayProductionCompanies()}
-                            </Text>
-                            {_displayFloatingActionButton()} */}
                         </View>
                     </View>
                 </ScrollView>

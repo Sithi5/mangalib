@@ -1,11 +1,13 @@
-import React, { useRef, useState } from 'react';
-import { Button, StyleSheet, TextInput, View } from 'react-native';
-import { searchFromApi } from 'api/KitsuApi';
+import { kitsuSearch } from 'api/KitsuApi';
 import type { KitsuData } from 'api/KitsuTypes';
-import AppStyles, { ORANGE } from 'globals/AppStyles';
-import type { SearchAnimeStackScreenProps } from 'navigations/NavigationsTypes';
+import { SearchTextInput } from 'components/inputs';
+import { SearchAnimesList } from 'components/lists';
 import Loading from 'components/Loading';
-import { SearchAnimesList } from 'components/list';
+import AppStyles from 'globals/AppStyles';
+import type { SearchAnimeStackScreenProps } from 'navigations/NavigationsTypes';
+import React, { useRef, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import SearchStyles from './SearchStyles';
 
 export type FunctionSearchAnimeArgs = {
     new_search?: boolean;
@@ -31,7 +33,7 @@ export default function SearchMangaScreen({
             if (last_page_reached.current === false) {
                 try {
                     setLoading(true);
-                    let response = await searchFromApi({
+                    let response = await kitsuSearch({
                         search_type: 'anime',
                         search_text: search_text.current,
                         next_page_url: next_page_url.current,
@@ -60,31 +62,19 @@ export default function SearchMangaScreen({
 
     return (
         <View style={AppStyles.main_container}>
-            <TextInput
-                style={AppStyles.text_input}
+            <SearchTextInput
                 placeholder="Anime title"
-                onChangeText={(text) => {
-                    search_text.current = text;
-                }}
-                onSubmitEditing={() => {
-                    _searchAnimes({ new_search: true });
-                }}
+                search_text={search_text}
+                on_submit_function={_searchAnimes}
             />
-            <View style={AppStyles.button_search}>
-                <Button
-                    color={ORANGE}
-                    title="Search"
-                    onPress={() => {
-                        _searchAnimes({ new_search: true });
-                    }}
+            <View style={SearchStyles.list_container}>
+                <SearchAnimesList
+                    navigation={navigation}
+                    animes_list={animes_list}
+                    last_page_reached={last_page_reached.current}
+                    _searchAnimes={_searchAnimes}
                 />
             </View>
-            <SearchAnimesList
-                navigation={navigation}
-                animes_list={animes_list}
-                last_page_reached={last_page_reached.current}
-                _searchAnimes={_searchAnimes}
-            />
             <Loading is_loading={is_loading} />
         </View>
     );
