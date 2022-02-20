@@ -1,12 +1,8 @@
 import { Id } from 'globals/GlobalTypes';
 
-export type MangaVolume = {
-    volume_number: number;
-};
-
 export type FirestoreUserManga = {
     manga_id: Id;
-    volumes: MangaVolume[];
+    volumes: number[];
     possessed_volumes: number[];
 };
 
@@ -19,22 +15,37 @@ export type FirestoreUser = {
 export type ArgsFireforceGetUserData = {
     uid: string;
 };
+
 export type ArgsUpdateUserEmail = {
     uid: string;
     email: string;
 };
+
 export type ArgsUpdateUserUsername = {
     uid: string;
     username: string;
 };
+
 export type ArgsUpdateUserMangasList = {
     uid: string;
     user_mangas_list: FirestoreUserManga[];
 };
+
 export type ArgsAddMangaToUserMangasList = {
     uid: string;
     user_manga: FirestoreUserManga;
 };
+
+export type ArgsAddVolumeToUserMangaPossessedVolume = {
+    volume_number: number;
+    user_manga: FirestoreUserManga;
+};
+
+export type ArgsAddVolumeToUserMangaVolumes = {
+    volume_number: number;
+    user_manga: FirestoreUserManga;
+};
+
 export type ArgsRemoveMangaFromUserMangasList = {
     uid: string;
     user_manga: FirestoreUserManga;

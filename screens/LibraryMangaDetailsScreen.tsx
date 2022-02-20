@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { kitsuGetItemDetails, kitsuGetItemImage } from 'api/KitsuApi';
 import { KitsuData } from 'api/KitsuTypes';
 import { ButtonFullBackgroundColor } from 'components/buttons';
@@ -7,20 +8,12 @@ import AppStyles, { BLACK, RED } from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
 import { LibraryStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useEffect, useState } from 'react';
-import {
-    Image,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
 import { removeMangaFromUserLibrary } from 'redux/UserSlice';
 import { alertRemoveMangaFromLibrary } from 'utils/alerts';
 import { getFirestoreUserMangaById } from 'utils/firebase/';
 import { getKitsuItemTitle } from 'utils/kitsu/';
-import { Ionicons } from '@expo/vector-icons';
 
 export default function LibraryMangaDetailsScreen({
     navigation,
@@ -60,6 +53,8 @@ export default function LibraryMangaDetailsScreen({
         }
         _getItemDetails();
     }, [id]);
+
+    function _addVolumeToManga() {}
 
     function _removeMangaFromLibrary() {
         async function _removeUserManga() {
@@ -120,7 +115,11 @@ export default function LibraryMangaDetailsScreen({
                                     color={BLACK}
                                 />
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={async () => {}}>
+                            <TouchableOpacity
+                                onPress={async () => {
+                                    _addVolumeToManga();
+                                }}
+                            >
                                 <Ionicons
                                     style={styles.icon}
                                     name="add-circle-outline"

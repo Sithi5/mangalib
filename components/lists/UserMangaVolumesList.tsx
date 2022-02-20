@@ -2,9 +2,7 @@ import { FirestoreUserManga } from 'api/FirebaseTypes';
 import AppStyles, {
     DEFAULT_MARGIN,
     GREY,
-    LIGHTGREY,
     ORANGE,
-    RED,
     WHITE,
 } from 'globals/AppStyles';
 import React from 'react';
@@ -18,42 +16,45 @@ type Props = {
 export default function UserMangaVolumesList(props: Props) {
     const { user_manga } = props;
 
-    function _addToUserPossessedVolumes({
+    function _addOrRemoveFromUserPossessedVolumes({
         volume_number,
     }: {
         volume_number: number;
-    }) {}
+    }) {
+        function _addToUserPossessedVolumes() {}
+        function _removeFromUserPossessedVolumes() {}
+
+        if (user_manga.possessed_volumes.includes(volume_number)) {
+            _addToUserPossessedVolumes();
+        } else {
+            _removeFromUserPossessedVolumes();
+        }
+    }
 
     return (
         <View style={AppStyles.main_container}>
             <FlatList
                 data={user_manga.volumes}
                 horizontal={false}
-                keyExtractor={(item) => item.volume_number.toString()}
+                keyExtractor={(item) => item.toString()}
                 numColumns={6}
                 ItemSeparatorComponent={() => (
                     <View style={styles.separator_container}></View>
                 )}
                 renderItem={({ item, index }) => (
                     <TouchableOpacity
-                        onPress={() => {
-                            _addToUserPossessedVolumes({
-                                volume_number: item.volume_number,
-                            });
-                        }}
+                        onPress={() => {}}
                         style={[
                             styles.volume_bubble,
                             {
                                 borderColor:
-                                    user_manga.possessed_volumes.includes(
-                                        item.volume_number
-                                    )
+                                    user_manga.possessed_volumes.includes(item)
                                         ? ORANGE
                                         : GREY,
                             },
                         ]}
                     >
-                        <Text>{item.volume_number}</Text>
+                        <Text>{item}</Text>
                     </TouchableOpacity>
                 )}
             />
