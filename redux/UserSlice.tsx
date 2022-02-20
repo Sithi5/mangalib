@@ -12,7 +12,7 @@ import {
     signOut,
 } from 'firebase/auth';
 import { collection, doc, getFirestore, setDoc } from 'firebase/firestore';
-import getMangasIdsListFromFirestoreUsersMangasList from 'utils/firebase/getMangasIdsListFromFirestoreUsersMangasList';
+import { getMangasIdsListFromFirestoreUsersMangasList } from 'utils/firebase';
 
 const auth = getAuth();
 const firestore = getFirestore();

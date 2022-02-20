@@ -4,6 +4,10 @@ export type ReplaceAllArgs = {
     replace: string;
 };
 
-export function replaceAll({ str, find, replace }: ReplaceAllArgs): string {
+export default function replaceAll({
+    str,
+    find,
+    replace,
+}: ReplaceAllArgs): string {
     return str.replace(new RegExp(find, 'g'), replace);
 }

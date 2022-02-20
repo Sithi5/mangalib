@@ -11,22 +11,18 @@ import AppStyles, {
 } from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
 import React from 'react';
-import {
-    Alert,
-    Image,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
 import {
     addMangaToUserLibrary,
     removeMangaFromUserLibrary,
 } from 'redux/UserSlice';
-import createNewFirestoreUserManga from 'utils/firebase/CreateNewFirestoreUserManga';
-import getFirestoreUserMangaById from 'utils/firebase/GetFirestoreUserMangaById';
-import getMangaTitle from 'utils/kitsu/GetKitsuItemTitle';
+import { alertRemoveMangaFromLibrary } from 'utils/alerts';
+import {
+    createNewFirestoreUserManga,
+    getFirestoreUserMangaById,
+} from 'utils/firebase';
+import { getKitsuItemTitle } from 'utils/kitsu/';
 
 export const ITEM_HEIGHT = 190;
 
@@ -41,7 +37,7 @@ export default React.memo(function SearchItem(props: Props) {
     const user = useAppSelector((state) => state.user);
     const dispatch = useAppDispatch();
 
-    let item_title = getMangaTitle({ item: item });
+    let item_title = getKitsuItemTitle({ item: item });
 
     const image_url = kitsuGetItemImage({
         id: item.id,
@@ -100,21 +96,9 @@ export default React.memo(function SearchItem(props: Props) {
             }
 
             if (manga_is_in_library) {
-                Alert.alert(
-                    'Remove manga from library',
-                    'Are you sure you want to remove this manga from your library?',
-                    [
-                        {
-                            text: 'No',
-                            onPress: () => {},
-                            style: 'cancel',
-                        },
-                        {
-                            text: 'Yes',
-                            onPress: _removeMangaFromLibrary,
-                        },
-                    ]
-                );
+                alertRemoveMangaFromLibrary({
+                    alertYesFunction: _removeMangaFromLibrary,
+                });
             } else {
                 _addMangaToLibrary();
             }

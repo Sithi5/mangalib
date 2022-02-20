@@ -6,11 +6,12 @@ import AppStyles, { RED } from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
 import { LibraryStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useEffect, useState } from 'react';
-import { Alert, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
 import { removeMangaFromUserLibrary } from 'redux/UserSlice';
-import getFirestoreUserMangaById from 'utils/firebase/GetFirestoreUserMangaById';
-import getKitsuItemTitle from 'utils/kitsu/GetKitsuItemTitle';
+import { alertRemoveMangaFromLibrary } from 'utils/alerts';
+import { getFirestoreUserMangaById } from 'utils/firebase/';
+import { getKitsuItemTitle } from 'utils/kitsu/';
 
 export default function LibraryMangaDetailsScreen({
     navigation,
@@ -67,21 +68,9 @@ export default function LibraryMangaDetailsScreen({
             }
         }
         if (manga_is_in_library) {
-            Alert.alert(
-                'Remove manga from library',
-                'Are you sure you want to remove this manga from your library?',
-                [
-                    {
-                        text: 'No',
-                        onPress: () => {},
-                        style: 'cancel',
-                    },
-                    {
-                        text: 'Yes',
-                        onPress: _asyncRemoveMangaFromLibrary,
-                    },
-                ]
-            );
+            alertRemoveMangaFromLibrary({
+                alertYesFunction: _asyncRemoveMangaFromLibrary,
+            });
         }
     }
 

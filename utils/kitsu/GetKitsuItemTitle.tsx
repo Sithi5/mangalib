@@ -4,7 +4,7 @@ type Args = {
     item: KitsuData;
 };
 
-export default function getMangaTitle({ item }: Args): string {
+export default function getKitsuItemTitle({ item }: Args): string {
     const titles = item.attributes.titles;
     if (titles) {
         if (titles.en && titles.en.length !== 0) {

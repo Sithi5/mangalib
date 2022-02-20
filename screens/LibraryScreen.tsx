@@ -9,11 +9,10 @@ import AppStyles, { ORANGE } from 'globals/AppStyles';
 import type { LibraryStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { scrollTo } from 'react-native-reanimated';
 import { useAppSelector } from 'redux/Hooks';
-import getMangasIdsListFromFirestoreUsersMangasList from 'utils/firebase/getMangasIdsListFromFirestoreUsersMangasList';
-import getMangaTitle from 'utils/kitsu/GetKitsuItemTitle';
-import { replaceAll } from 'utils/strings/replaceAll';
+import { getMangasIdsListFromFirestoreUsersMangasList } from 'utils/firebase/';
+import { getKitsuItemTitle } from 'utils/kitsu/';
+import { replaceAll } from 'utils/strings/';
 
 export default function LibraryScreen({
     navigation,
@@ -48,7 +47,8 @@ export default function LibraryScreen({
                     });
 
                     mangas_list.current = tmp_mangas_list.sort((a, b) =>
-                        getMangaTitle({ item: a }) > getMangaTitle({ item: b })
+                        getKitsuItemTitle({ item: a }) >
+                        getKitsuItemTitle({ item: b })
                             ? 1
                             : -1
                     );
@@ -75,7 +75,7 @@ export default function LibraryScreen({
             });
             tmp_filtered_mangas_list = mangas_list.current.filter((manga) => {
                 const compared_manga_title = replaceAll({
-                    str: getMangaTitle({
+                    str: getKitsuItemTitle({
                         item: manga,
                     }).toLowerCase(),
                     find: ' ',
