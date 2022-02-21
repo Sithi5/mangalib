@@ -1,6 +1,6 @@
 # MangaLib
 
-MangaLib is a free, open source application to help users list their mangas library, built with React-Native for Androit and iOS devices.
+MangaLib is a free, open source application to help users list their mangas library, built with React-Native for Android and iOS devices.
 
 ## Stack
 
