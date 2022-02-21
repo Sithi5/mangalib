@@ -107,12 +107,12 @@ export default function LibraryScreen({
     } else {
         return (
             <View style={AppStyles.main_container}>
-                <Text>You need to be connected to see your library.</Text>
+                <Text>You need to be logged in to see your library.</Text>
                 <ButtonFullBackgroundColor
                     color={ORANGE}
                     text={'Go to login'}
                     onPressFunction={() => {
-                        navigation.navigate('Login');
+                        navigation.navigate('LoginStack');
                     }}
                 ></ButtonFullBackgroundColor>
             </View>

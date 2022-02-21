@@ -49,13 +49,15 @@ export const signUpUser = createAsyncThunk(
             password
         );
         const uid = response.user.uid;
-        const new_user_data: FirestoreUser = {
+        const user_data: FirestoreUser = {
             email: email,
             username: username,
             user_mangas_list: [],
         };
-        await setDoc(doc(collection(firestore, 'users'), uid), new_user_data);
-        return { email, uid, username };
+        await setDoc(doc(collection(firestore, 'users'), uid), user_data);
+        const snapshot = await firestoreGetUserData({ uid: uid });
+
+        return { email, uid, username, user_data };
     }
 );
 
@@ -136,6 +138,8 @@ export const userSlice = createSlice({
             state.logged = true;
             state.uid = action.payload.uid;
             state.username = action.payload.username;
+            state.user_mangas_list =
+                action.payload.user_data['user_mangas_list'];
             state.email = action.payload.email;
         });
         builder.addCase(addMangaToUserMangaList.fulfilled, (state, action) => {

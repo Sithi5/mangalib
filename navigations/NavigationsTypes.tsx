@@ -22,7 +22,8 @@ export type RootBottomTabParamList = {
     SearchTopTab: undefined;
     LibraryStack: undefined;
     WatchListStack: undefined;
-    Login: undefined;
+    Profil: undefined;
+    LoginStack: undefined;
 };
 
 export type SearchTopTabParamList = {
@@ -43,6 +44,16 @@ export type SearchAnimeStackParamList = {
 export type LibraryStackParamList = {
     Library: undefined;
     UserMangaDetails: { manga_id: Id };
+};
+
+export type ProfilStackParamList = {
+    Profil: undefined;
+    Login: undefined;
+};
+
+export type LoginStackParamList = {
+    SignIn: undefined;
+    SignUp: undefined;
 };
 
 export type WatchListStackParamList = {
@@ -78,6 +89,12 @@ export type SearchAnimeStackScreenProps<
 export type LibraryStackScreenProps<T extends keyof LibraryStackParamList> =
     CompositeScreenProps<
         NativeStackScreenProps<LibraryStackParamList, T>,
+        RootBottomTabScreenProps<keyof RootBottomTabParamList>
+    >;
+
+export type LoginStackScreenProps<T extends keyof LoginStackParamList> =
+    CompositeScreenProps<
+        NativeStackScreenProps<LoginStackParamList, T>,
         RootBottomTabScreenProps<keyof RootBottomTabParamList>
     >;
 

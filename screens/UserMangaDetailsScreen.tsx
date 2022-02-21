@@ -1,4 +1,3 @@
-import { FirestoreUserManga } from 'api/FirebaseTypes';
 import { kitsuGetItemDetails } from 'api/KitsuApi';
 import { KitsuData } from 'api/KitsuTypes';
 import Loading from 'components/Loading';
@@ -24,16 +23,7 @@ import {
     View,
 } from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
-import {
-    removeMangaFromUserMangaList,
-    updateUserMangasList,
-} from 'redux/UserSlice';
-import { alertRemoveMangaFromLibrary } from 'utils/alerts';
-import {
-    getFirestoreUserMangaById,
-    getMangasIdsListFromFirestoreUsersMangasList,
-} from 'utils/firebase/';
-import { deepCopy } from 'utils/objects';
+import { getFirestoreUserMangaById } from 'utils/firebase/';
 import {
     addOrRemoveFromUserPossessedVolumes,
     addVolumeToUserManga,
@@ -57,6 +47,9 @@ export default function UserMangaDetailsScreen({
         user: user,
         id: manga_id,
     });
+    if (!user_manga) {
+        navigation.goBack(); // The manga no longer exist on the user library.
+    }
 
     useEffect(() => {
         async function _getKitsuMangaDetails() {
@@ -119,7 +112,6 @@ export default function UserMangaDetailsScreen({
     function _UserMangaDetails() {
         if (
             is_loading === false &&
-            user.logged &&
             kitsu_manga_data != undefined &&
             user_manga
         ) {

@@ -5,6 +5,7 @@ export const WHITE = '#ffffff';
 export const RED = '#9f0000';
 export const GREY = '#8c8c8c';
 export const BLACK = '#000000';
+export const BLUE = '#0000FF';
 export const LIGHTGREY = '#e6e6e6';
 export const DEFAULT_MARGIN = 5;
 export const DEFAULT_RADIUS = 10;
