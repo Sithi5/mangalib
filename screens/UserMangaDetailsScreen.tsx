@@ -34,6 +34,12 @@ import {
     getMangasIdsListFromFirestoreUsersMangasList,
 } from 'utils/firebase/';
 import { deepCopy } from 'utils/objects';
+import {
+    addOrRemoveFromUserPossessedVolumes,
+    addVolumeToUserManga,
+    removeMangaFromUser,
+    removeVolumeFromUserManga,
+} from 'utils/users';
 
 const window_width = Dimensions.get('window').width;
 
@@ -51,16 +57,6 @@ export default function UserMangaDetailsScreen({
         user: user,
         id: manga_id,
     });
-    const manga_index_in_user_mangas_list =
-        getMangasIdsListFromFirestoreUsersMangasList({
-            user_mangas_list: user.user_mangas_list,
-        }).indexOf(user_manga.manga_id);
-
-    const manga_is_in_library = user.user_mangas_list
-        .map((user_manga) => {
-            return user_manga.manga_id;
-        })
-        .includes(manga_id);
 
     useEffect(() => {
         async function _getKitsuMangaDetails() {
@@ -81,173 +77,43 @@ export default function UserMangaDetailsScreen({
         _getKitsuMangaDetails();
     }, [manga_id]);
 
-    function removeMangaFromLibrary() {
-        async function _removeUserManga() {
-            try {
-                if (user.logged && user.uid !== undefined) {
-                    await dispatch(
-                        removeMangaFromUserMangaList({
-                            uid: user.uid,
-                            user_manga,
-                        })
-                    );
-                    navigation.goBack();
-                }
-            } catch (error: any) {
-                console.error(error.message);
-            }
-        }
-        if (manga_is_in_library) {
-            alertRemoveMangaFromLibrary({
-                alertYesFunction: _removeUserManga,
-            });
-        }
+    function callRemoveMangaFromUserLibrary() {
+        removeMangaFromUser({
+            user: user,
+            user_manga: user_manga,
+            manga_id: manga_id,
+            dispatch: dispatch,
+        });
+        navigation.goBack();
     }
 
-    function _addOrRemoveFromUserPossessedVolumes({
+    function callAddOrRemoveFromUserPossessedVolumes({
         volume_number,
     }: {
         volume_number: number;
     }) {
-        async function _addToUserPossessedVolumes() {
-            try {
-                if (user.uid) {
-                    let new_user_mangas_list: FirestoreUserManga[] = deepCopy({
-                        source_object: user.user_mangas_list,
-                    });
-                    if (
-                        !new_user_mangas_list[
-                            manga_index_in_user_mangas_list
-                        ].possessed_volumes.includes(volume_number)
-                    )
-                        new_user_mangas_list[
-                            manga_index_in_user_mangas_list
-                        ].possessed_volumes.push(volume_number);
-                    await dispatch(
-                        updateUserMangasList({
-                            uid: user.uid,
-                            user_mangas_list: new_user_mangas_list,
-                        })
-                    );
-                }
-            } catch (error: any) {
-                console.error(error.message);
-            }
-        }
-
-        async function _removeFromUserPossessedVolumes() {
-            try {
-                if (user.uid) {
-                    let new_user_mangas_list: FirestoreUserManga[] = deepCopy({
-                        source_object: user.user_mangas_list,
-                    });
-
-                    const index =
-                        new_user_mangas_list[
-                            manga_index_in_user_mangas_list
-                        ].possessed_volumes.indexOf(volume_number);
-                    if (index > -1) {
-                        new_user_mangas_list[
-                            manga_index_in_user_mangas_list
-                        ].possessed_volumes.splice(index, 1);
-                        await dispatch(
-                            updateUserMangasList({
-                                uid: user.uid,
-                                user_mangas_list: new_user_mangas_list,
-                            })
-                        );
-                    }
-                }
-            } catch (error: any) {
-                console.error(error.message);
-            }
-        }
-        if (user_manga.possessed_volumes.includes(volume_number)) {
-            _removeFromUserPossessedVolumes();
-        } else {
-            _addToUserPossessedVolumes();
-        }
+        addOrRemoveFromUserPossessedVolumes({
+            user: user,
+            user_manga: user_manga,
+            volume_number: volume_number,
+            dispatch: dispatch,
+        });
     }
 
-    async function addVolumeToUserManga() {
-        try {
-            if (user.uid) {
-                const last_volume = Math.max(...user_manga.volumes);
-                user.user_mangas_list.indexOf(user_manga);
-                let new_user_mangas_list: FirestoreUserManga[] = deepCopy({
-                    source_object: user.user_mangas_list,
-                });
-                new_user_mangas_list[
-                    manga_index_in_user_mangas_list
-                ].volumes.push(last_volume + 1);
-                await dispatch(
-                    updateUserMangasList({
-                        uid: user.uid,
-                        user_mangas_list: new_user_mangas_list,
-                    })
-                );
-            }
-        } catch (error: any) {
-            console.error(error.message);
-        }
+    function callRemoveVolumeFromUserManga() {
+        removeVolumeFromUserManga({
+            user: user,
+            user_manga: user_manga,
+            dispatch: dispatch,
+        });
     }
 
-    async function removeVolumeFromUserManga() {
-        const last_volume = Math.max(...user_manga.volumes);
-        if (last_volume > 1) {
-            try {
-                if (user.uid) {
-                    if (
-                        user.user_mangas_list[manga_index_in_user_mangas_list]
-                            .volumes.length > 1
-                    ) {
-                        user.user_mangas_list[manga_index_in_user_mangas_list]
-                            .volumes.length;
-                        let new_user_mangas_list: FirestoreUserManga[] =
-                            deepCopy({
-                                source_object: user.user_mangas_list,
-                            });
-                        const last_volume_number = Math.max.apply(
-                            Math,
-                            new_user_mangas_list[
-                                manga_index_in_user_mangas_list
-                            ].volumes
-                        );
-
-                        // Removing possessed manga
-                        let index =
-                            new_user_mangas_list[
-                                manga_index_in_user_mangas_list
-                            ].possessed_volumes.indexOf(last_volume_number);
-                        if (index > -1) {
-                            new_user_mangas_list[
-                                manga_index_in_user_mangas_list
-                            ].possessed_volumes.splice(index, 1);
-                        }
-
-                        // Removing volume manga
-                        index =
-                            new_user_mangas_list[
-                                manga_index_in_user_mangas_list
-                            ].volumes.indexOf(last_volume_number);
-                        if (index > -1) {
-                            new_user_mangas_list[
-                                manga_index_in_user_mangas_list
-                            ].volumes.splice(index, 1);
-                        }
-
-                        await dispatch(
-                            updateUserMangasList({
-                                uid: user.uid,
-                                user_mangas_list: new_user_mangas_list,
-                            })
-                        );
-                    }
-                }
-            } catch (error: any) {
-                console.error(error.message);
-            }
-        }
+    function callAddVolumeToUserManga() {
+        addVolumeToUserManga({
+            user: user,
+            user_manga: user_manga,
+            dispatch: dispatch,
+        });
     }
 
     function _UserMangaDetails() {
@@ -264,12 +130,13 @@ export default function UserMangaDetailsScreen({
                             kitsu_manga_data: kitsu_manga_data,
                             manga_id: manga_id,
                             user_manga: user_manga,
-                            addVolumeToUserManga: addVolumeToUserManga,
+                            addVolumeToUserManga: callAddVolumeToUserManga,
                             removeVolumeFromUserManga:
-                                removeVolumeFromUserManga,
+                                callRemoveVolumeFromUserManga,
                         })}
                         ListFooterComponent={UserMangaDetailsFooter({
-                            removeMangaFromLibrary: removeMangaFromLibrary,
+                            removeMangaFromLibrary:
+                                callRemoveMangaFromUserLibrary,
                         })}
                         data={user_manga.volumes}
                         horizontal={false}
@@ -281,7 +148,7 @@ export default function UserMangaDetailsScreen({
                         renderItem={({ item, index }) => (
                             <TouchableOpacity
                                 onPress={() => {
-                                    _addOrRemoveFromUserPossessedVolumes({
+                                    callAddOrRemoveFromUserPossessedVolumes({
                                         volume_number: item,
                                     });
                                 }}
