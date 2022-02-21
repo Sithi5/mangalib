@@ -1,3 +1,3 @@
-import { replaceAll } from './replaceAll';
+import replaceAll from './replaceAll';
 
 export { replaceAll };

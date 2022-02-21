@@ -22,7 +22,8 @@ export type RootBottomTabParamList = {
     SearchTopTab: undefined;
     LibraryStack: undefined;
     WatchListStack: undefined;
-    Login: undefined;
+    Profil: undefined;
+    LoginStack: undefined;
 };
 
 export type SearchTopTabParamList = {
@@ -42,7 +43,17 @@ export type SearchAnimeStackParamList = {
 
 export type LibraryStackParamList = {
     Library: undefined;
-    LibraryMangaDetails: { id: Id };
+    UserMangaDetails: { manga_id: Id };
+};
+
+export type ProfilStackParamList = {
+    Profil: undefined;
+    Login: undefined;
+};
+
+export type LoginStackParamList = {
+    SignIn: undefined;
+    SignUp: undefined;
 };
 
 export type WatchListStackParamList = {
@@ -81,6 +92,12 @@ export type LibraryStackScreenProps<T extends keyof LibraryStackParamList> =
         RootBottomTabScreenProps<keyof RootBottomTabParamList>
     >;
 
+export type LoginStackScreenProps<T extends keyof LoginStackParamList> =
+    CompositeScreenProps<
+        NativeStackScreenProps<LoginStackParamList, T>,
+        RootBottomTabScreenProps<keyof RootBottomTabParamList>
+    >;
+
 // Navigation prop
 
 export type RootBottomTabNavigationProp<
@@ -105,6 +122,11 @@ export type SearchAnimeScreenNavigationProp = CompositeNavigationProp<
 
 export type LibraryScreenNavigationProp = CompositeNavigationProp<
     NativeStackNavigationProp<LibraryStackParamList, 'Library'>,
+    RootBottomTabNavigationProp<keyof RootBottomTabParamList>
+>;
+
+export type UserMangaDetailsScreenNavigationProp = CompositeNavigationProp<
+    NativeStackNavigationProp<LibraryStackParamList, 'UserMangaDetails'>,
     RootBottomTabNavigationProp<keyof RootBottomTabParamList>
 >;
 

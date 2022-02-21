@@ -14,8 +14,10 @@ type Props = {
 export default function LibraryMangasList(props: Props) {
     const { navigation, mangas_list } = props;
 
-    function _navigateToLibraryMangaDetails(id: Id) {
-        navigation.navigate('LibraryMangaDetails', { id: id });
+    function _navigateToLibraryMangaDetails(manga_id: Id) {
+        navigation.navigate('UserMangaDetails', {
+            manga_id: manga_id,
+        });
     }
 
     return (

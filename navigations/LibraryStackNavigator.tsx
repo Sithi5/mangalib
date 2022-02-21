@@ -1,30 +1,48 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
+import { useAppSelector } from 'redux/Hooks';
 import { LibraryScreen } from 'screens';
-import LibraryMangaDetailsScreen from 'screens/LibraryMangaDetailsScreen';
+import UserMangaDetailsScreen from 'screens/UserMangaDetailsScreen';
 import { LibraryStackParamList } from './NavigationsTypes';
 
 const LibraryStack = createNativeStackNavigator<LibraryStackParamList>();
 
 export default function LibraryStackNavigator() {
-    return (
-        <LibraryStack.Navigator initialRouteName="Library">
-            <LibraryStack.Screen
-                name="Library"
-                component={LibraryScreen}
-                options={{
-                    headerShown: false,
-                    title: 'Library',
-                }}
-            />
-            <LibraryStack.Screen
-                name="LibraryMangaDetails"
-                component={LibraryMangaDetailsScreen}
-                options={{
-                    headerShown: true,
-                    title: 'Details',
-                }}
-            />
-        </LibraryStack.Navigator>
-    );
+    const user = useAppSelector((state) => state.user);
+
+    if (user.logged) {
+        return (
+            <LibraryStack.Navigator initialRouteName="Library">
+                <LibraryStack.Screen
+                    name="Library"
+                    component={LibraryScreen}
+                    options={{
+                        headerShown: false,
+                        title: 'Library',
+                    }}
+                />
+                <LibraryStack.Screen
+                    name="UserMangaDetails"
+                    component={UserMangaDetailsScreen}
+                    options={{
+                        headerShown: true,
+                        title: 'Details',
+                    }}
+                />
+            </LibraryStack.Navigator>
+        );
+    } else {
+        return (
+            <LibraryStack.Navigator initialRouteName="Library">
+                <LibraryStack.Screen
+                    name="Library"
+                    component={LibraryScreen}
+                    options={{
+                        headerShown: false,
+                        title: 'Library',
+                    }}
+                />
+            </LibraryStack.Navigator>
+        );
+    }
 }
