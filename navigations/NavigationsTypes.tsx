@@ -42,7 +42,7 @@ export type SearchAnimeStackParamList = {
 
 export type LibraryStackParamList = {
     Library: undefined;
-    LibraryMangaDetails: { id: Id };
+    UserMangaDetails: { manga_id: Id };
 };
 
 export type WatchListStackParamList = {
@@ -105,6 +105,11 @@ export type SearchAnimeScreenNavigationProp = CompositeNavigationProp<
 
 export type LibraryScreenNavigationProp = CompositeNavigationProp<
     NativeStackNavigationProp<LibraryStackParamList, 'Library'>,
+    RootBottomTabNavigationProp<keyof RootBottomTabParamList>
+>;
+
+export type UserMangaDetailsScreenNavigationProp = CompositeNavigationProp<
+    NativeStackNavigationProp<LibraryStackParamList, 'UserMangaDetails'>,
     RootBottomTabNavigationProp<keyof RootBottomTabParamList>
 >;
 
