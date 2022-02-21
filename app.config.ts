@@ -21,12 +21,14 @@ export default {
         assetBundlePatterns: ['**/*'],
         ios: {
             supportsTablet: true,
+            bundleIdentifier: 'com.mangalib',
         },
         android: {
             adaptiveIcon: {
                 foregroundImage: './assets/adaptive-icon.png',
                 backgroundColor: '#FFFFFF',
             },
+            package: 'com.mangalib',
         },
         web: {
             favicon: './assets/favicon.png',

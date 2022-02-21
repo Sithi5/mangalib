@@ -15,6 +15,7 @@ LogBox.ignoreLogs([
 LogBox.ignoreLogs(['Setting a timer']);
 
 export default function App() {
+    console.log('Rendering App');
     return (
         <Provider store={store}>
             <NavigationContainer>

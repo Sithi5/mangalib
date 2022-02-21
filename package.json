@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@react-navigation/bottom-tabs": "^6.1.0",
-    "@react-navigation/BottomTab": "^6.3.0",
     "@react-navigation/material-top-tabs": "^6.1.1",
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/native-stack": "^6.5.0",
