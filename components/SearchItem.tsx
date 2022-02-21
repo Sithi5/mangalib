@@ -67,7 +67,8 @@ export default React.memo(function SearchItem(props: Props) {
                             addMangaToUserMangaList({
                                 uid: user.uid,
                                 user_manga: createNewFirestoreUserManga({
-                                    id: item.id,
+                                    manga_name: item_title,
+                                    manga_id: item.id,
                                 }),
                             })
                         );

@@ -2,6 +2,7 @@ import { Id } from 'globals/GlobalTypes';
 
 export type FirestoreUserManga = {
     manga_id: Id;
+    manga_name: string;
     volumes: number[];
     possessed_volumes: number[];
 };
