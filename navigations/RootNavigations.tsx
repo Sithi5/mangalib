@@ -41,10 +41,13 @@ function _checkForPersistingUser() {
         }
     });
 }
-export default function RootBottomTabNavigator() {
-    _checkForPersistingUser();
 
+export default function RootBottomTabNavigator() {
     const user = useAppSelector((state) => state.user);
+
+    if (user.logged == false) {
+        _checkForPersistingUser();
+    }
 
     if (user.logged) {
         return (
