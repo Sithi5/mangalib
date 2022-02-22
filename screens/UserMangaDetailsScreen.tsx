@@ -71,13 +71,15 @@ export default function UserMangaDetailsScreen({
     }, [manga_id]);
 
     function callRemoveMangaFromUserLibrary() {
-        removeMangaFromUser({
+        const removed = removeMangaFromUser({
             user: user,
             user_manga: user_manga,
             manga_id: manga_id,
             dispatch: dispatch,
         });
-        navigation.goBack();
+        if (!user_manga) {
+            navigation.goBack();
+        }
     }
 
     function callAddOrRemoveFromUserPossessedVolumes({

@@ -32,6 +32,7 @@ export default async function removeMangaFromUser({
                         user_manga,
                     })
                 );
+                return true;
             }
         } catch (error: any) {
             console.error(error.message);
