@@ -22,7 +22,7 @@ import {
     View,
 } from 'react-native';
 import { useAppDispatch } from 'redux/Hooks';
-import { signUpUser } from 'redux/UserSlice';
+import { signUpUser } from 'redux/UserSliceAsyncThunk';
 
 export default function SignUpScreen({
     navigation,

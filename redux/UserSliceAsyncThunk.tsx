@@ -15,6 +15,7 @@ import {
 import { collection, doc, getFirestore, setDoc } from 'firebase/firestore';
 
 const auth = getAuth();
+
 const firestore = getFirestore();
 
 export const signInUser = createAsyncThunk(
@@ -55,8 +56,25 @@ export const signUpUser = createAsyncThunk(
         };
         await setDoc(doc(collection(firestore, 'users'), uid), user_data);
         const snapshot = await firestoreGetUserData({ uid: uid });
-
+        if (!snapshot.exists()) {
+            throw 'Error when creating user data.';
+        }
         return { email, uid, username, user_data };
+    }
+);
+
+export const setUserData = createAsyncThunk(
+    'user/setUserData',
+    async (args: { user_uid: string }) => {
+        const { user_uid } = args;
+        const snapshot = await firestoreGetUserData({ uid: user_uid });
+        let user_data: FirestoreUser;
+        if (snapshot.exists()) {
+            user_data = snapshot.data() as FirestoreUser;
+        } else {
+            throw "User data doesn't exist.";
+        }
+        return { user_data };
     }
 );
 

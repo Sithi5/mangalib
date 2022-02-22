@@ -1,5 +1,4 @@
 import { AntDesign } from '@expo/vector-icons';
-import { NavigationContainer } from '@react-navigation/native';
 import { ButtonFullBackgroundColor } from 'components/buttons';
 import AppStyles, {
     BLACK,
@@ -22,8 +21,8 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
-import { useAppDispatch, useAppSelector } from 'redux/Hooks';
-import { signInUser } from 'redux/UserSlice';
+import { useAppDispatch } from 'redux/Hooks';
+import { setUserData, signInUser } from 'redux/UserSliceAsyncThunk';
 
 export default function SignInScreen({
     navigation,
@@ -34,7 +33,6 @@ export default function SignInScreen({
         password: '',
         secure_password: true,
     });
-    const user = useAppSelector((state) => state.user);
 
     const dispatch = useAppDispatch();
 

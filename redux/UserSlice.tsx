@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { FirestoreUser } from 'api/FirebaseTypes';
 import { getMangasIdsListFromFirestoreUsersMangasList } from 'utils/firebase';
 import * as UserSLiceAsyncThunk from './UserSliceAsyncThunk';
@@ -19,7 +19,14 @@ const initialState: UserState = {
 export const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {},
+    reducers: {
+        setUserLogged(state, action: PayloadAction<boolean>) {
+            state.logged = action.payload;
+        },
+        setUserUid(state, action: PayloadAction<string>) {
+            state.uid = action.payload;
+        },
+    },
     extraReducers: (builder) => {
         builder.addCase(
             UserSLiceAsyncThunk.signInUser.fulfilled,
@@ -48,6 +55,16 @@ export const userSlice = createSlice({
                 state.user_mangas_list =
                     action.payload.user_data['user_mangas_list'];
                 state.email = action.payload.email;
+            }
+        );
+        builder.addCase(
+            UserSLiceAsyncThunk.setUserData.fulfilled,
+            (state, action) => {
+                // console.log('signUpUser fullfilled');
+                const { user_data } = action.payload;
+                state.username = user_data.username;
+                state.user_mangas_list = user_data['user_mangas_list'];
+                state.email = user_data.email;
             }
         );
         builder.addCase(
@@ -84,6 +101,6 @@ export const userSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {} = userSlice.actions;
+export const { setUserLogged, setUserUid } = userSlice.actions;
 
 export default userSlice.reducer;

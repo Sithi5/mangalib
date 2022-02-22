@@ -16,7 +16,7 @@ import { useAppDispatch, useAppSelector } from 'redux/Hooks';
 import {
     addMangaToUserMangaList,
     removeMangaFromUserMangaList,
-} from 'redux/UserSlice';
+} from 'redux/UserSliceAsyncThunk';
 import { alertRemoveMangaFromLibrary } from 'utils/alerts';
 import {
     createNewFirestoreUserManga,

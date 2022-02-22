@@ -1,6 +1,7 @@
 import { FirestoreUserManga } from 'api/FirebaseTypes';
 import { AppDispatch } from 'redux/store';
-import { updateUserMangasList, UserState } from 'redux/UserSlice';
+import { UserState } from 'redux/UserSlice';
+import { updateUserMangasList } from 'redux/UserSliceAsyncThunk';
 import { getMangasIdsListFromFirestoreUsersMangasList } from 'utils/firebase';
 import { deepCopy } from 'utils/objects';
 

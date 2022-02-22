@@ -97,10 +97,15 @@ export default function LibraryScreen({
                     search_text={search_text}
                     on_submit_function={_filterMangas}
                 />
-                <LibraryMangasList
-                    navigation={navigation}
-                    mangas_list={filtered_mangas_list}
-                />
+                {mangas_list.current.length > 0 ? (
+                    <LibraryMangasList
+                        navigation={navigation}
+                        mangas_list={filtered_mangas_list}
+                    />
+                ) : (
+                    <Text>Nothing to show.</Text>
+                )}
+
                 <Loading is_loading={is_loading} />
             </View>
         );

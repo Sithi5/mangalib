@@ -46,11 +46,6 @@ export type LibraryStackParamList = {
     UserMangaDetails: { manga_id: Id };
 };
 
-export type ProfilStackParamList = {
-    Profil: undefined;
-    Login: undefined;
-};
-
 export type LoginStackParamList = {
     SignIn: undefined;
     SignUp: undefined;

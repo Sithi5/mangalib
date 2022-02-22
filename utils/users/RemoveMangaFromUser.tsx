@@ -1,14 +1,9 @@
 import { FirestoreUserManga } from 'api/FirebaseTypes';
 import { Id } from 'globals/GlobalTypes';
 import { AppDispatch } from 'redux/store';
-import {
-    removeMangaFromUserMangaList,
-    updateUserMangasList,
-    UserState,
-} from 'redux/UserSlice';
+import { UserState } from 'redux/UserSlice';
+import { removeMangaFromUserMangaList } from 'redux/UserSliceAsyncThunk';
 import { alertRemoveMangaFromLibrary } from 'utils/alerts';
-import { getMangasIdsListFromFirestoreUsersMangasList } from 'utils/firebase';
-import { deepCopy } from 'utils/objects';
 
 export type Args = {
     user: UserState;

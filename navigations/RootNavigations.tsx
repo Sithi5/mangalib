@@ -1,9 +1,12 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 // Components
 import { GREY, LIGHTGREY, ORANGE, WHITE } from 'globals/AppStyles';
 import * as React from 'react';
-import { Image, StyleSheet } from 'react-native';
-import { useAppSelector } from 'redux/Hooks';
+import { Alert, Image, StyleSheet } from 'react-native';
+import { useAppDispatch, useAppSelector } from 'redux/Hooks';
+import { setUserLogged, setUserUid } from 'redux/UserSlice';
+import { setUserData } from 'redux/UserSliceAsyncThunk';
 import ProfilScreen from 'screens/ProfilScreen';
 import LibraryStackNavigator from './LibraryStackNavigator';
 import LoginStackNavigator from './LoginStackNavigator';
@@ -12,8 +15,35 @@ import type { RootBottomTabParamList } from './NavigationsTypes';
 import SearchTopTabNavigator from './SearchTopTabNavigator';
 
 const RootBottomTab = createBottomTabNavigator<RootBottomTabParamList>();
+const auth = getAuth();
 
+function _checkForPersistingUser() {
+    const dispatch = useAppDispatch();
+    onAuthStateChanged(auth, (user) => {
+        // Check if user is logged in.
+        if (user) {
+            dispatch(setUserLogged(true));
+            dispatch(setUserUid(user.uid));
+            async function _setUserData(user_uid: string) {
+                try {
+                    await dispatch(
+                        setUserData({ user_uid: user_uid })
+                    ).unwrap(); //Unwrap to raise error.
+                } catch (error: any) {
+                    Alert.alert('error:', error.message, [
+                        {
+                            text: 'ok',
+                        },
+                    ]);
+                }
+            }
+            _setUserData(user.uid);
+        }
+    });
+}
 export default function RootBottomTabNavigator() {
+    _checkForPersistingUser();
+
     const user = useAppSelector((state) => state.user);
 
     if (user.logged) {

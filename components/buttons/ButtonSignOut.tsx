@@ -3,7 +3,7 @@ import { DEFAULT_MARGIN, DEFAULT_RADIUS, WHITE } from 'globals/AppStyles';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useAppDispatch } from 'redux/Hooks';
-import { signOutUser } from 'redux/UserSlice';
+import { signOutUser } from 'redux/UserSliceAsyncThunk';
 
 const auth = getAuth();
 
