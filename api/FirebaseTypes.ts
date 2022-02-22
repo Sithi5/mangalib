@@ -7,8 +7,16 @@ export type FirestoreUserManga = {
     possessed_volumes: number[];
 };
 
+export type FirestoreUserAnime = {
+    anime_id: Id;
+    anime_name: string;
+    episodes: number[];
+    seen_episodes: number[];
+};
+
 export type FirestoreUser = {
     user_mangas_list: FirestoreUserManga[];
+    user_animes_list: FirestoreUserAnime[];
     email?: string;
     username?: string;
 };

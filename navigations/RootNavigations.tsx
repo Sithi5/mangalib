@@ -13,6 +13,7 @@ import LoginStackNavigator from './LoginStackNavigator';
 // Type
 import type { RootBottomTabParamList } from './NavigationsTypes';
 import SearchTopTabNavigator from './SearchTopTabNavigator';
+import WatchListStackNavigator from './WatchListStackNavigator';
 
 const RootBottomTab = createBottomTabNavigator<RootBottomTabParamList>();
 const auth = getAuth();
@@ -90,6 +91,25 @@ export default function RootBottomTabNavigator() {
                     component={LibraryStackNavigator}
                     options={{
                         title: 'My Library',
+                        tabBarIcon: ({ color }) => {
+                            const image_name = '../images/icon_open_book.png';
+                            return (
+                                <Image
+                                    style={[
+                                        styles.tab_bar_icon,
+                                        { tintColor: color },
+                                    ]}
+                                    source={require(image_name)}
+                                ></Image>
+                            );
+                        },
+                    }}
+                />
+                <RootBottomTab.Screen
+                    name="WatchListStack"
+                    component={WatchListStackNavigator}
+                    options={{
+                        title: 'My WatchList',
                         tabBarIcon: ({ color }) => {
                             const image_name = '../images/icon_open_book.png';
                             return (

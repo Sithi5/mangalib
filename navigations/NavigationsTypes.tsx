@@ -52,8 +52,7 @@ export type LoginStackParamList = {
 };
 
 export type WatchListStackParamList = {
-    Library: undefined;
-    ItemDetails: { id: Id; item_type: KitsuItemType };
+    WatchList: undefined;
 };
 
 // Screen props
@@ -84,6 +83,12 @@ export type SearchAnimeStackScreenProps<
 export type LibraryStackScreenProps<T extends keyof LibraryStackParamList> =
     CompositeScreenProps<
         NativeStackScreenProps<LibraryStackParamList, T>,
+        RootBottomTabScreenProps<keyof RootBottomTabParamList>
+    >;
+
+export type WatchListStackScreenProps<T extends keyof WatchListStackParamList> =
+    CompositeScreenProps<
+        NativeStackScreenProps<WatchListStackParamList, T>,
         RootBottomTabScreenProps<keyof RootBottomTabParamList>
     >;
 

@@ -14,6 +14,7 @@ const initialState: UserState = {
     uid: undefined,
     logged: false,
     user_mangas_list: [], //Refer to user_mangas_list in firestore
+    user_animes_list: [], //Refer to user_animes_list in firestore
     profil_image_url:
         'https://img2.freepng.fr/20180714/hxu/kisspng-user-profile-computer-icons-login-clip-art-profile-picture-icon-5b49de2f52aa71.9002514115315676633386.jpg',
     // kitsu_mangas_list: [], // Refer to corresponding mangas in Kitsu

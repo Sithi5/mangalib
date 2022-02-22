@@ -1,7 +1,8 @@
 import { kitsuGetItemDetails, kitsuGetItemImage } from 'api/KitsuApi';
 import { KitsuData, KitsuItemType } from 'api/KitsuTypes';
+import { ButtonBorderColor } from 'components/buttons';
 import Loading from 'components/Loading';
-import AppStyles from 'globals/AppStyles';
+import AppStyles, { GREY, ORANGE } from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
 import {
     SearchAnimeStackScreenProps,
@@ -9,6 +10,12 @@ import {
 } from 'navigations/NavigationsTypes';
 import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useAppDispatch, useAppSelector } from 'redux/Hooks';
+import { addMangaToUserMangaList } from 'redux/UserSliceAsyncThunk';
+import {
+    createNewFirestoreUserManga,
+    getFirestoreUserMangaById,
+} from 'utils/firebase';
 import getKitsuItemTitle from 'utils/kitsu/GetKitsuItemTitle';
 
 export default function ItemDetailsScreen({
@@ -20,6 +27,8 @@ export default function ItemDetailsScreen({
     const [item, setItem] = useState<KitsuData>();
     const id: Id = route.params.id;
     const item_type: KitsuItemType = route.params.item_type;
+    const user = useAppSelector((state) => state.user);
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         async function _getItemDetails() {
@@ -39,6 +48,46 @@ export default function ItemDetailsScreen({
         }
         _getItemDetails();
     }, [id]);
+
+    function _displayAddToLibrary() {
+        async function _addMangaToLibrary() {
+            if (user.uid !== undefined && item) {
+                let item_title = getKitsuItemTitle({ item: item });
+                try {
+                    await dispatch(
+                        addMangaToUserMangaList({
+                            uid: user.uid,
+                            user_manga: createNewFirestoreUserManga({
+                                manga_name: item_title,
+                                manga_id: item.id,
+                            }),
+                        })
+                    );
+                } catch (error: any) {
+                    console.error(error.message);
+                }
+            }
+        }
+        if (item && item_type === 'manga' && user.logged) {
+            const manga_is_in_library = user.user_mangas_list.includes(
+                getFirestoreUserMangaById({
+                    user: user,
+                    id: item.id,
+                })
+            );
+            if (!manga_is_in_library) {
+                return (
+                    <ButtonBorderColor
+                        color={ORANGE}
+                        text={'Add to library'}
+                        onPressFunction={() => {
+                            _addMangaToLibrary();
+                        }}
+                    />
+                );
+            }
+        }
+    }
 
     function _ItemDetails() {
         if (item != undefined) {
@@ -70,6 +119,7 @@ export default function ItemDetailsScreen({
                                 Vote: {item.attributes.averageRating} / 100
                             </Text>
                         </View>
+                        {_displayAddToLibrary()}
                     </View>
                 </ScrollView>
             );
