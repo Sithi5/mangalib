@@ -117,7 +117,7 @@ export default function WatchListScreen({
                 >
                     <View>
                         <Text>
-                            You need to be logged in to see your library.
+                            You need to be logged in to see your watchlist.
                         </Text>
                     </View>
                     <View style={{ width: '60%', paddingTop: DEFAULT_MARGIN }}>

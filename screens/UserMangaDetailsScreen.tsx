@@ -47,10 +47,11 @@ export default function UserMangaDetailsScreen({
         user: user,
         id: manga_id,
     });
-    if (!user_manga) {
-        navigation.goBack(); // The manga no longer exist on the user library.
-    }
-
+    useEffect(() => {
+        if (!user_manga) {
+            navigation.goBack(); // The manga no longer exist on the user library.
+        }
+    });
     useEffect(() => {
         async function _getKitsuMangaDetails() {
             try {
@@ -77,9 +78,6 @@ export default function UserMangaDetailsScreen({
             manga_id: manga_id,
             dispatch: dispatch,
         });
-        if (!user_manga) {
-            navigation.goBack();
-        }
     }
 
     function callAddOrRemoveFromUserPossessedVolumes({

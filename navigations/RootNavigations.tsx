@@ -200,7 +200,25 @@ export default function RootBottomTabNavigator() {
                         },
                     }}
                 />
-
+                <RootBottomTab.Screen
+                    name="WatchListStack"
+                    component={WatchListStackNavigator}
+                    options={{
+                        title: 'My WatchList',
+                        tabBarIcon: ({ color }) => {
+                            const image_name = '../images/icon_open_book.png';
+                            return (
+                                <Image
+                                    style={[
+                                        styles.tab_bar_icon,
+                                        { tintColor: color },
+                                    ]}
+                                    source={require(image_name)}
+                                ></Image>
+                            );
+                        },
+                    }}
+                />
                 <RootBottomTab.Screen
                     name="LoginStack"
                     component={LoginStackNavigator}
