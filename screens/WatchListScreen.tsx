@@ -3,6 +3,7 @@ import type { KitsuData } from 'api/KitsuTypes';
 import { ButtonFullBackgroundColor } from 'components/buttons';
 import { SearchTextInput } from 'components/inputs';
 import { TextInputOnSubmitFunctionArgs } from 'components/inputs/SearchTextInput';
+import { WatchListAnimesList } from 'components/lists';
 import Loading from 'components/Loading';
 import AppStyles, { DEFAULT_MARGIN, ORANGE } from 'globals/AppStyles';
 import type { WatchListStackScreenProps } from 'navigations/NavigationsTypes';
@@ -16,7 +17,7 @@ import { replaceAll } from 'utils/strings/';
 export default function WatchListScreen({
     navigation,
 }: WatchListStackScreenProps<'WatchList'>) {
-    const [is_loading, setLoading] = useState(false);
+    const [is_loading, setLoading] = useState(true);
     const search_text = useRef('');
     const anime_list = useRef<KitsuData[]>([]);
     const [filtered_anime_list, setFilteredAnimesList] = useState<KitsuData[]>(
@@ -97,12 +98,14 @@ export default function WatchListScreen({
                     search_text={search_text}
                     on_submit_function={_filterAnimes}
                 />
-                {/* <WatchListAnimesList
-                    navigation={navigation}
-                    anime_list={filtered_anime_list}
-                /> */}
-
-                <Loading is_loading={is_loading} />
+                {is_loading ? (
+                    <Loading is_loading={is_loading} />
+                ) : (
+                    <WatchListAnimesList
+                        navigation={navigation}
+                        animes_list={filtered_anime_list}
+                    />
+                )}
             </View>
         );
     } else {

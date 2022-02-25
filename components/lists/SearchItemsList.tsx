@@ -1,5 +1,5 @@
 import type { KitsuData, KitsuItemType } from 'api/KitsuTypes';
-import SearchItem, { ITEM_HEIGHT } from 'components/SearchItem';
+import SearchItem, { ITEM_HEIGHT } from 'components/items/SearchItem';
 import { LIGHTGREY } from 'globals/AppStyles';
 import type { Id } from 'globals/GlobalTypes';
 import React from 'react';

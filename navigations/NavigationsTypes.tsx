@@ -125,6 +125,11 @@ export type LibraryScreenNavigationProp = CompositeNavigationProp<
     RootBottomTabNavigationProp<keyof RootBottomTabParamList>
 >;
 
+export type WatchListScreenNavigationProp = CompositeNavigationProp<
+    NativeStackNavigationProp<WatchListStackParamList, 'WatchList'>,
+    RootBottomTabNavigationProp<keyof RootBottomTabParamList>
+>;
+
 export type UserMangaDetailsScreenNavigationProp = CompositeNavigationProp<
     NativeStackNavigationProp<LibraryStackParamList, 'UserMangaDetails'>,
     RootBottomTabNavigationProp<keyof RootBottomTabParamList>

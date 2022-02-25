@@ -8,17 +8,19 @@ import { deepCopy } from 'utils/objects';
 export type Args = {
     user: UserState;
     user_manga: FirestoreUserManga;
+    number_to_remove?: number;
     dispatch: AppDispatch;
 };
 
-export default async function removeVolumeFromUserManga({
+export default async function removeVolumesFromUserManga({
     user,
     user_manga,
+    number_to_remove = 1,
     dispatch,
 }: Args) {
     const last_volume = Math.max(...user_manga.volumes);
 
-    if (last_volume > 1) {
+    if (last_volume > number_to_remove) {
         try {
             if (user.uid) {
                 const manga_index_in_user_mangas_list =
@@ -28,35 +30,36 @@ export default async function removeVolumeFromUserManga({
 
                 if (
                     user.user_mangas_list[manga_index_in_user_mangas_list]
-                        .volumes.length > 1
+                        .volumes.length > number_to_remove
                 ) {
-                    user.user_mangas_list[manga_index_in_user_mangas_list]
-                        .volumes.length;
                     let new_user_mangas_list: FirestoreUserManga[] = deepCopy({
                         source_object: user.user_mangas_list,
                     });
-                    const last_volume_number = Math.max(...user_manga.volumes);
+                    let last_volume_number = Math.max(...user_manga.volumes);
 
                     // Removing possessed manga
-                    let index =
-                        new_user_mangas_list[
-                            manga_index_in_user_mangas_list
-                        ].possessed_volumes.indexOf(last_volume_number);
-                    if (index > -1) {
-                        new_user_mangas_list[
-                            manga_index_in_user_mangas_list
-                        ].possessed_volumes.splice(index, 1);
-                    }
-
-                    // Removing volume manga
-                    index =
-                        new_user_mangas_list[
-                            manga_index_in_user_mangas_list
-                        ].volumes.indexOf(last_volume_number);
-                    if (index > -1) {
-                        new_user_mangas_list[
-                            manga_index_in_user_mangas_list
-                        ].volumes.splice(index, 1);
+                    while (number_to_remove > 0) {
+                        let index =
+                            new_user_mangas_list[
+                                manga_index_in_user_mangas_list
+                            ].possessed_volumes.indexOf(last_volume_number);
+                        if (index > -1) {
+                            new_user_mangas_list[
+                                manga_index_in_user_mangas_list
+                            ].possessed_volumes.splice(index, 1);
+                        }
+                        // Removing volume manga
+                        index =
+                            new_user_mangas_list[
+                                manga_index_in_user_mangas_list
+                            ].volumes.indexOf(last_volume_number);
+                        if (index > -1) {
+                            new_user_mangas_list[
+                                manga_index_in_user_mangas_list
+                            ].volumes.splice(index, 1);
+                        }
+                        number_to_remove -= 1;
+                        last_volume_number -= 1;
                     }
 
                     await dispatch(

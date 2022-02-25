@@ -17,7 +17,7 @@ import { replaceAll } from 'utils/strings/';
 export default function LibraryScreen({
     navigation,
 }: LibraryStackScreenProps<'Library'>) {
-    const [is_loading, setLoading] = useState(false);
+    const [is_loading, setLoading] = useState(true);
     const search_text = useRef('');
     const mangas_list = useRef<KitsuData[]>([]);
     const [filtered_mangas_list, setFilteredMangasList] = useState<KitsuData[]>(
@@ -98,12 +98,14 @@ export default function LibraryScreen({
                     search_text={search_text}
                     on_submit_function={_filterMangas}
                 />
-                <LibraryMangasList
-                    navigation={navigation}
-                    mangas_list={filtered_mangas_list}
-                />
-
-                <Loading is_loading={is_loading} />
+                {is_loading ? (
+                    <Loading is_loading={is_loading} />
+                ) : (
+                    <LibraryMangasList
+                        navigation={navigation}
+                        mangas_list={filtered_mangas_list}
+                    />
+                )}
             </View>
         );
     } else {

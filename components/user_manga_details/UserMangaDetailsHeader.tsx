@@ -2,10 +2,23 @@ import { Ionicons } from '@expo/vector-icons';
 import { FirestoreUserManga } from 'api/FirebaseTypes';
 import { kitsuGetItemImage } from 'api/KitsuApi';
 import { KitsuData } from 'api/KitsuTypes';
-import AppStyles, { BLACK } from 'globals/AppStyles';
+import AppStyles, {
+    BLACK,
+    DEFAULT_MARGIN,
+    GREY,
+    ORANGE,
+    WHITE,
+} from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
-import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import {
+    Image,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from 'react-native';
 import { getKitsuItemTitle } from 'utils/kitsu';
 
 type Props = {
@@ -41,6 +54,8 @@ export default function UserMangaDetailsHeader(props: Props) {
                             {getKitsuItemTitle({ item: kitsu_manga_data })}
                         </Text>
                     </View>
+                    <Text>Total manga:</Text>
+
                     <View
                         style={{
                             flex: 1,
@@ -104,5 +119,13 @@ const styles = StyleSheet.create({
     },
     icon: {
         padding: 10,
+    },
+    text_input: {
+        flex: 1,
+        height: 30,
+        borderColor: WHITE,
+        borderWidth: 1,
+        paddingLeft: DEFAULT_MARGIN,
+        color: BLACK,
     },
 });

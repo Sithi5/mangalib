@@ -4,7 +4,7 @@ import Loading from 'components/Loading';
 import {
     UserMangaDetailsFooter,
     UserMangaDetailsHeader,
-} from 'components/users';
+} from 'components/user_manga_details';
 import AppStyles, {
     BLACK,
     DEFAULT_MARGIN,
@@ -26,9 +26,9 @@ import { useAppDispatch, useAppSelector } from 'redux/Hooks';
 import { getFirestoreUserMangaById } from 'utils/firebase/';
 import {
     addOrRemoveFromUserPossessedVolumes,
-    addVolumeToUserManga,
+    addVolumesToUserManga,
     removeMangaFromUser,
-    removeVolumeFromUserManga,
+    removeVolumesFromUserManga,
 } from 'utils/users';
 
 const window_width = Dimensions.get('window').width;
@@ -94,7 +94,7 @@ export default function UserMangaDetailsScreen({
     }
 
     function callRemoveVolumeFromUserManga() {
-        removeVolumeFromUserManga({
+        removeVolumesFromUserManga({
             user: user,
             user_manga: user_manga,
             dispatch: dispatch,
@@ -102,7 +102,7 @@ export default function UserMangaDetailsScreen({
     }
 
     function callAddVolumeToUserManga() {
-        addVolumeToUserManga({
+        addVolumesToUserManga({
             user: user,
             user_manga: user_manga,
             dispatch: dispatch,

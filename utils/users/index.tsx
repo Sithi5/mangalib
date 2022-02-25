@@ -1,11 +1,11 @@
-import addVolumeToUserManga from './AddVolumeToUserManga';
-import removeVolumeFromUserManga from './RemoveVolumeFromUserManga';
+import addVolumesToUserManga from './AddVolumesToUserManga';
+import removeVolumesFromUserManga from './RemoveVolumesFromUserManga';
 import addOrRemoveFromUserPossessedVolumes from './AddOrRemoveFromUserPossessedVolumes';
 import removeMangaFromUser from './RemoveMangaFromUser';
 
 export {
-    addVolumeToUserManga,
-    removeVolumeFromUserManga,
+    addVolumesToUserManga,
+    removeVolumesFromUserManga,
     addOrRemoveFromUserPossessedVolumes,
     removeMangaFromUser,
 };

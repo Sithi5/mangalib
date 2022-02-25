@@ -1,30 +1,30 @@
 import type { KitsuData } from 'api/KitsuTypes';
+import { WatchListItem } from 'components/items';
 import AppStyles, { DEFAULT_MARGIN } from 'globals/AppStyles';
 import type { Id } from 'globals/GlobalTypes';
-import type { LibraryScreenNavigationProp } from 'navigations/NavigationsTypes';
+import type { WatchListScreenNavigationProp } from 'navigations/NavigationsTypes';
 import React from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
-import { LibraryItem } from 'components/items';
 
 type Props = {
-    navigation: LibraryScreenNavigationProp;
-    mangas_list: KitsuData[];
+    navigation: WatchListScreenNavigationProp;
+    animes_list: KitsuData[];
 };
 
-export default function LibraryMangasList(props: Props) {
-    const { navigation, mangas_list } = props;
+export default function WatchListAnimesList(props: Props) {
+    const { navigation, animes_list } = props;
 
-    function _navigateToLibraryMangaDetails(manga_id: Id) {
-        navigation.navigate('UserMangaDetails', {
-            manga_id: manga_id,
-        });
+    function _navigateToWatchListAnimeDetails(anime_id: Id) {
+        // navigation.navigate('UserMangaDetails', {
+        //     manga_id: manga_id,
+        // });
     }
 
-    if (mangas_list.length > 0) {
+    if (animes_list.length > 0) {
         return (
             <View style={AppStyles.main_container}>
                 <FlatList
-                    data={mangas_list}
+                    data={animes_list}
                     horizontal={false}
                     keyExtractor={(item) => item.id.toString()}
                     numColumns={3}
@@ -32,11 +32,11 @@ export default function LibraryMangasList(props: Props) {
                         <View style={styles.separator_container}></View>
                     )}
                     renderItem={({ item, index }) => (
-                        <LibraryItem
-                            manga={item}
+                        <WatchListItem
+                            anime={item}
                             index={index}
-                            _navigateToMangaDetails={
-                                _navigateToLibraryMangaDetails
+                            _navigateToAnimeDetails={
+                                _navigateToWatchListAnimeDetails
                             }
                         />
                     )}
@@ -53,7 +53,7 @@ export default function LibraryMangasList(props: Props) {
                 }}
             >
                 <View>
-                    <Text>Nothing in your library yet.</Text>
+                    <Text>Nothing in your watchlist yet.</Text>
                     <Text>You can add some manga from the search screen.</Text>
                 </View>
             </View>
