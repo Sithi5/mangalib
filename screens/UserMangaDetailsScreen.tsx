@@ -42,11 +42,14 @@ export default function UserMangaDetailsScreen({
     const dispatch = useAppDispatch();
     const [kitsu_manga_data, setKitsuMangaData] = useState<KitsuData>();
     const [is_loading, setLoading] = useState(true);
+    const [total_manga_volumes_text, setTotalMangaVolumesText] = useState('');
 
     const user_manga = getFirestoreUserMangaById({
         user: user,
         id: manga_id,
     });
+    const total_manga_volumes = Math.max(...user_manga.volumes);
+
     useEffect(() => {
         if (!user_manga) {
             navigation.goBack(); // The manga no longer exist on the user library.
@@ -93,18 +96,20 @@ export default function UserMangaDetailsScreen({
         });
     }
 
-    function callRemoveVolumeFromUserManga() {
+    function callRemoveVolumeFromUserManga(number_to_remove?: number) {
         removeVolumesFromUserManga({
             user: user,
             user_manga: user_manga,
+            number_to_remove: number_to_remove,
             dispatch: dispatch,
         });
     }
 
-    function callAddVolumeToUserManga() {
+    function callAddVolumeToUserManga(number_to_add?: number) {
         addVolumesToUserManga({
             user: user,
             user_manga: user_manga,
+            number_to_add: number_to_add,
             dispatch: dispatch,
         });
     }
@@ -122,9 +127,12 @@ export default function UserMangaDetailsScreen({
                             kitsu_manga_data: kitsu_manga_data,
                             manga_id: manga_id,
                             user_manga: user_manga,
+                            total_manga_volumes: total_manga_volumes,
                             addVolumeToUserManga: callAddVolumeToUserManga,
                             removeVolumeFromUserManga:
                                 callRemoveVolumeFromUserManga,
+                            total_manga_volumes_text: total_manga_volumes_text,
+                            setTotalMangaVolumesText: setTotalMangaVolumesText,
                         })}
                         ListFooterComponent={UserMangaDetailsFooter({
                             removeMangaFromLibrary:

@@ -6,11 +6,10 @@ import AppStyles, {
     BLACK,
     DEFAULT_MARGIN,
     GREY,
-    ORANGE,
     WHITE,
 } from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
-import React, { useState } from 'react';
+import React from 'react';
 import {
     Image,
     StyleSheet,
@@ -25,8 +24,11 @@ type Props = {
     manga_id: Id;
     user_manga: FirestoreUserManga;
     kitsu_manga_data: KitsuData;
-    addVolumeToUserManga: () => void;
-    removeVolumeFromUserManga: () => void;
+    total_manga_volumes: number;
+    addVolumeToUserManga: (number_to_add?: number) => void;
+    removeVolumeFromUserManga: (number_to_remove?: number) => void;
+    total_manga_volumes_text: string;
+    setTotalMangaVolumesText: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export default function UserMangaDetailsHeader(props: Props) {
@@ -34,8 +36,11 @@ export default function UserMangaDetailsHeader(props: Props) {
         manga_id,
         user_manga,
         kitsu_manga_data,
+        total_manga_volumes,
+        total_manga_volumes_text,
         addVolumeToUserManga,
         removeVolumeFromUserManga,
+        setTotalMangaVolumesText,
     } = props;
 
     const image_url = kitsuGetItemImage({
@@ -54,7 +59,34 @@ export default function UserMangaDetailsHeader(props: Props) {
                             {getKitsuItemTitle({ item: kitsu_manga_data })}
                         </Text>
                     </View>
-                    <Text>Total manga:</Text>
+                    <View style={{}}>
+                        <Text>total volumes : </Text>
+                        <TextInput
+                            placeholder={total_manga_volumes.toString()}
+                            placeholderTextColor={GREY}
+                            selectionColor={GREY}
+                            value={total_manga_volumes_text}
+                            onChangeText={setTotalMangaVolumesText}
+                            onSubmitEditing={() => {
+                                if (
+                                    parseInt(total_manga_volumes_text) >
+                                    total_manga_volumes
+                                ) {
+                                    addVolumeToUserManga(
+                                        parseInt(total_manga_volumes_text) -
+                                            total_manga_volumes
+                                    );
+                                } else {
+                                    removeVolumeFromUserManga(
+                                        total_manga_volumes -
+                                            parseInt(total_manga_volumes_text)
+                                    );
+                                }
+                            }}
+                            keyboardType="numeric"
+                            maxLength={3} //setting limit of input
+                        />
+                    </View>
 
                     <View
                         style={{
@@ -92,6 +124,8 @@ export default function UserMangaDetailsHeader(props: Props) {
                 </View>
             </View>
         );
+    } else {
+        return null;
     }
 }
 
