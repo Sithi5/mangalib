@@ -60,6 +60,7 @@ export default function ItemDetailsScreen({
                             user_manga: createNewFirestoreUserManga({
                                 manga_name: item_title,
                                 manga_id: item.id,
+                                volumes_count: item.attributes.volumeCount,
                             }),
                         })
                     );

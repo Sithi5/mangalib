@@ -69,6 +69,7 @@ export default React.memo(function SearchItem(props: Props) {
                                 user_manga: createNewFirestoreUserManga({
                                     manga_name: item_title,
                                     manga_id: item.id,
+                                    volumes_count: item.attributes.volumeCount,
                                 }),
                             })
                         );
