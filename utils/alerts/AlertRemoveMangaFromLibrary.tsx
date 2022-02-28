@@ -1,10 +1,9 @@
-import { getAuth } from 'firebase/auth';
 import { Alert } from 'react-native';
 
-const auth = getAuth();
+type AlertRemoveMangaFromLibraryYesFunction = () => void;
 
 type Props = {
-    alertYesFunction: () => void;
+    alertYesFunction: AlertRemoveMangaFromLibraryYesFunction;
 };
 
 export default function alertRemoveMangaFromLibrary(props: Props) {
@@ -21,7 +20,9 @@ export default function alertRemoveMangaFromLibrary(props: Props) {
             },
             {
                 text: 'Yes',
-                onPress: alertYesFunction,
+                onPress: () => {
+                    alertYesFunction();
+                },
             },
         ]
     );

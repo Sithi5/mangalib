@@ -44,10 +44,12 @@ export default function UserMangaDetailsScreen({
     const [is_loading, setLoading] = useState(true);
     const [total_manga_volumes_text, setTotalMangaVolumesText] = useState('');
 
-    const user_manga = getFirestoreUserMangaById({
-        user: user,
-        id: manga_id,
-    });
+    const [user_manga, setUserManga] = useState(
+        getFirestoreUserMangaById({
+            user: user,
+            id: manga_id,
+        })
+    );
     const total_manga_volumes = Math.max(...user_manga.volumes);
 
     useEffect(() => {
@@ -74,13 +76,15 @@ export default function UserMangaDetailsScreen({
         _getKitsuMangaDetails();
     }, [manga_id]);
 
-    function callRemoveMangaFromUserLibrary() {
-        const removed = removeMangaFromUser({
-            user: user,
-            user_manga: user_manga,
-            manga_id: manga_id,
-            dispatch: dispatch,
-        });
+    async function callRemoveMangaFromUserLibrary() {
+        try {
+            await removeMangaFromUser({
+                user: user,
+                user_manga: user_manga,
+                manga_id: manga_id,
+                dispatch: dispatch,
+            });
+        } catch {}
     }
 
     function callAddOrRemoveFromUserPossessedVolumes({

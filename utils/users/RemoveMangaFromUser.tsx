@@ -4,6 +4,7 @@ import { AppDispatch } from 'redux/store';
 import { UserState } from 'redux/UserSlice';
 import { removeMangaFromUserMangaList } from 'redux/UserSliceAsyncThunk';
 import { alertRemoveMangaFromLibrary } from 'utils/alerts';
+import mangaIsInUserLibrary from './MangaIsInUserLibrary';
 
 export type Args = {
     user: UserState;
@@ -17,12 +18,7 @@ export default async function removeMangaFromUser({
     user_manga,
     manga_id,
     dispatch,
-}: Args) {
-    const manga_is_in_library = user.user_mangas_list
-        .map((user_manga) => {
-            return user_manga.manga_id;
-        })
-        .includes(manga_id);
+}: Args): Promise<void> {
     async function _removeUserManga() {
         try {
             if (user.uid !== undefined) {
@@ -32,13 +28,12 @@ export default async function removeMangaFromUser({
                         user_manga,
                     })
                 );
-                return true;
             }
         } catch (error: any) {
             console.error(error.message);
         }
     }
-    if (manga_is_in_library) {
+    if (mangaIsInUserLibrary({ user: user, manga_id: manga_id })) {
         alertRemoveMangaFromLibrary({
             alertYesFunction: _removeUserManga,
         });

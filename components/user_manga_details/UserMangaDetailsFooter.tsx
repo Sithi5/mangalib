@@ -4,7 +4,7 @@ import React from 'react';
 import { View } from 'react-native';
 
 type Props = {
-    removeMangaFromLibrary: () => void;
+    removeMangaFromLibrary: () => Promise<void>;
 };
 
 export default function UserMangaDetailsFooter(props: Props) {
