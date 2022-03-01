@@ -62,7 +62,7 @@ export const userSlice = createSlice({
             }
         );
         builder.addCase(
-            UserSLiceAsyncThunk.setUserData.fulfilled,
+            UserSLiceAsyncThunk.getUserData.fulfilled,
             (state, action) => {
                 // console.log('signUpUser fullfilled');
                 const { user_data } = action.payload;

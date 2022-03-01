@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
     firestoreAddMangaToUserMangasList,
+    firestoreCreateUserData,
     firestoreGetUserData,
     firestoreRemoveMangaFromUserMangasList,
     firestoreUpdateUserMangasList,
@@ -49,22 +50,23 @@ export const signUpUser = createAsyncThunk(
             password
         );
         const uid = response.user.uid;
-        const user_data: FirestoreUser = {
+
+        await firestoreCreateUserData({
+            uid: uid,
             email: email,
             username: username,
-            user_mangas_list: [],
-        };
-        await setDoc(doc(collection(firestore, 'users'), uid), user_data);
+        });
         const snapshot = await firestoreGetUserData({ uid: uid });
         if (!snapshot.exists()) {
             throw 'Error when creating user data.';
         }
+        const user_data = snapshot.data() as FirestoreUser;
         return { email, uid, username, user_data };
     }
 );
 
-export const setUserData = createAsyncThunk(
-    'user/setUserData',
+export const getUserData = createAsyncThunk(
+    'user/getUserData',
     async (args: { user_uid: string }) => {
         const { user_uid } = args;
         const snapshot = await firestoreGetUserData({ uid: user_uid });

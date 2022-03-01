@@ -1,13 +1,12 @@
 import type { KitsuData } from 'api/KitsuTypes';
+import SearchItemsList, {
+    NavigateToItemDetailsArgs,
+} from 'components/lists/SearchItemsList'; // Not using the index.ts to avoid cycle import.
 import { WHITE } from 'globals/AppStyles';
-import type { Id } from 'globals/GlobalTypes';
 import type { SearchMangaScreenNavigationProp } from 'navigations/NavigationsTypes';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import type { FunctionSearchMangaArgs } from 'screens/SearchMangaScreen';
-import SearchItemsList, {
-    NavigateToItemDetailsArgs,
-} from 'components/lists/SearchItemsList'; // Not using the index.ts to avoid cycle import.
 
 const SEPARATOR_HEIGHT = 5;
 

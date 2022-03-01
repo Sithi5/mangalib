@@ -25,6 +25,12 @@ export type ArgsFireforceGetUserData = {
     uid: string;
 };
 
+export type ArgsFireforceCreateUserData = {
+    uid: string;
+    email: string;
+    username: string;
+};
+
 export type ArgsUpdateUserEmail = {
     uid: string;
     email: string;
@@ -48,5 +54,20 @@ export type ArgsAddMangaToUserMangasList = {
 export type ArgsRemoveMangaFromUserMangasList = {
     uid: string;
     user_manga: FirestoreUserManga;
+};
+
+export type ArgsUpdateUserAnimesList = {
+    uid: string;
+    user_animes_list: FirestoreUserAnime[];
+};
+
+export type ArgsAddAnimeToUserAnimesList = {
+    uid: string;
+    user_anime: FirestoreUserAnime;
+};
+
+export type ArgsRemoveAnimeFromUserAnimesList = {
+    uid: string;
+    user_anime: FirestoreUserAnime;
 };
 // Functions returns

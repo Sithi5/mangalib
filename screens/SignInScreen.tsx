@@ -22,7 +22,7 @@ import {
     View,
 } from 'react-native';
 import { useAppDispatch } from 'redux/Hooks';
-import { setUserData, signInUser } from 'redux/UserSliceAsyncThunk';
+import { signInUser } from 'redux/UserSliceAsyncThunk';
 
 export default function SignInScreen({
     navigation,
