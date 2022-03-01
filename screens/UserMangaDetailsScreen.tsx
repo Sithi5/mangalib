@@ -1,3 +1,4 @@
+import { deepCopy } from 'utils/objects';
 import { kitsuGetItemDetails } from 'api/KitsuApi';
 import { KitsuData } from 'api/KitsuTypes';
 import Loading from 'components/Loading';
@@ -44,17 +45,17 @@ export default function UserMangaDetailsScreen({
     const [is_loading, setLoading] = useState(true);
     const [total_manga_volumes_text, setTotalMangaVolumesText] = useState('');
 
-    const [user_manga, setUserManga] = useState(
-        getFirestoreUserMangaById({
-            user: user,
-            id: manga_id,
-        })
-    );
-    const total_manga_volumes = Math.max(...user_manga.volumes);
+    let user_manga = getFirestoreUserMangaById({
+        user: user,
+        id: manga_id,
+    });
+    let total_manga_volumes = 0;
 
     useEffect(() => {
         if (!user_manga) {
             navigation.goBack(); // The manga no longer exist on the user library.
+        } else {
+            total_manga_volumes = Math.max(...user_manga.volumes);
         }
     });
     useEffect(() => {
@@ -78,13 +79,18 @@ export default function UserMangaDetailsScreen({
 
     async function callRemoveMangaFromUserLibrary() {
         try {
-            await removeMangaFromUser({
+            const response = await removeMangaFromUser({
                 user: user,
                 user_manga: user_manga,
                 manga_id: manga_id,
                 dispatch: dispatch,
             });
-        } catch {}
+            if (response) {
+                navigation.goBack();
+            }
+        } catch (error: any) {
+            console.error(error);
+        }
     }
 
     function callAddOrRemoveFromUserPossessedVolumes({
@@ -119,11 +125,7 @@ export default function UserMangaDetailsScreen({
     }
 
     function _UserMangaDetails() {
-        if (
-            is_loading === false &&
-            kitsu_manga_data != undefined &&
-            user_manga
-        ) {
+        if (is_loading === false && kitsu_manga_data && user_manga) {
             return (
                 <View style={AppStyles.main_container}>
                     <FlatList

@@ -3,7 +3,7 @@ import { Id } from 'globals/GlobalTypes';
 import { AppDispatch } from 'redux/store';
 import { UserState } from 'redux/UserSlice';
 import { removeMangaFromUserMangaList } from 'redux/UserSliceAsyncThunk';
-import { alertRemoveMangaFromLibrary } from 'utils/alerts';
+import { asyncAlert } from 'utils/alerts';
 import mangaIsInUserLibrary from './MangaIsInUserLibrary';
 
 export type Args = {
@@ -13,13 +13,14 @@ export type Args = {
     dispatch: AppDispatch;
 };
 
+/** Remove manga from user and return true if the manga is well removed.*/
 export default async function removeMangaFromUser({
     user,
     user_manga,
     manga_id,
     dispatch,
-}: Args): Promise<void> {
-    async function _removeUserManga() {
+}: Args): Promise<boolean> {
+    async function _removeUserManga(): Promise<void> {
         try {
             if (user.uid !== undefined) {
                 await dispatch(
@@ -30,12 +31,17 @@ export default async function removeMangaFromUser({
                 );
             }
         } catch (error: any) {
-            console.error(error.message);
+            throw error;
         }
     }
     if (mangaIsInUserLibrary({ user: user, manga_id: manga_id })) {
-        alertRemoveMangaFromLibrary({
+        const response = await asyncAlert({
+            title: 'Remove manga from library',
+            message:
+                'Are you sure you want to remove this manga from your library?',
             alertYesFunction: _removeUserManga,
         });
+        return response;
     }
+    return false;
 }

@@ -1,3 +1,3 @@
-import alertRemoveMangaFromLibrary from './AlertRemoveMangaFromLibrary';
+import asyncAlert from './AsyncAlert';
 
-export { alertRemoveMangaFromLibrary };
+export { asyncAlert };
