@@ -1,11 +1,10 @@
-import { deepCopy } from 'utils/objects';
 import { kitsuGetItemDetails } from 'api/KitsuApi';
 import { KitsuData } from 'api/KitsuTypes';
 import Loading from 'components/Loading';
 import {
-    UserMangaDetailsFooter,
-    UserMangaDetailsHeader,
-} from 'components/user_manga_details';
+    UserAnimeDetailsFooter,
+    UserAnimeDetailsHeader,
+} from 'components/user_anime_details';
 import AppStyles, {
     BLACK,
     DEFAULT_MARGIN,
@@ -13,7 +12,7 @@ import AppStyles, {
     WHITE,
 } from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
-import { LibraryStackScreenProps } from 'navigations/NavigationsTypes';
+import { WatchListStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useEffect, useState } from 'react';
 import {
     Dimensions,
@@ -24,45 +23,46 @@ import {
     View,
 } from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
-import { getFirestoreUserMangaById } from 'utils/firebase/';
+import { getFirestoreUserAnimeById } from 'utils/firebase';
 import {
-    addOrRemoveFromUserPossessedVolumes,
-    addVolumesToUserManga,
+    addOrRemoveFromUserSeenEpisodes,
     removeItemFromUser,
-    removeVolumesFromUserManga,
 } from 'utils/users';
+import addEpisodesToUserAnime from 'utils/users/AddEpisodesToUserAnime';
+import removeEpisodesFromUserAnime from 'utils/users/RemoveEpisodesFromUserAnime';
 
 const window_width = Dimensions.get('window').width;
 
-export default function UserMangaDetailsScreen({
+export default function UserAnimeDetailsScreen({
     navigation,
     route,
-}: LibraryStackScreenProps<'UserMangaDetails'>) {
-    const manga_id: Id = route.params.manga_id;
+}: WatchListStackScreenProps<'UserAnimeDetails'>) {
+    const anime_id: Id = route.params.anime_id;
     const user = useAppSelector((state) => state.user);
     const dispatch = useAppDispatch();
-    const [kitsu_manga_data, setKitsuMangaData] = useState<KitsuData>();
+    const [kitsu_item_data, setKitsuAnimeData] = useState<KitsuData>();
     const [is_loading, setLoading] = useState(true);
-    const [total_manga_volumes_input, setTotalMangaVolumesInput] = useState('');
+    const [total_anime_episodes_input, setTotalAnimeEpisodesInput] =
+        useState('');
 
-    let user_manga = getFirestoreUserMangaById({
+    let user_anime = getFirestoreUserAnimeById({
         user: user,
-        id: manga_id,
+        id: anime_id,
     });
     useEffect(() => {
-        if (!user_manga) {
-            navigation.goBack(); // The manga no longer exist on the user library.
+        if (!user_anime) {
+            navigation.goBack(); // The anime no longer exist on the user library.
         }
     });
     useEffect(() => {
-        async function _getKitsuMangaDetails() {
+        async function _getKitsuAnimeDetails() {
             try {
                 const response = await kitsuGetItemDetails({
-                    id: manga_id,
-                    item_type: 'manga',
+                    id: anime_id,
+                    item_type: 'anime',
                 });
                 if (response) {
-                    setKitsuMangaData(response.data);
+                    setKitsuAnimeData(response.data);
                 }
             } catch (error) {
                 console.error(error);
@@ -70,16 +70,16 @@ export default function UserMangaDetailsScreen({
                 setLoading(false);
             }
         }
-        _getKitsuMangaDetails();
-    }, [manga_id]);
+        _getKitsuAnimeDetails();
+    }, [anime_id]);
 
-    async function callRemoveMangaFromUserLibrary() {
+    async function callRemoveItemFromUser() {
         try {
             await removeItemFromUser({
                 user: user,
-                user_item: user_manga,
-                item_id: manga_id,
-                item_type: 'manga',
+                user_item: user_anime,
+                item_id: anime_id,
+                item_type: 'anime',
                 dispatch: dispatch,
             });
         } catch (error: any) {
@@ -87,59 +87,58 @@ export default function UserMangaDetailsScreen({
         }
     }
 
-    function callAddOrRemoveFromUserPossessedVolumes({
-        volume_number,
+    function callAddOrRemoveFromUserSeenEpisodes({
+        episode_number,
     }: {
-        volume_number: number;
+        episode_number: number;
     }) {
-        addOrRemoveFromUserPossessedVolumes({
+        addOrRemoveFromUserSeenEpisodes({
             user: user,
-            user_manga: user_manga,
-            volume_number: volume_number,
+            user_anime: user_anime,
+            episode_number: episode_number,
             dispatch: dispatch,
         });
     }
 
-    function callRemoveVolumeFromUserManga(number_to_remove?: number) {
-        removeVolumesFromUserManga({
+    function callRemoveEpisodeFromUserAnime(number_to_remove?: number) {
+        removeEpisodesFromUserAnime({
             user: user,
-            user_manga: user_manga,
+            user_anime: user_anime,
             number_to_remove: number_to_remove,
             dispatch: dispatch,
         });
     }
 
-    function callAddVolumeToUserManga(number_to_add?: number) {
-        addVolumesToUserManga({
+    function callAddEpisodeToUserAnime(number_to_add?: number) {
+        addEpisodesToUserAnime({
             user: user,
-            user_manga: user_manga,
+            user_anime: user_anime,
             number_to_add: number_to_add,
             dispatch: dispatch,
         });
     }
 
-    function _UserMangaDetails() {
-        if (is_loading === false && kitsu_manga_data && user_manga) {
+    function _UserAnimeDetails() {
+        if (is_loading === false && kitsu_item_data && user_anime) {
             return (
                 <View style={AppStyles.main_container}>
                     <FlatList
-                        ListHeaderComponent={UserMangaDetailsHeader({
-                            kitsu_manga_data: kitsu_manga_data,
-                            manga_id: manga_id,
-                            user_manga: user_manga,
-                            addVolumeToUserManga: callAddVolumeToUserManga,
-                            removeVolumeFromUserManga:
-                                callRemoveVolumeFromUserManga,
-                            total_manga_volumes_input:
-                                total_manga_volumes_input,
-                            setTotalMangaVolumesInput:
-                                setTotalMangaVolumesInput,
+                        ListHeaderComponent={UserAnimeDetailsHeader({
+                            kitsu_item_data: kitsu_item_data,
+                            anime_id: anime_id,
+                            user_anime: user_anime,
+                            addEpisodeToUserAnime: callAddEpisodeToUserAnime,
+                            removeEpisodeFromUserAnime:
+                                callRemoveEpisodeFromUserAnime,
+                            total_anime_episodes_input:
+                                total_anime_episodes_input,
+                            setTotalAnimeEpisodesInput:
+                                setTotalAnimeEpisodesInput,
                         })}
-                        ListFooterComponent={UserMangaDetailsFooter({
-                            removeMangaFromLibrary:
-                                callRemoveMangaFromUserLibrary,
+                        ListFooterComponent={UserAnimeDetailsFooter({
+                            removeAnimeFromWatchList: callRemoveItemFromUser,
                         })}
-                        data={user_manga.volumes}
+                        data={user_anime.episodes}
                         horizontal={false}
                         keyExtractor={(item) => item.toString()}
                         numColumns={8}
@@ -149,15 +148,15 @@ export default function UserMangaDetailsScreen({
                         renderItem={({ item }) => (
                             <TouchableOpacity
                                 onPress={() => {
-                                    callAddOrRemoveFromUserPossessedVolumes({
-                                        volume_number: item,
+                                    callAddOrRemoveFromUserSeenEpisodes({
+                                        episode_number: item,
                                     });
                                 }}
                                 style={[
                                     styles.volume_bubble,
                                     {
                                         backgroundColor:
-                                            user_manga.possessed_volumes.includes(
+                                            user_anime.seen_episodes.includes(
                                                 item
                                             )
                                                 ? ORANGE
@@ -167,7 +166,7 @@ export default function UserMangaDetailsScreen({
                             >
                                 <Text
                                     style={{
-                                        color: user_manga.possessed_volumes.includes(
+                                        color: user_anime.seen_episodes.includes(
                                             item
                                         )
                                             ? WHITE
@@ -186,7 +185,7 @@ export default function UserMangaDetailsScreen({
     return (
         <View style={AppStyles.main_container}>
             <Loading is_loading={is_loading} />
-            {_UserMangaDetails()}
+            {_UserAnimeDetails()}
         </View>
     );
 }

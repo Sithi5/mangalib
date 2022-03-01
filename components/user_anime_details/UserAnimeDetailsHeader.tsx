@@ -1,4 +1,4 @@
-import { FirestoreUserManga } from 'api/FirebaseTypes';
+import { FirestoreUserAnime } from 'api/FirebaseTypes';
 import { kitsuGetItemImage } from 'api/KitsuApi';
 import { KitsuData } from 'api/KitsuTypes';
 import AppStyles, {
@@ -13,35 +13,35 @@ import { Image, StyleSheet, Text, TextInput, View } from 'react-native';
 import { getKitsuItemTitle } from 'utils/kitsu';
 
 type Props = {
-    manga_id: Id;
-    user_manga: FirestoreUserManga;
+    anime_id: Id;
+    user_anime: FirestoreUserAnime;
     kitsu_item_data: KitsuData;
-    addVolumeToUserManga: (number_to_add?: number) => void;
-    removeVolumeFromUserManga: (number_to_remove?: number) => void;
-    total_manga_volumes_input: string;
-    setTotalMangaVolumesInput: React.Dispatch<React.SetStateAction<string>>;
+    addEpisodeToUserAnime: (number_to_add?: number) => void;
+    removeEpisodeFromUserAnime: (number_to_remove?: number) => void;
+    total_anime_episodes_input: string;
+    setTotalAnimeEpisodesInput: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export default function UserMangaDetailsHeader(props: Props) {
+export default function UserAnimeDetailsHeader(props: Props) {
     const {
-        manga_id,
-        user_manga,
+        anime_id,
+        user_anime,
         kitsu_item_data,
-        total_manga_volumes_input,
-        addVolumeToUserManga,
-        removeVolumeFromUserManga,
-        setTotalMangaVolumesInput,
+        total_anime_episodes_input,
+        addEpisodeToUserAnime,
+        removeEpisodeFromUserAnime,
+        setTotalAnimeEpisodesInput,
     } = props;
 
     const image_url = kitsuGetItemImage({
-        id: manga_id,
-        item_type: 'manga',
+        id: anime_id,
+        item_type: 'anime',
         format: 'small',
     });
-    const total_manga_volumes = user_manga.volumes.length;
-    const total_possessed_volumes = user_manga.possessed_volumes.length;
+    const total_anime_episodes = user_anime.episodes.length;
+    const total_episodes_seen = user_anime.seen_episodes.length;
 
-    if (kitsu_item_data != undefined && user_manga) {
+    if (kitsu_item_data != undefined && user_anime) {
         return (
             <View style={AppStyles.main_container}>
                 <Image source={{ uri: image_url }} style={styles.item_image} />
@@ -53,33 +53,33 @@ export default function UserMangaDetailsHeader(props: Props) {
                     </View>
                     <View style={{}}>
                         <Text style={styles.description_text}>
-                            Total possessed volumes : {total_possessed_volumes}
+                            Total episodes seen: {total_episodes_seen}
                         </Text>
                         <View style={{ flexDirection: 'row' }}>
                             <Text style={styles.description_text}>
-                                Total volumes :{' '}
+                                Total episodes :{' '}
                             </Text>
                             <TextInput
-                                placeholder={total_manga_volumes.toString()}
+                                placeholder={total_anime_episodes.toString()}
                                 placeholderTextColor={GREY}
                                 selectionColor={GREY}
-                                value={total_manga_volumes_input}
-                                onChangeText={setTotalMangaVolumesInput}
+                                value={total_anime_episodes_input}
+                                onChangeText={setTotalAnimeEpisodesInput}
                                 onSubmitEditing={() => {
                                     if (
-                                        parseInt(total_manga_volumes_input) >
-                                        total_manga_volumes
+                                        parseInt(total_anime_episodes_input) >
+                                        total_anime_episodes
                                     ) {
-                                        addVolumeToUserManga(
+                                        addEpisodeToUserAnime(
                                             parseInt(
-                                                total_manga_volumes_input
-                                            ) - total_manga_volumes
+                                                total_anime_episodes_input
+                                            ) - total_anime_episodes
                                         );
                                     } else {
-                                        removeVolumeFromUserManga(
-                                            total_manga_volumes -
+                                        removeEpisodeFromUserAnime(
+                                            total_anime_episodes -
                                                 parseInt(
-                                                    total_manga_volumes_input
+                                                    total_anime_episodes_input
                                                 )
                                         );
                                     }

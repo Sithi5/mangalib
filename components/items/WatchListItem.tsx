@@ -40,7 +40,12 @@ export default React.memo(function WatchListItem(props: Props) {
 
     return (
         <FadeIn>
-            <TouchableOpacity style={styles.item_container} onPress={() => {}}>
+            <TouchableOpacity
+                style={styles.item_container}
+                onPress={() => {
+                    _navigateToAnimeDetails(anime.id);
+                }}
+            >
                 <Text adjustsFontSizeToFit={true} style={styles.title_text}>
                     {anime_title}
                 </Text>

@@ -1,12 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import FadeIn from 'animations/FadeIn';
 import { kitsuGetItemImage } from 'api/KitsuApi';
-import {
-    KitsuAnimeAttributes,
-    KitsuData,
-    KitsuItemType,
-    KitsuMangaAttributes,
-} from 'api/KitsuTypes';
+import { KitsuData, KitsuItemType } from 'api/KitsuTypes';
 import AppStyles, {
     DEFAULT_MARGIN,
     DEFAULT_RADIUS,
@@ -19,17 +14,12 @@ import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
 import {
-    addAnimeToUserAnimeList,
-    addMangaToUserMangaList,
-} from 'redux/UserSliceAsyncThunk';
-import {
-    createNewFirestoreUserAnime,
-    createNewFirestoreUserManga,
     getFirestoreUserAnimeById,
     getFirestoreUserMangaById,
 } from 'utils/firebase';
 import { getKitsuItemTitle } from 'utils/kitsu/';
 import { removeItemFromUser } from 'utils/users';
+import addItemToUser from 'utils/users/AddItemToUser';
 
 export const ITEM_HEIGHT = 190;
 
@@ -59,38 +49,16 @@ export default React.memo(function SearchItem(props: Props) {
     }) {
         if (user.logged) {
             async function _addItemToUser() {
-                if (user.uid !== undefined) {
-                    try {
-                        if (item_type === 'manga') {
-                            await dispatch(
-                                addMangaToUserMangaList({
-                                    uid: user.uid,
-                                    user_manga: createNewFirestoreUserManga({
-                                        manga_name: item_title,
-                                        manga_id: item.id,
-                                        volumes_count: (
-                                            item.attributes as KitsuMangaAttributes
-                                        ).volumeCount,
-                                    }),
-                                })
-                            );
-                        } else if (item_type === 'anime') {
-                            await dispatch(
-                                addAnimeToUserAnimeList({
-                                    uid: user.uid,
-                                    user_anime: createNewFirestoreUserAnime({
-                                        anime_name: item_title,
-                                        anime_id: item.id,
-                                        episodes_count: (
-                                            item.attributes as KitsuAnimeAttributes
-                                        ).episodeCount,
-                                    }),
-                                })
-                            );
-                        }
-                    } catch (error: any) {
-                        console.error(error.message);
-                    }
+                try {
+                    await addItemToUser({
+                        item_type: item_type,
+                        item: item,
+                        dispatch: dispatch,
+                        user: user,
+                        item_title: item_title,
+                    });
+                } catch (error: any) {
+                    console.error(error.message);
                 }
             }
 

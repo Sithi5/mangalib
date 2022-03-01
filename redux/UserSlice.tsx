@@ -65,6 +65,7 @@ export const userSlice = createSlice({
                 const { user_data } = action.payload;
                 state.username = user_data.username;
                 state.user_mangas_list = user_data['user_mangas_list'];
+                state.user_animes_list = user_data['user_animes_list'];
                 state.email = user_data.email;
             }
         );

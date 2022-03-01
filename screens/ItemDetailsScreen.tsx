@@ -2,7 +2,7 @@ import { kitsuGetItemDetails, kitsuGetItemImage } from 'api/KitsuApi';
 import { KitsuData, KitsuItemType } from 'api/KitsuTypes';
 import { ButtonBorderColor } from 'components/buttons';
 import Loading from 'components/Loading';
-import AppStyles, { GREY, ORANGE } from 'globals/AppStyles';
+import AppStyles, { ORANGE } from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
 import {
     SearchAnimeStackScreenProps,
@@ -11,12 +11,9 @@ import {
 import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
-import { addMangaToUserMangaList } from 'redux/UserSliceAsyncThunk';
-import {
-    createNewFirestoreUserManga,
-    getFirestoreUserMangaById,
-} from 'utils/firebase';
+import { getFirestoreUserMangaById } from 'utils/firebase';
 import getKitsuItemTitle from 'utils/kitsu/GetKitsuItemTitle';
+import addItemToUser from 'utils/users/AddItemToUser';
 
 export default function ItemDetailsScreen({
     route,
@@ -54,16 +51,13 @@ export default function ItemDetailsScreen({
             if (user.uid !== undefined && item) {
                 let item_title = getKitsuItemTitle({ item: item });
                 try {
-                    await dispatch(
-                        addMangaToUserMangaList({
-                            uid: user.uid,
-                            user_manga: createNewFirestoreUserManga({
-                                manga_name: item_title,
-                                manga_id: item.id,
-                                volumes_count: item.attributes.volumeCount,
-                            }),
-                        })
-                    );
+                    addItemToUser({
+                        item_type: item_type,
+                        item: item,
+                        dispatch: dispatch,
+                        user: user,
+                        item_title: item_title,
+                    });
                 } catch (error: any) {
                     console.error(error.message);
                 }
