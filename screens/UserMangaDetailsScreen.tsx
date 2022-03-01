@@ -41,7 +41,7 @@ export default function UserMangaDetailsScreen({
     const manga_id: Id = route.params.manga_id;
     const user = useAppSelector((state) => state.user);
     const dispatch = useAppDispatch();
-    const [kitsu_manga_data, setKitsuMangaData] = useState<KitsuData>();
+    const [kitsu_item_data, setKitsuItemData] = useState<KitsuData>();
     const [is_loading, setLoading] = useState(true);
     const [total_manga_volumes_input, setTotalMangaVolumesInput] = useState('');
 
@@ -62,7 +62,7 @@ export default function UserMangaDetailsScreen({
                     item_type: 'manga',
                 });
                 if (response) {
-                    setKitsuMangaData(response.data);
+                    setKitsuItemData(response.data);
                 }
             } catch (error) {
                 console.error(error);
@@ -119,12 +119,12 @@ export default function UserMangaDetailsScreen({
     }
 
     function _UserMangaDetails() {
-        if (is_loading === false && kitsu_manga_data && user_manga) {
+        if (is_loading === false && kitsu_item_data && user_manga) {
             return (
                 <View style={AppStyles.main_container}>
                     <FlatList
                         ListHeaderComponent={UserMangaDetailsHeader({
-                            kitsu_manga_data: kitsu_manga_data,
+                            kitsu_item_data: kitsu_item_data,
                             manga_id: manga_id,
                             user_manga: user_manga,
                             addVolumeToUserManga: callAddVolumeToUserManga,
