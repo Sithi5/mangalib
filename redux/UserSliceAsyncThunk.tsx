@@ -1,23 +1,27 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
+    firestoreAddAnimeToUserAnimesList,
     firestoreAddMangaToUserMangasList,
     firestoreCreateUserData,
     firestoreGetUserData,
+    firestoreRemoveAnimeFromUserAnimesList,
     firestoreRemoveMangaFromUserMangasList,
+    firestoreUpdateUserAnimesList,
     firestoreUpdateUserMangasList,
 } from 'api/FirebaseApi';
-import { FirestoreUser, FirestoreUserManga } from 'api/FirebaseTypes';
+import {
+    FirestoreUser,
+    FirestoreUserAnime,
+    FirestoreUserManga,
+} from 'api/FirebaseTypes';
 import {
     createUserWithEmailAndPassword,
     getAuth,
     signInWithEmailAndPassword,
     signOut,
 } from 'firebase/auth';
-import { collection, doc, getFirestore, setDoc } from 'firebase/firestore';
 
 const auth = getAuth();
-
-const firestore = getFirestore();
 
 export const signInUser = createAsyncThunk(
     'user/signInUser',
@@ -117,5 +121,41 @@ export const updateUserMangasList = createAsyncThunk(
             uid: uid,
         });
         return { user_mangas_list };
+    }
+);
+
+export const addAnimeToUserAnimeList = createAsyncThunk(
+    'user/addAnimeToUserAnimeList',
+    async (args: { uid: string; user_anime: FirestoreUserAnime }) => {
+        const { user_anime, uid } = args;
+        const response = await firestoreAddAnimeToUserAnimesList({
+            user_anime: user_anime,
+            uid: uid,
+        });
+        return { user_anime };
+    }
+);
+
+export const removeAnimeFromUserAnimeList = createAsyncThunk(
+    'user/removeAnimeFromUserAnimeList',
+    async (args: { uid: string; user_anime: FirestoreUserAnime }) => {
+        const { user_anime, uid } = args;
+        const response = await firestoreRemoveAnimeFromUserAnimesList({
+            user_anime: user_anime,
+            uid: uid,
+        });
+        return { user_anime };
+    }
+);
+
+export const updateUserAnimesList = createAsyncThunk(
+    'user/updateUserAnimesList',
+    async (args: { uid: string; user_animes_list: FirestoreUserAnime[] }) => {
+        const { user_animes_list, uid } = args;
+        const response = await firestoreUpdateUserAnimesList({
+            user_animes_list: user_animes_list,
+            uid: uid,
+        });
+        return { user_animes_list };
     }
 );

@@ -1,13 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { FirestoreUser } from 'api/FirebaseTypes';
-import { getMangasIdsListFromFirestoreUsersMangasList } from 'utils/firebase';
+import {
+    getAnimesIdsListFromFirestoreUsersAnimesList,
+    getMangasIdsListFromFirestoreUsersMangasList,
+} from 'utils/firebase';
 import * as UserSLiceAsyncThunk from './UserSliceAsyncThunk';
 
 export type UserState = FirestoreUser & {
     uid: string | undefined;
     logged: boolean;
     profil_image_url?: string;
-    // kitsu_mangas_list: KitsuMangaAttributes[];
 };
 
 const initialState: UserState = {
@@ -17,7 +19,6 @@ const initialState: UserState = {
     user_animes_list: [], //Refer to user_animes_list in firestore
     profil_image_url:
         'https://img2.freepng.fr/20180714/hxu/kisspng-user-profile-computer-icons-login-clip-art-profile-picture-icon-5b49de2f52aa71.9002514115315676633386.jpg',
-    // kitsu_mangas_list: [], // Refer to corresponding mangas in Kitsu
 };
 
 export const userSlice = createSlice({
@@ -35,7 +36,6 @@ export const userSlice = createSlice({
         builder.addCase(
             UserSLiceAsyncThunk.signInUser.fulfilled,
             (state, action) => {
-                // console.log('signInUser fullfilled');
                 state.logged = true;
                 state.uid = action.payload.uid;
                 state.email = action.payload.email;
@@ -45,14 +45,12 @@ export const userSlice = createSlice({
             }
         );
         builder.addCase(UserSLiceAsyncThunk.signOutUser.fulfilled, (state) => {
-            // console.log('signOutUser fullfilled');
             state.uid = undefined;
             state.logged = false;
         });
         builder.addCase(
             UserSLiceAsyncThunk.signUpUser.fulfilled,
             (state, action) => {
-                // console.log('signUpUser fullfilled');
                 state.logged = true;
                 state.uid = action.payload.uid;
                 state.username = action.payload.username;
@@ -64,7 +62,6 @@ export const userSlice = createSlice({
         builder.addCase(
             UserSLiceAsyncThunk.getUserData.fulfilled,
             (state, action) => {
-                // console.log('signUpUser fullfilled');
                 const { user_data } = action.payload;
                 state.username = user_data.username;
                 state.user_mangas_list = user_data['user_mangas_list'];
@@ -99,6 +96,36 @@ export const userSlice = createSlice({
             UserSLiceAsyncThunk.updateUserMangasList.fulfilled,
             (state, action) => {
                 state.user_mangas_list = action.payload.user_mangas_list;
+            }
+        );
+        builder.addCase(
+            UserSLiceAsyncThunk.addAnimeToUserAnimeList.fulfilled,
+            (state, action) => {
+                if (
+                    !getAnimesIdsListFromFirestoreUsersAnimesList({
+                        user_animes_list: state.user_animes_list,
+                    }).includes(action.payload.user_anime.anime_id)
+                ) {
+                    const new_user_anime = action.payload.user_anime;
+                    state.user_animes_list.push(new_user_anime);
+                }
+            }
+        );
+        builder.addCase(
+            UserSLiceAsyncThunk.removeAnimeFromUserAnimeList.fulfilled,
+            (state, action) => {
+                const index = getAnimesIdsListFromFirestoreUsersAnimesList({
+                    user_animes_list: state.user_animes_list,
+                }).indexOf(action.payload.user_anime.anime_id);
+                if (index > -1) {
+                    state.user_animes_list.splice(index, 1);
+                }
+            }
+        );
+        builder.addCase(
+            UserSLiceAsyncThunk.updateUserAnimesList.fulfilled,
+            (state, action) => {
+                state.user_animes_list = action.payload.user_animes_list;
             }
         );
     },
