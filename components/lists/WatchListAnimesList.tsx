@@ -54,7 +54,7 @@ export default function WatchListAnimesList(props: Props) {
             >
                 <View>
                     <Text>Nothing in your watchlist yet.</Text>
-                    <Text>You can add some manga from the search screen.</Text>
+                    <Text>You can add some anime from the search screen.</Text>
                 </View>
             </View>
         );

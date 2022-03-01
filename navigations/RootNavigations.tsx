@@ -111,7 +111,7 @@ export default function RootBottomTabNavigator() {
                     options={{
                         title: 'My WatchList',
                         tabBarIcon: ({ color }) => {
-                            const image_name = '../images/icon_open_book.png';
+                            const image_name = '../images/icon_checklist.png';
                             return (
                                 <Image
                                     style={[
@@ -206,7 +206,7 @@ export default function RootBottomTabNavigator() {
                     options={{
                         title: 'My WatchList',
                         tabBarIcon: ({ color }) => {
-                            const image_name = '../images/icon_open_book.png';
+                            const image_name = '../images/icon_checklist.png';
                             return (
                                 <Image
                                     style={[
