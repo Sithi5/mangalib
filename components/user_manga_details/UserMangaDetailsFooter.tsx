@@ -11,14 +11,21 @@ export default function UserMangaDetailsFooter(props: Props) {
     const { removeMangaFromLibrary } = props;
 
     return (
-        <View style={{ flex: 1 }}>
-            <ButtonFullBackgroundColor
-                color={RED}
-                onPressFunction={() => {
-                    removeMangaFromLibrary();
-                }}
-                text={'Remove manga from library'}
-            />
+        <View
+            style={{
+                flex: 1,
+                alignItems: 'center',
+            }}
+        >
+            <View style={{ width: '60%' }}>
+                <ButtonFullBackgroundColor
+                    color={RED}
+                    onPressFunction={() => {
+                        removeMangaFromLibrary();
+                    }}
+                    text={'Remove manga from library'}
+                />
+            </View>
         </View>
     );
 }
