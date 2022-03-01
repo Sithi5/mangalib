@@ -1,7 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
 import FadeIn from 'animations/FadeIn';
 import { kitsuGetItemImage } from 'api/KitsuApi';
-import { KitsuData, KitsuItemType } from 'api/KitsuTypes';
+import {
+    KitsuAnimeAttributes,
+    KitsuData,
+    KitsuItemType,
+    KitsuMangaAttributes,
+} from 'api/KitsuTypes';
 import AppStyles, {
     DEFAULT_MARGIN,
     DEFAULT_RADIUS,
@@ -13,13 +18,18 @@ import { Id } from 'globals/GlobalTypes';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
-import { addMangaToUserMangaList } from 'redux/UserSliceAsyncThunk';
 import {
+    addAnimeToUserAnimeList,
+    addMangaToUserMangaList,
+} from 'redux/UserSliceAsyncThunk';
+import {
+    createNewFirestoreUserAnime,
     createNewFirestoreUserManga,
+    getFirestoreUserAnimeById,
     getFirestoreUserMangaById,
 } from 'utils/firebase';
 import { getKitsuItemTitle } from 'utils/kitsu/';
-import { removeMangaFromUser } from 'utils/users';
+import { removeItemFromUser } from 'utils/users';
 
 export const ITEM_HEIGHT = 190;
 
@@ -42,73 +52,99 @@ export default React.memo(function SearchItem(props: Props) {
         format: 'small',
     });
 
-    function _addOrRemoveMangaFromLibrary() {
+    function _addOrRemoveItemFromLibrary({
+        item_is_in_library,
+    }: {
+        item_is_in_library: boolean;
+    }) {
         if (user.logged) {
-            const manga_is_in_library = user.user_mangas_list.includes(
-                getFirestoreUserMangaById({
-                    user: user,
-                    id: item.id,
-                })
-            );
-
-            async function _addMangaToLibrary() {
+            async function _addItemToUser() {
                 if (user.uid !== undefined) {
-                    const manga_is_in_library = user.user_mangas_list.includes(
-                        getFirestoreUserMangaById({
-                            user: user,
-                            id: item.id,
-                        })
-                    );
                     try {
-                        await dispatch(
-                            addMangaToUserMangaList({
-                                uid: user.uid,
-                                user_manga: createNewFirestoreUserManga({
-                                    manga_name: item_title,
-                                    manga_id: item.id,
-                                    volumes_count: item.attributes.volumeCount,
-                                }),
-                            })
-                        );
+                        if (item_type === 'manga') {
+                            await dispatch(
+                                addMangaToUserMangaList({
+                                    uid: user.uid,
+                                    user_manga: createNewFirestoreUserManga({
+                                        manga_name: item_title,
+                                        manga_id: item.id,
+                                        volumes_count: (
+                                            item.attributes as KitsuMangaAttributes
+                                        ).volumeCount,
+                                    }),
+                                })
+                            );
+                        } else if (item_type === 'anime') {
+                            await dispatch(
+                                addAnimeToUserAnimeList({
+                                    uid: user.uid,
+                                    user_anime: createNewFirestoreUserAnime({
+                                        anime_name: item_title,
+                                        anime_id: item.id,
+                                        episodes_count: (
+                                            item.attributes as KitsuAnimeAttributes
+                                        ).episodeCount,
+                                    }),
+                                })
+                            );
+                        }
                     } catch (error: any) {
                         console.error(error.message);
                     }
                 }
             }
 
-            async function _removeUserManga() {
-                await removeMangaFromUser({
+            async function _removeUserItem() {
+                const user_item =
+                    item_type === 'manga'
+                        ? getFirestoreUserMangaById({
+                              user: user,
+                              id: item.id,
+                          })
+                        : getFirestoreUserAnimeById({
+                              user: user,
+                              id: item.id,
+                          });
+                await removeItemFromUser({
                     user: user,
-                    user_manga: getFirestoreUserMangaById({
-                        user: user,
-                        id: item.id,
-                    }),
-                    manga_id: item.id,
+                    user_item: user_item,
+                    item_id: item.id,
+                    item_type: item_type,
                     dispatch: dispatch,
                 });
             }
 
-            if (manga_is_in_library) {
-                _removeUserManga();
+            if (item_is_in_library) {
+                _removeUserItem();
             } else {
-                _addMangaToLibrary();
+                _addItemToUser();
             }
         }
     }
 
     function _displayAddToLibraryImage() {
-        if (item_type === 'manga' && user.logged) {
-            const manga_is_in_library = user.user_mangas_list.includes(
-                getFirestoreUserMangaById({
-                    user: user,
-                    id: item.id,
-                })
-            );
-            const color = manga_is_in_library ? ORANGE : GREY;
+        if (user.logged) {
+            const item_is_in_library =
+                item_type === 'manga'
+                    ? user.user_mangas_list.includes(
+                          getFirestoreUserMangaById({
+                              user: user,
+                              id: item.id,
+                          })
+                      )
+                    : user.user_animes_list.includes(
+                          getFirestoreUserAnimeById({
+                              user: user,
+                              id: item.id,
+                          })
+                      );
+            const color = item_is_in_library ? ORANGE : GREY;
             return (
                 <TouchableOpacity
                     onPress={async () => {
-                        await _addOrRemoveMangaFromLibrary();
+                        await _addOrRemoveItemFromLibrary({
+                            item_is_in_library: item_is_in_library,
+                        });
                     }}
                 >
                     <Ionicons
