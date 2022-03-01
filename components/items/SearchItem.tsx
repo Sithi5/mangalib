@@ -13,16 +13,13 @@ import { Id } from 'globals/GlobalTypes';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
-import {
-    addMangaToUserMangaList,
-    removeMangaFromUserMangaList,
-} from 'redux/UserSliceAsyncThunk';
-import { alertRemoveMangaFromLibrary } from 'utils/alerts';
+import { addMangaToUserMangaList } from 'redux/UserSliceAsyncThunk';
 import {
     createNewFirestoreUserManga,
     getFirestoreUserMangaById,
 } from 'utils/firebase';
 import { getKitsuItemTitle } from 'utils/kitsu/';
+import { removeMangaFromUser } from 'utils/users';
 
 export const ITEM_HEIGHT = 190;
 
@@ -80,27 +77,19 @@ export default React.memo(function SearchItem(props: Props) {
             }
 
             async function _removeUserManga() {
-                if (user.uid !== undefined) {
-                    try {
-                        await dispatch(
-                            removeMangaFromUserMangaList({
-                                uid: user.uid,
-                                user_manga: getFirestoreUserMangaById({
-                                    user: user,
-                                    id: item.id,
-                                }),
-                            })
-                        );
-                    } catch (error: any) {
-                        console.error(error.message);
-                    }
-                }
+                await removeMangaFromUser({
+                    user: user,
+                    user_manga: getFirestoreUserMangaById({
+                        user: user,
+                        id: item.id,
+                    }),
+                    manga_id: item.id,
+                    dispatch: dispatch,
+                });
             }
 
             if (manga_is_in_library) {
-                alertRemoveMangaFromLibrary({
-                    alertYesFunction: _removeUserManga,
-                });
+                _removeUserManga();
             } else {
                 _addMangaToLibrary();
             }
@@ -212,13 +201,13 @@ const styles = StyleSheet.create({
     rating_text: {
         textAlign: 'right',
         fontWeight: 'bold',
-        color: 'grey',
+        color: GREY,
         flex: 1,
         fontSize: 25,
     },
     icon: {
         padding: 10,
     },
-    synopsis_text: { fontStyle: 'italic', color: 'grey' },
+    synopsis_text: { fontStyle: 'italic', color: GREY },
     start_date_text: { textAlign: 'right' },
 });

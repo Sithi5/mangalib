@@ -1,4 +1,3 @@
-import { Ionicons } from '@expo/vector-icons';
 import { FirestoreUserManga } from 'api/FirebaseTypes';
 import { kitsuGetItemImage } from 'api/KitsuApi';
 import { KitsuData } from 'api/KitsuTypes';
@@ -10,25 +9,18 @@ import AppStyles, {
 } from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
 import React from 'react';
-import {
-    Image,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
-} from 'react-native';
+import { Image, StyleSheet, Text, TextInput, View } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { getKitsuItemTitle } from 'utils/kitsu';
 
 type Props = {
     manga_id: Id;
     user_manga: FirestoreUserManga;
     kitsu_manga_data: KitsuData;
-    total_manga_volumes: number;
     addVolumeToUserManga: (number_to_add?: number) => void;
     removeVolumeFromUserManga: (number_to_remove?: number) => void;
-    total_manga_volumes_text: string;
-    setTotalMangaVolumesText: React.Dispatch<React.SetStateAction<string>>;
+    total_manga_volumes_input: string;
+    setTotalMangaVolumesInput: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export default function UserMangaDetailsHeader(props: Props) {
@@ -36,11 +28,10 @@ export default function UserMangaDetailsHeader(props: Props) {
         manga_id,
         user_manga,
         kitsu_manga_data,
-        total_manga_volumes,
-        total_manga_volumes_text,
+        total_manga_volumes_input,
         addVolumeToUserManga,
         removeVolumeFromUserManga,
-        setTotalMangaVolumesText,
+        setTotalMangaVolumesInput,
     } = props;
 
     const image_url = kitsuGetItemImage({
@@ -48,6 +39,8 @@ export default function UserMangaDetailsHeader(props: Props) {
         item_type: 'manga',
         format: 'small',
     });
+    const total_manga_volumes = user_manga.volumes.length;
+    const total_possessed_volumes = user_manga.possessed_volumes.length;
 
     if (kitsu_manga_data != undefined && user_manga) {
         return (
@@ -60,66 +53,42 @@ export default function UserMangaDetailsHeader(props: Props) {
                         </Text>
                     </View>
                     <View style={{}}>
-                        <Text>total volumes : </Text>
-                        <TextInput
-                            placeholder={total_manga_volumes.toString()}
-                            placeholderTextColor={GREY}
-                            selectionColor={GREY}
-                            value={total_manga_volumes_text}
-                            onChangeText={setTotalMangaVolumesText}
-                            onSubmitEditing={() => {
-                                if (
-                                    parseInt(total_manga_volumes_text) >
-                                    total_manga_volumes
-                                ) {
-                                    addVolumeToUserManga(
-                                        parseInt(total_manga_volumes_text) -
-                                            total_manga_volumes
-                                    );
-                                } else {
-                                    removeVolumeFromUserManga(
-                                        total_manga_volumes -
-                                            parseInt(total_manga_volumes_text)
-                                    );
-                                }
-                            }}
-                            keyboardType="numeric"
-                            maxLength={3} //setting limit of input
-                        />
-                    </View>
-
-                    <View
-                        style={{
-                            flex: 1,
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            flexDirection: 'row',
-                        }}
-                    >
-                        <TouchableOpacity
-                            onPress={async () => {
-                                removeVolumeFromUserManga();
-                            }}
-                        >
-                            <Ionicons
-                                style={styles.icon}
-                                name="remove-circle-outline"
-                                size={20}
-                                color={BLACK}
+                        <Text style={styles.description_text}>
+                            Total possessed volumes : {total_possessed_volumes}
+                        </Text>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={styles.description_text}>
+                                Total volumes :{' '}
+                            </Text>
+                            <TextInput
+                                placeholder={total_manga_volumes.toString()}
+                                placeholderTextColor={GREY}
+                                selectionColor={GREY}
+                                value={total_manga_volumes_input}
+                                onChangeText={setTotalMangaVolumesInput}
+                                onSubmitEditing={() => {
+                                    if (
+                                        parseInt(total_manga_volumes_input) >
+                                        total_manga_volumes
+                                    ) {
+                                        addVolumeToUserManga(
+                                            parseInt(
+                                                total_manga_volumes_input
+                                            ) - total_manga_volumes
+                                        );
+                                    } else {
+                                        removeVolumeFromUserManga(
+                                            total_manga_volumes -
+                                                parseInt(
+                                                    total_manga_volumes_input
+                                                )
+                                        );
+                                    }
+                                }}
+                                keyboardType="numeric"
+                                maxLength={3} //setting limit of input
                             />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={async () => {
-                                addVolumeToUserManga();
-                            }}
-                        >
-                            <Ionicons
-                                style={styles.icon}
-                                name="add-circle-outline"
-                                size={20}
-                                color={BLACK}
-                            />
-                        </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </View>
@@ -162,4 +131,5 @@ const styles = StyleSheet.create({
         paddingLeft: DEFAULT_MARGIN,
         color: BLACK,
     },
+    description_text: { color: GREY },
 });
