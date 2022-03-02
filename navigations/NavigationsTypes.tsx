@@ -33,12 +33,12 @@ export type SearchTopTabParamList = {
 
 export type SearchMangaStackParamList = {
     SearchManga: undefined;
-    ItemDetails: { id: Id; item_type: KitsuItemType };
+    ItemDetails: { item_id: Id; item_type: KitsuItemType; item_title: string };
 };
 
 export type SearchAnimeStackParamList = {
     SearchAnime: undefined;
-    ItemDetails: { id: Id; item_type: KitsuItemType };
+    ItemDetails: { item_id: Id; item_type: KitsuItemType; item_title: string };
 };
 
 export type LibraryStackParamList = {

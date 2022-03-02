@@ -32,11 +32,11 @@ function SearchMangaStackNavigator() {
             <SearchMangaStack.Screen
                 name="ItemDetails"
                 component={ItemDetailsScreen}
-                options={{
+                options={({ route }) => ({
                     headerShown: true,
-                    title: 'Details',
+                    title: route.params.item_title,
                     headerTitleStyle: { color: GREY },
-                }}
+                })}
             />
         </SearchMangaStack.Navigator>
     );
@@ -59,10 +59,11 @@ function SearchAnimeStackNavigator() {
             <SearchAnimeStack.Screen
                 name="ItemDetails"
                 component={ItemDetailsScreen}
-                options={{
+                options={({ route }) => ({
                     headerShown: true,
-                    title: 'Details',
-                }}
+                    title: route.params.item_title,
+                    headerTitleStyle: { color: GREY },
+                })}
             />
         </SearchAnimeStack.Navigator>
     );

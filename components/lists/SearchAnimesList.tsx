@@ -27,8 +27,15 @@ export default function SearchAnimesList(props: Props) {
 
     const item_type = 'anime';
 
-    function _navigateToItemDetails({ id }: NavigateToItemDetailsArgs) {
-        navigation.navigate('ItemDetails', { id, item_type: item_type });
+    function _navigateToItemDetails({
+        item_id,
+        item_title,
+    }: NavigateToItemDetailsArgs) {
+        navigation.navigate('ItemDetails', {
+            item_id,
+            item_type: item_type,
+            item_title: item_title,
+        });
     }
 
     return (

@@ -22,7 +22,7 @@ export default function ItemDetailsScreen({
     | SearchAnimeStackScreenProps<'ItemDetails'>) {
     const [is_loading, setLoading] = useState(true);
     const [item, setItem] = useState<KitsuData>();
-    const id: Id = route.params.id;
+    const item_id: Id = route.params.item_id;
     const item_type: KitsuItemType = route.params.item_type;
     const user = useAppSelector((state) => state.user);
     const dispatch = useAppDispatch();
@@ -31,7 +31,7 @@ export default function ItemDetailsScreen({
         async function _getItemDetails() {
             try {
                 const response = await kitsuGetItemDetails({
-                    id: id,
+                    id: item_id,
                     item_type: item_type,
                 });
                 if (response) {
@@ -44,7 +44,7 @@ export default function ItemDetailsScreen({
             }
         }
         _getItemDetails();
-    }, [id]);
+    }, [item_id]);
 
     function _displayAddToLibrary() {
         async function _addMangaToLibrary() {
@@ -87,7 +87,7 @@ export default function ItemDetailsScreen({
     function _ItemDetails() {
         if (item != undefined) {
             const image_url = kitsuGetItemImage({
-                id: id,
+                id: item_id,
                 item_type: item_type,
                 format: 'small',
             });

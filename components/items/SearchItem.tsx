@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import FadeIn from 'animations/FadeIn';
 import { kitsuGetItemImage } from 'api/KitsuApi';
 import { KitsuData, KitsuItemType } from 'api/KitsuTypes';
+import { NavigateToItemDetailsArgs } from 'components/lists/SearchItemsList';
 import AppStyles, {
     DEFAULT_MARGIN,
     DEFAULT_RADIUS,
@@ -9,7 +10,6 @@ import AppStyles, {
     ORANGE,
     WHITE,
 } from 'globals/AppStyles';
-import { Id } from 'globals/GlobalTypes';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
@@ -26,7 +26,10 @@ export const ITEM_HEIGHT = 190;
 type Props = {
     item: KitsuData;
     item_type: KitsuItemType;
-    _navigateToItemDetails: ({ id }: { id: Id }) => void;
+    _navigateToItemDetails: ({
+        item_id,
+        item_title,
+    }: NavigateToItemDetailsArgs) => void;
 };
 
 export default React.memo(function SearchItem(props: Props) {
@@ -131,7 +134,12 @@ export default React.memo(function SearchItem(props: Props) {
             <FadeIn>
                 <TouchableOpacity
                     style={styles.item_container}
-                    onPress={() => _navigateToItemDetails({ id: item.id })}
+                    onPress={() =>
+                        _navigateToItemDetails({
+                            item_id: item.id,
+                            item_title: item_title,
+                        })
+                    }
                 >
                     <Image
                         source={{ uri: image_url }}

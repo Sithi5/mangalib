@@ -27,8 +27,15 @@ export default function SearchMangasList(props: Props) {
 
     const item_type = 'manga';
 
-    function _navigateToItemDetails({ id }: NavigateToItemDetailsArgs) {
-        navigation.navigate('ItemDetails', { id: id, item_type: item_type });
+    function _navigateToItemDetails({
+        item_id,
+        item_title,
+    }: NavigateToItemDetailsArgs) {
+        navigation.navigate('ItemDetails', {
+            item_id: item_id,
+            item_type: item_type,
+            item_title: item_title,
+        });
     }
 
     return (
