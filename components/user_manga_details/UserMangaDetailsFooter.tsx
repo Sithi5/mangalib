@@ -7,7 +7,7 @@ type Props = {
     removeMangaFromLibrary: () => Promise<void>;
 };
 
-export default function UserMangaDetailsFooter(props: Props) {
+export default React.memo(function UserMangaDetailsFooter(props: Props) {
     const { removeMangaFromLibrary } = props;
 
     return (
@@ -28,4 +28,4 @@ export default function UserMangaDetailsFooter(props: Props) {
             </View>
         </View>
     );
-}
+});

@@ -31,6 +31,8 @@ import {
     removeItemFromUser,
     removeVolumesFromUserManga,
 } from 'utils/users';
+import { LibraryItemVolume } from 'components/items';
+import { VOLUME_BUBBLE_SIZE } from 'components/items/LibraryItemVolume';
 
 const window_width = Dimensions.get('window').width;
 
@@ -44,6 +46,7 @@ export default function UserMangaDetailsScreen({
     const [kitsu_item_data, setKitsuItemData] = useState<KitsuData>();
     const [is_loading, setLoading] = useState(true);
     const [total_manga_volumes_input, setTotalMangaVolumesInput] = useState('');
+    console.log('RERENDERING');
 
     let user_manga = getFirestoreUserMangaById({
         user: user,
@@ -123,22 +126,31 @@ export default function UserMangaDetailsScreen({
             return (
                 <View style={AppStyles.main_container}>
                     <FlatList
-                        ListHeaderComponent={UserMangaDetailsHeader({
-                            kitsu_item_data: kitsu_item_data,
-                            manga_id: manga_id,
-                            user_manga: user_manga,
-                            addVolumeToUserManga: callAddVolumeToUserManga,
-                            removeVolumeFromUserManga:
-                                callRemoveVolumeFromUserManga,
-                            total_manga_volumes_input:
-                                total_manga_volumes_input,
-                            setTotalMangaVolumesInput:
-                                setTotalMangaVolumesInput,
-                        })}
-                        ListFooterComponent={UserMangaDetailsFooter({
-                            removeMangaFromLibrary:
-                                callRemoveMangaFromUserLibrary,
-                        })}
+                        ListHeaderComponent={
+                            <UserMangaDetailsHeader
+                                kitsu_item_data={kitsu_item_data}
+                                manga_id={manga_id}
+                                user_manga={user_manga}
+                                addVolumeToUserManga={callAddVolumeToUserManga}
+                                removeVolumeFromUserManga={
+                                    callRemoveVolumeFromUserManga
+                                }
+                                total_manga_volumes_input={
+                                    total_manga_volumes_input
+                                }
+                                setTotalMangaVolumesInput={
+                                    setTotalMangaVolumesInput
+                                }
+                            />
+                        }
+                        initialNumToRender={1}
+                        ListFooterComponent={
+                            <UserMangaDetailsFooter
+                                removeMangaFromLibrary={
+                                    callRemoveMangaFromUserLibrary
+                                }
+                            />
+                        }
                         data={user_manga.volumes}
                         horizontal={false}
                         keyExtractor={(item) => item.toString()}
@@ -147,36 +159,13 @@ export default function UserMangaDetailsScreen({
                             <View style={styles.separator_container}></View>
                         )}
                         renderItem={({ item }) => (
-                            <TouchableOpacity
-                                onPress={() => {
-                                    callAddOrRemoveFromUserPossessedVolumes({
-                                        volume_number: item,
-                                    });
-                                }}
-                                style={[
-                                    styles.volume_bubble,
-                                    {
-                                        backgroundColor:
-                                            user_manga.possessed_volumes.includes(
-                                                item
-                                            )
-                                                ? ORANGE
-                                                : WHITE,
-                                    },
-                                ]}
-                            >
-                                <Text
-                                    style={{
-                                        color: user_manga.possessed_volumes.includes(
-                                            item
-                                        )
-                                            ? WHITE
-                                            : BLACK,
-                                    }}
-                                >
-                                    {item}
-                                </Text>
-                            </TouchableOpacity>
+                            <LibraryItemVolume
+                                user_manga={user_manga}
+                                item={item}
+                                callAddOrRemoveFromUserPossessedVolumes={
+                                    callAddOrRemoveFromUserPossessedVolumes
+                                }
+                            />
                         )}
                     />
                 </View>

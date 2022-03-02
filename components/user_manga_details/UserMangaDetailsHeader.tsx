@@ -22,7 +22,7 @@ type Props = {
     setTotalMangaVolumesInput: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export default function UserMangaDetailsHeader(props: Props) {
+export default React.memo(function UserMangaDetailsHeader(props: Props) {
     const {
         manga_id,
         user_manga,
@@ -95,7 +95,7 @@ export default function UserMangaDetailsHeader(props: Props) {
     } else {
         return null;
     }
-}
+});
 
 const styles = StyleSheet.create({
     item_image: {

@@ -18,8 +18,8 @@ import {
 } from 'react-native';
 import getKitsuItemTitle from 'utils/kitsu/GetKitsuItemTitle';
 
-export const LIBRARY_ITEM_WIDTH = Dimensions.get('window').width / 3.2;
-export const LIBRARY_ITEM_HEIGHT = 200;
+export const WATCHLIST_ITEM_WIDTH = Dimensions.get('window').width / 3.2;
+export const WATCHLIST_ITEM_HEIGHT = 200;
 
 type Props = {
     anime: KitsuData;
@@ -59,8 +59,8 @@ const styles = StyleSheet.create({
     item_container: {
         flex: 1,
         marginLeft: DEFAULT_MARGIN,
-        width: LIBRARY_ITEM_WIDTH,
-        height: LIBRARY_ITEM_HEIGHT,
+        width: WATCHLIST_ITEM_WIDTH,
+        height: WATCHLIST_ITEM_HEIGHT,
         backgroundColor: WHITE,
         borderRadius: DEFAULT_RADIUS,
     },
