@@ -1,3 +1,4 @@
+import { useIsFocused } from '@react-navigation/native';
 import { kitsuGetItemDetails, kitsuGetItemImage } from 'api/KitsuApi';
 import { KitsuData, KitsuItemType } from 'api/KitsuTypes';
 import { ButtonBorderColor } from 'components/buttons';
@@ -11,6 +12,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
+import { hideSearchTobTabHeader } from 'redux/NavigationsHeaderOptionSlice';
 import { getFirestoreUserMangaById } from 'utils/firebase';
 import getKitsuItemTitle from 'utils/kitsu/GetKitsuItemTitle';
 import addItemToUser from 'utils/users/AddItemToUser';
@@ -25,8 +27,16 @@ export default function ItemDetailsScreen({
     const item_id: Id = route.params.item_id;
     const item_type: KitsuItemType = route.params.item_type;
     const user = useAppSelector((state) => state.user);
+    const navigation_header_option = useAppSelector(
+        (state) => state.navigation_header_option
+    );
     const dispatch = useAppDispatch();
 
+    const is_focused = useIsFocused();
+
+    if (is_focused && navigation_header_option.search_top_tab_header_shown) {
+        dispatch(hideSearchTobTabHeader());
+    }
     useEffect(() => {
         async function _getItemDetails() {
             try {

@@ -1,3 +1,4 @@
+import { useIsFocused } from '@react-navigation/native';
 import { kitsuSearch } from 'api/KitsuApi';
 import type { KitsuData } from 'api/KitsuTypes';
 import { SearchTextInput } from 'components/inputs';
@@ -7,6 +8,11 @@ import AppStyles from 'globals/AppStyles';
 import type { SearchAnimeStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { useAppDispatch, useAppSelector } from 'redux/Hooks';
+import {
+    hideSearchTobTabHeader,
+    showSearchTobTabHeader,
+} from 'redux/NavigationsHeaderOptionSlice';
 import SearchStyles from './SearchStyles';
 
 export type FunctionSearchAnimeArgs = {
@@ -21,7 +27,15 @@ export default function SearchMangaScreen({
     const search_text = useRef('');
     const next_page_url = useRef<string | undefined>();
     const last_page_reached = useRef<boolean>(false);
+    const navigation_header_option = useAppSelector(
+        (state) => state.navigation_header_option
+    );
+    const dispatch = useAppDispatch();
+    const is_focused = useIsFocused();
 
+    if (is_focused && !navigation_header_option.search_top_tab_header_shown) {
+        dispatch(showSearchTobTabHeader());
+    }
     async function _searchAnimes({
         new_search = false,
     }: FunctionSearchAnimeArgs) {

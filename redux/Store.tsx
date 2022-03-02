@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
+import NavigationsHeaderOptionReducer from './NavigationsHeaderOptionSlice';
 import UserReducer from './UserSlice';
 
 export const store = configureStore({
     reducer: {
         user: UserReducer,
+        navigation_header_option: NavigationsHeaderOptionReducer,
     },
 });
 

@@ -41,6 +41,9 @@ function _checkForPersistingUser() {
 
 export default function RootBottomTabNavigator() {
     const user = useAppSelector((state) => state.user);
+    const navigation_header_option = useAppSelector(
+        (state) => state.navigation_header_option
+    );
 
     if (user.logged == false) {
         _checkForPersistingUser();
@@ -67,7 +70,8 @@ export default function RootBottomTabNavigator() {
                     component={SearchTopTabNavigator}
                     options={{
                         title: 'Search',
-                        headerShown: true,
+                        headerShown:
+                            navigation_header_option.search_top_tab_header_shown,
                         tabBarIcon: ({ color }) => {
                             const image_name = '../images/icon_search.png';
                             return (
