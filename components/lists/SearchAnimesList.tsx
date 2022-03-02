@@ -3,7 +3,7 @@ import SearchItemsList, {
     NavigateToItemDetailsArgs,
 } from 'components/lists/SearchItemsList';
 import { WHITE } from 'globals/AppStyles';
-import type { SearchAnimeScreenNavigationProp } from 'navigations/NavigationsTypes';
+import type { SearchTopTabNavigationProps } from 'navigations/NavigationsTypes';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { FunctionSearchAnimeArgs } from 'Screens/SearchAnimeScreen';
@@ -11,7 +11,7 @@ import { FunctionSearchAnimeArgs } from 'Screens/SearchAnimeScreen';
 const SEPARATOR_HEIGHT = 5;
 
 type Props = {
-    navigation: SearchAnimeScreenNavigationProp;
+    navigation: SearchTopTabNavigationProps<'SearchAnime'>;
     animes_list: KitsuData[];
     last_page_reached?: boolean;
     _searchAnimes?: ({}: FunctionSearchAnimeArgs) => Promise<void>;

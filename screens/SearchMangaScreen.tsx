@@ -4,7 +4,7 @@ import { SearchTextInput } from 'components/inputs';
 import { SearchMangasList } from 'components/lists';
 import Loading from 'components/Loading';
 import AppStyles from 'globals/AppStyles';
-import type { SearchMangaStackScreenProps } from 'navigations/NavigationsTypes';
+import type { SearchTopTabScreenProps } from 'navigations/NavigationsTypes';
 import React, { useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import SearchStyles from './SearchStyles';
@@ -15,7 +15,7 @@ export type FunctionSearchMangaArgs = {
 
 export default function SearchMangaScreen({
     navigation,
-}: SearchMangaStackScreenProps<'SearchManga'>) {
+}: SearchTopTabScreenProps<'SearchManga'>) {
     const [is_loading, setLoading] = useState(false);
     const [mangas_list, setMangasList] = useState<KitsuData[]>([]);
     const search_text = useRef('');
