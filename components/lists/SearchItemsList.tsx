@@ -1,6 +1,6 @@
 import type { KitsuData, KitsuItemType } from 'api/KitsuTypes';
 import SearchItem, { ITEM_HEIGHT } from 'components/items/SearchItem';
-import { LIGHTGREY } from 'globals/AppStyles';
+import { LIGHT_GREY } from 'globals/AppStyles';
 import type { Id } from 'globals/GlobalTypes';
 import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
@@ -68,7 +68,7 @@ export default function SearchItemsList(props: Props) {
 
 const styles = StyleSheet.create({
     list_container: {
-        backgroundColor: LIGHTGREY,
+        backgroundColor: LIGHT_GREY,
         paddingTop: SEPARATOR_HEIGHT,
     },
     separator_container: {

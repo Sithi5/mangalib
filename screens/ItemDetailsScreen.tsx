@@ -2,30 +2,37 @@ import { kitsuGetItemDetails, kitsuGetItemImage } from 'api/KitsuApi';
 import { KitsuData, KitsuItemType } from 'api/KitsuTypes';
 import { ButtonBorderColor } from 'components/buttons';
 import Loading from 'components/Loading';
-import AppStyles, { ORANGE } from 'globals/AppStyles';
+import { ItemDetailsScreenNavigationHeader } from 'components/navigations_headers';
+import AppStyles, { DARK_GREY, ORANGE } from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
+import { SearchStackScreenProps } from 'navigations/NavigationsTypes';
+import React, { useEffect, useRef, useState } from 'react';
 import {
-    SearchAnimeStackScreenProps,
-    SearchMangaStackScreenProps,
-} from 'navigations/NavigationsTypes';
-import React, { useEffect, useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+    Animated,
+    Image,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
 import { getFirestoreUserMangaById } from 'utils/firebase';
 import getKitsuItemTitle from 'utils/kitsu/GetKitsuItemTitle';
 import addItemToUser from 'utils/users/AddItemToUser';
 
 export default function ItemDetailsScreen({
+    navigation,
     route,
-}:
-    | SearchMangaStackScreenProps<'ItemDetails'>
-    | SearchAnimeStackScreenProps<'ItemDetails'>) {
+}: SearchStackScreenProps<'ItemDetails'>) {
     const [is_loading, setLoading] = useState(true);
     const [item, setItem] = useState<KitsuData>();
+    const [on_scroll, setOnScroll] = useState(false);
     const item_id: Id = route.params.item_id;
     const item_type: KitsuItemType = route.params.item_type;
     const user = useAppSelector((state) => state.user);
     const dispatch = useAppDispatch();
+    let image_url = useRef('');
+    let item_title = item ? getKitsuItemTitle({ item: item }) : '';
 
     useEffect(() => {
         async function _getItemDetails() {
@@ -40,6 +47,12 @@ export default function ItemDetailsScreen({
             } catch (error) {
                 console.error(error);
             } finally {
+                console.log;
+                image_url.current = kitsuGetItemImage({
+                    id: item_id,
+                    item_type: item_type,
+                    format: 'small',
+                });
                 setLoading(false);
             }
         }
@@ -49,7 +62,6 @@ export default function ItemDetailsScreen({
     function _displayAddToLibrary() {
         async function _addMangaToLibrary() {
             if (user.uid !== undefined && item) {
-                let item_title = getKitsuItemTitle({ item: item });
                 try {
                     addItemToUser({
                         item_type: item_type,
@@ -86,35 +98,58 @@ export default function ItemDetailsScreen({
 
     function _ItemDetails() {
         if (item != undefined) {
-            const image_url = kitsuGetItemImage({
-                id: item_id,
-                item_type: item_type,
-                format: 'small',
-            });
-
             return (
-                <ScrollView style={styles.scrollview_container}>
-                    <Image
-                        source={{ uri: image_url }}
-                        style={styles.item_image}
-                    />
-                    <View style={styles.content_main_container}>
-                        <View style={styles.content_title_container}>
-                            <Text style={styles.title_text}>
-                                {getKitsuItemTitle({ item: item })}
-                            </Text>
+                <ScrollView
+                    style={styles.scrollview_container}
+                    stickyHeaderIndices={[0]}
+                    onScroll={(event) => {
+                        const scrolling = event.nativeEvent.contentOffset.y;
+
+                        if (scrolling > 1) {
+                            setOnScroll(true);
+                        } else {
+                            setOnScroll(false);
+                        }
+                    }}
+                >
+                    <Animated.View style={styles.navigation_header_container}>
+                        <ItemDetailsScreenNavigationHeader
+                            item_title={item_title}
+                            image_url={image_url.current}
+                            navigation={navigation}
+                            on_scroll={on_scroll}
+                        ></ItemDetailsScreenNavigationHeader>
+                    </Animated.View>
+                    <View style={styles.content_container}>
+                        <Image
+                            source={
+                                image_url.current !== ''
+                                    ? { uri: image_url.current }
+                                    : require('images/default_image.png')
+                            }
+                            style={styles.item_image}
+                        />
+                        <View style={styles.content_main_container}>
+                            <View style={styles.content_overview_container}>
+                                <Text style={styles.overview_text}>
+                                    {item.attributes.synopsis}
+                                </Text>
+                            </View>
+                            <View style={styles.content_bottom_container}>
+                                <Text style={styles.bottom_text}>
+                                    Vote:{' '}
+                                    {item.attributes.averageRating
+                                        ? (
+                                              parseInt(
+                                                  item.attributes.averageRating
+                                              ) / 10
+                                          ).toString()
+                                        : ''}{' '}
+                                    / 10
+                                </Text>
+                            </View>
+                            {_displayAddToLibrary()}
                         </View>
-                        <View style={styles.content_overview_container}>
-                            <Text style={styles.overview_text}>
-                                {item.attributes.synopsis}
-                            </Text>
-                        </View>
-                        <View style={styles.content_bottom_container}>
-                            <Text style={styles.bottom_text}>
-                                Vote: {item.attributes.averageRating} / 100
-                            </Text>
-                        </View>
-                        {_displayAddToLibrary()}
                     </View>
                 </ScrollView>
             );
@@ -133,30 +168,23 @@ const styles = StyleSheet.create({
     scrollview_container: {
         flex: 1,
     },
+    navigation_header_container: {
+        flex: 1,
+    },
+    content_container: {
+        flex: 1,
+    },
     item_image: {
-        flex: 3,
         height: 150,
+        width: 100,
         margin: 5,
         backgroundColor: 'gray',
-    },
-    loading_container: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
-        alignItems: 'center',
-        justifyContent: 'center',
     },
     content_main_container: {
         flex: 3,
         margin: 5,
     },
-    content_title_container: {
-        flex: 1,
-        margin: 5,
-        alignItems: 'center',
-    },
+
     content_overview_container: {
         flex: 1,
         margin: 5,
@@ -169,7 +197,7 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         fontWeight: 'bold',
         fontSize: 30,
-        color: 'black',
+        color: DARK_GREY,
     },
     overview_text: {
         flexWrap: 'wrap',
@@ -181,21 +209,5 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         fontSize: 17,
         color: 'dimgrey',
-    },
-
-    share_touchable_floatingactionbutton: {
-        position: 'absolute',
-        width: 60,
-        height: 60,
-        right: 30,
-        bottom: 30,
-        borderRadius: 30,
-        backgroundColor: '#e91e63',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    share_image: {
-        width: 30,
-        height: 30,
     },
 });

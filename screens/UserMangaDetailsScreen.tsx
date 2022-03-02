@@ -1,28 +1,20 @@
-import { deepCopy } from 'utils/objects';
 import { kitsuGetItemDetails } from 'api/KitsuApi';
 import { KitsuData } from 'api/KitsuTypes';
+import { LibraryItemVolume } from 'components/items';
 import Loading from 'components/Loading';
 import {
     UserMangaDetailsFooter,
     UserMangaDetailsHeader,
 } from 'components/user_manga_details';
 import AppStyles, {
-    BLACK,
     DEFAULT_MARGIN,
-    ORANGE,
     WHITE,
+    WINDOW_WIDTH,
 } from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
 import { LibraryStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useEffect, useState } from 'react';
-import {
-    Dimensions,
-    FlatList,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
 import { getFirestoreUserMangaById } from 'utils/firebase/';
 import {
@@ -31,10 +23,6 @@ import {
     removeItemFromUser,
     removeVolumesFromUserManga,
 } from 'utils/users';
-import { LibraryItemVolume } from 'components/items';
-import { VOLUME_BUBBLE_SIZE } from 'components/items/LibraryItemVolume';
-
-const window_width = Dimensions.get('window').width;
 
 export default function UserMangaDetailsScreen({
     navigation,
@@ -180,7 +168,7 @@ export default function UserMangaDetailsScreen({
     );
 }
 
-const volume_bubble_size = window_width / 10;
+const volume_bubble_size = WINDOW_WIDTH / 10;
 
 const styles = StyleSheet.create({
     separator_container: {

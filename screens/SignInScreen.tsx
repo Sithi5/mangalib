@@ -1,8 +1,8 @@
 import { AntDesign } from '@expo/vector-icons';
 import { ButtonFullBackgroundColor } from 'components/buttons';
 import AppStyles, {
-    BLACK,
     BLUE,
+    DARK_GREY,
     DEFAULT_MARGIN,
     DEFAULT_RADIUS,
     GREY,
@@ -128,7 +128,7 @@ export default function SignInScreen({
                         alignItems: 'center',
                     }}
                 >
-                    <Text style={{ color: BLACK }}>
+                    <Text style={{ color: DARK_GREY }}>
                         Don't have an account yet ?
                     </Text>
                     <TouchableOpacity
@@ -174,6 +174,6 @@ const styles = StyleSheet.create({
         borderColor: WHITE,
         borderWidth: 1,
         paddingLeft: DEFAULT_MARGIN,
-        color: BLACK,
+        color: DARK_GREY,
     },
 });

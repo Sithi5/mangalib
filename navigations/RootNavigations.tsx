@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 // Components
-import { GREY, LIGHTGREY, ORANGE, WHITE } from 'globals/AppStyles';
+import { GREY, LIGHT_GREY, ORANGE, WHITE } from 'globals/AppStyles';
 import * as React from 'react';
 import { Image, StyleSheet } from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
@@ -47,13 +47,13 @@ export default function RootBottomTabNavigator() {
 
     return (
         <RootBottomTab.Navigator
-            initialRouteName="Profil"
+            initialRouteName="SearchStack"
             screenOptions={() => ({
                 headerStyle: {
                     backgroundColor: WHITE,
                 },
                 tabBarActiveTintColor: ORANGE,
-                tabBarActiveBackgroundColor: LIGHTGREY,
+                tabBarActiveBackgroundColor: LIGHT_GREY,
                 tabBarInactiveBackgroundColor: WHITE,
                 tabBarInactiveTintColor: GREY,
                 tabBarShowLabel: false,

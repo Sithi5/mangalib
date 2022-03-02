@@ -1,5 +1,6 @@
-import AppStyles, {
-    BLACK,
+import { Ionicons } from '@expo/vector-icons';
+import {
+    DARK_GREY,
     DEFAULT_MARGIN,
     DEFAULT_RADIUS,
     GREY,
@@ -7,7 +8,6 @@ import AppStyles, {
 } from 'globals/AppStyles';
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
 export type TextInputOnSubmitFunctionArgs = {
     new_search?: boolean;
@@ -79,6 +79,6 @@ const styles = StyleSheet.create({
         borderColor: WHITE,
         borderWidth: 1,
         paddingLeft: DEFAULT_MARGIN,
-        color: BLACK,
+        color: DARK_GREY,
     },
 });

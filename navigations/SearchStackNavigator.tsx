@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { GREY, ORANGE } from 'globals/AppStyles';
+import { ORANGE } from 'globals/AppStyles';
 import { ItemDetailsScreen } from 'screens';
 import { SearchStackParamList } from './NavigationsTypes';
 import SearchTopTabNavigator from './SearchTopTabNavigator';
@@ -21,10 +21,8 @@ export default function SearchStackNavigator() {
             <SearchStack.Screen
                 name="ItemDetails"
                 component={ItemDetailsScreen}
-                options={({ route }) => ({
-                    headerShown: true,
-                    title: route.params.item_title,
-                    headerTitleStyle: { color: GREY },
+                options={() => ({
+                    headerShown: false,
                 })}
             />
         </SearchStack.Navigator>

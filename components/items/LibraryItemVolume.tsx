@@ -1,7 +1,13 @@
 import { FirestoreUserManga } from 'api/FirebaseTypes';
-import { BLACK, DEFAULT_MARGIN, ORANGE, WHITE } from 'globals/AppStyles';
+import {
+    DARK_GREY,
+    DEFAULT_MARGIN,
+    ORANGE,
+    WHITE,
+    WINDOW_WIDTH,
+} from 'globals/AppStyles';
 import React from 'react';
-import { Dimensions, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 type Props = {
     user_manga: FirestoreUserManga;
@@ -36,7 +42,7 @@ export default React.memo(function LibraryItemVolume(props: Props) {
                 style={{
                     color: user_manga.possessed_volumes.includes(item)
                         ? WHITE
-                        : BLACK,
+                        : DARK_GREY,
                 }}
             >
                 {item}
@@ -45,8 +51,7 @@ export default React.memo(function LibraryItemVolume(props: Props) {
     );
 });
 
-const window_width = Dimensions.get('window').width;
-export const VOLUME_BUBBLE_SIZE = window_width / 10;
+export const VOLUME_BUBBLE_SIZE = WINDOW_WIDTH / 10;
 
 const styles = StyleSheet.create({
     volume_bubble: {

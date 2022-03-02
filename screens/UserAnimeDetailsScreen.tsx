@@ -6,16 +6,16 @@ import {
     UserAnimeDetailsHeader,
 } from 'components/user_anime_details';
 import AppStyles, {
-    BLACK,
+    DARK_GREY,
     DEFAULT_MARGIN,
     ORANGE,
     WHITE,
+    WINDOW_WIDTH,
 } from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
 import { WatchListStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useEffect, useState } from 'react';
 import {
-    Dimensions,
     FlatList,
     StyleSheet,
     Text,
@@ -30,8 +30,6 @@ import {
 } from 'utils/users';
 import addEpisodesToUserAnime from 'utils/users/AddEpisodesToUserAnime';
 import removeEpisodesFromUserAnime from 'utils/users/RemoveEpisodesFromUserAnime';
-
-const window_width = Dimensions.get('window').width;
 
 export default function UserAnimeDetailsScreen({
     navigation,
@@ -170,7 +168,7 @@ export default function UserAnimeDetailsScreen({
                                             item
                                         )
                                             ? WHITE
-                                            : BLACK,
+                                            : DARK_GREY,
                                     }}
                                 >
                                     {item}
@@ -190,7 +188,7 @@ export default function UserAnimeDetailsScreen({
     );
 }
 
-const volume_bubble_size = window_width / 10;
+const volume_bubble_size = WINDOW_WIDTH / 10;
 
 const styles = StyleSheet.create({
     separator_container: {

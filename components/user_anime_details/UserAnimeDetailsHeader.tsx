@@ -2,7 +2,7 @@ import { FirestoreUserAnime } from 'api/FirebaseTypes';
 import { kitsuGetItemImage } from 'api/KitsuApi';
 import { KitsuData } from 'api/KitsuTypes';
 import AppStyles, {
-    BLACK,
+    DARK_GREY,
     DEFAULT_MARGIN,
     GREY,
     WHITE,
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         fontWeight: 'bold',
         fontSize: 30,
-        color: 'black',
+        color: DARK_GREY,
     },
     icon: {
         padding: 10,
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
         borderColor: WHITE,
         borderWidth: 1,
         paddingLeft: DEFAULT_MARGIN,
-        color: BLACK,
+        color: DARK_GREY,
     },
     description_text: { color: GREY },
 });

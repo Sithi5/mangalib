@@ -1,5 +1,5 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { GREY, LIGHTGREY, ORANGE, WHITE } from 'globals/AppStyles';
+import { GREY, LIGHT_GREY, ORANGE, WHITE } from 'globals/AppStyles';
 import React from 'react';
 import { SearchAnimeScreen, SearchMangaScreen } from 'screens';
 import { SearchTopTabParamList } from './NavigationsTypes';
@@ -15,10 +15,7 @@ export default function SearchTopTabNavigator() {
                     backgroundColor: WHITE,
                 },
                 tabBarActiveTintColor: ORANGE,
-                tabBarActiveBackgroundColor: LIGHTGREY,
-                tabBarInactiveBackgroundColor: WHITE,
                 tabBarInactiveTintColor: GREY,
-                tabBarShowLabel: true,
             })}
         >
             <SearchTopTab.Screen
