@@ -1,10 +1,10 @@
 import type { KitsuData } from 'api/KitsuTypes';
+import { LibraryItem } from 'components/items';
 import AppStyles, { DEFAULT_MARGIN } from 'globals/AppStyles';
 import type { Id } from 'globals/GlobalTypes';
 import type { LibraryScreenNavigationProp } from 'navigations/NavigationsTypes';
 import React from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
-import { LibraryItem } from 'components/items';
 
 type Props = {
     navigation: LibraryScreenNavigationProp;
@@ -14,9 +14,10 @@ type Props = {
 export default function LibraryMangasList(props: Props) {
     const { navigation, mangas_list } = props;
 
-    function _navigateToLibraryMangaDetails(manga_id: Id) {
+    function _navigateToLibraryMangaDetails(manga_id: Id, manga_title: string) {
         navigation.navigate('UserMangaDetails', {
             manga_id: manga_id,
+            manga_title: manga_title,
         });
     }
 

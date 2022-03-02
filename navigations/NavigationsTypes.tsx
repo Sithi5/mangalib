@@ -43,7 +43,7 @@ export type SearchAnimeStackParamList = {
 
 export type LibraryStackParamList = {
     Library: undefined;
-    UserMangaDetails: { manga_id: Id };
+    UserMangaDetails: { manga_id: Id; manga_title: string };
 };
 
 export type LoginStackParamList = {
@@ -53,7 +53,7 @@ export type LoginStackParamList = {
 
 export type WatchListStackParamList = {
     WatchList: undefined;
-    UserAnimeDetails: { anime_id: Id };
+    UserAnimeDetails: { anime_id: Id; anime_title: string };
 };
 
 // Screen props

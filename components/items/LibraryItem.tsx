@@ -24,11 +24,11 @@ export const LIBRARY_ITEM_HEIGHT = 200;
 type Props = {
     manga: KitsuData;
     index: number;
-    _navigateToMangaDetails: (manga_id: Id) => void;
+    _navigateToMangaDetails: (manga_id: Id, manga_title: string) => void;
 };
 
 export default React.memo(function LibraryItem(props: Props) {
-    const { manga, _navigateToMangaDetails, index } = props;
+    const { manga, _navigateToMangaDetails } = props;
 
     let manga_title = getMangaTitle({ item: manga });
 
@@ -42,7 +42,7 @@ export default React.memo(function LibraryItem(props: Props) {
         <FadeIn>
             <TouchableOpacity
                 style={styles.item_container}
-                onPress={() => _navigateToMangaDetails(manga.id)}
+                onPress={() => _navigateToMangaDetails(manga.id, manga_title)}
             >
                 <Text adjustsFontSizeToFit={true} style={styles.title_text}>
                     {manga_title}

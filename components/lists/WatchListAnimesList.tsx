@@ -14,9 +14,13 @@ type Props = {
 export default function WatchListAnimesList(props: Props) {
     const { navigation, animes_list } = props;
 
-    function _navigateToWatchListAnimeDetails(anime_id: Id) {
+    function _navigateToWatchListAnimeDetails(
+        anime_id: Id,
+        anime_title: string
+    ) {
         navigation.navigate('UserAnimeDetails', {
             anime_id: anime_id,
+            anime_title: anime_title,
         });
     }
 

@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { ORANGE } from 'globals/AppStyles';
 import React from 'react';
 import { useAppSelector } from 'redux/Hooks';
 import { WatchListScreen } from 'screens';
@@ -17,17 +18,19 @@ export default function WatchListStackNavigator() {
                     name="WatchList"
                     component={WatchListScreen}
                     options={{
-                        headerShown: false,
-                        title: 'WatchList',
+                        headerShown: true,
+                        headerTitleStyle: { color: ORANGE },
+                        title: 'My WatchList',
                     }}
                 />
                 <WatchList.Screen
                     name="UserAnimeDetails"
                     component={UserAnimeDetailsScreen}
-                    options={{
+                    options={({ route }) => ({
+                        headerTitleStyle: { color: ORANGE },
                         headerShown: true,
-                        title: 'Details',
-                    }}
+                        title: route.params.anime_title,
+                    })}
                 />
             </WatchList.Navigator>
         );

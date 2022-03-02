@@ -45,7 +45,7 @@ export default async function addItemToUser(args: Args) {
                     addAnimeToUserAnimeList({
                         uid: user.uid,
                         user_anime: createNewFirestoreUserAnime({
-                            anime_name: item_title,
+                            anime_title: item_title,
                             anime_id: item.id,
                             episodes_count: (
                                 item.attributes as KitsuAnimeAttributes

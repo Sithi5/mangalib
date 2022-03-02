@@ -60,7 +60,6 @@ export default function RootBottomTabNavigator() {
                     tabBarInactiveTintColor: GREY,
                     tabBarShowLabel: false,
                     headerTitleStyle: { color: ORANGE },
-                    headerShown: true,
                 })}
             >
                 <RootBottomTab.Screen
@@ -68,6 +67,7 @@ export default function RootBottomTabNavigator() {
                     component={SearchTopTabNavigator}
                     options={{
                         title: 'Search',
+                        headerShown: true,
                         tabBarIcon: ({ color }) => {
                             const image_name = '../images/icon_search.png';
                             return (
@@ -86,6 +86,7 @@ export default function RootBottomTabNavigator() {
                     name="LibraryStack"
                     component={LibraryStackNavigator}
                     options={{
+                        headerShown: false,
                         title: 'My Library',
                         tabBarIcon: ({ color }) => {
                             const image_name = '../images/icon_open_book.png';
@@ -105,6 +106,7 @@ export default function RootBottomTabNavigator() {
                     name="WatchListStack"
                     component={WatchListStackNavigator}
                     options={{
+                        headerShown: false,
                         title: 'My WatchList',
                         tabBarIcon: ({ color }) => {
                             const image_name = '../images/icon_checklist.png';

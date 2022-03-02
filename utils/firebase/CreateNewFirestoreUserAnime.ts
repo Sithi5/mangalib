@@ -3,13 +3,13 @@ import { Id } from 'globals/GlobalTypes';
 
 type Args = {
     anime_id: Id;
-    anime_name: string;
+    anime_title: string;
     episodes_count?: number | null;
 };
 
 export default function createNewFirestoreUserAnime({
     anime_id,
-    anime_name,
+    anime_title,
     episodes_count,
 }: Args): FirestoreUserAnime {
     if (!episodes_count) {
@@ -22,7 +22,7 @@ export default function createNewFirestoreUserAnime({
     }
     episodes.reverse();
     const new_user_anime: FirestoreUserAnime = {
-        anime_name: anime_name,
+        anime_title: anime_title,
         anime_id: anime_id,
         episodes: episodes,
         seen_episodes: [],

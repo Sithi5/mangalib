@@ -24,7 +24,7 @@ export const WATCHLIST_ITEM_HEIGHT = 200;
 type Props = {
     anime: KitsuData;
     index: number;
-    _navigateToAnimeDetails: (anime_id: Id) => void;
+    _navigateToAnimeDetails: (anime_id: Id, anime_title: string) => void;
 };
 
 export default React.memo(function WatchListItem(props: Props) {
@@ -43,7 +43,7 @@ export default React.memo(function WatchListItem(props: Props) {
             <TouchableOpacity
                 style={styles.item_container}
                 onPress={() => {
-                    _navigateToAnimeDetails(anime.id);
+                    _navigateToAnimeDetails(anime.id, anime_title);
                 }}
             >
                 <Text adjustsFontSizeToFit={true} style={styles.title_text}>

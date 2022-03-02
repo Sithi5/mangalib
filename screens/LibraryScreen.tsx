@@ -9,7 +9,7 @@ import AppStyles, { DEFAULT_MARGIN, ORANGE } from 'globals/AppStyles';
 import type { LibraryStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { useAppSelector } from 'redux/Hooks';
+import { useAppDispatch, useAppSelector } from 'redux/Hooks';
 import { getMangasIdsListFromFirestoreUsersMangasList } from 'utils/firebase/';
 import { getKitsuItemTitle } from 'utils/kitsu/';
 import { replaceAll } from 'utils/strings/';
