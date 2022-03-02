@@ -3,7 +3,7 @@ import SearchItemsList, {
     NavigateToItemDetailsArgs,
 } from 'components/lists/SearchItemsList'; // Not using the index.ts to avoid cycle import.
 import { WHITE } from 'globals/AppStyles';
-import type { SearchTopTabNavigationProps } from 'navigations/NavigationsTypes';
+import type { SearchTopTabMangaScreenNavigationProps } from 'navigations/NavigationsTypes';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import type { FunctionSearchMangaArgs } from 'screens/SearchMangaScreen';
@@ -11,7 +11,7 @@ import type { FunctionSearchMangaArgs } from 'screens/SearchMangaScreen';
 const SEPARATOR_HEIGHT = 5;
 
 type Props = {
-    navigation: SearchTopTabNavigationProps<'SearchManga'>;
+    navigation: SearchTopTabMangaScreenNavigationProps;
     mangas_list: KitsuData[];
     last_page_reached?: boolean;
     _searchMangas?: ({}: FunctionSearchMangaArgs) => Promise<void>;

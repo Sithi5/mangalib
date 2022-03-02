@@ -51,7 +51,6 @@ export type WatchListStackParamList = {
 };
 
 // Screen props
-
 export type RootBottomTabScreenProps<T extends keyof RootBottomTabParamList> =
     BottomTabScreenProps<RootBottomTabParamList, T>;
 
@@ -86,7 +85,6 @@ export type LoginStackScreenProps<T extends keyof LoginStackParamList> =
     >;
 
 // Navigation prop
-
 export type RootBottomTabNavigationProp<
     T extends keyof RootBottomTabParamList
 > = BottomTabNavigationProp<RootBottomTabParamList, T>;
@@ -102,6 +100,16 @@ export type SearchTopTabNavigationProps<T extends keyof SearchTopTabParamList> =
         MaterialTopTabNavigationProp<SearchTopTabParamList, T>,
         SearchStackNavigationProps<keyof SearchStackParamList>
     >;
+
+export type SearchTopTabAnimeScreenNavigationProps = CompositeNavigationProp<
+    MaterialTopTabNavigationProp<SearchTopTabParamList, 'SearchAnime'>,
+    SearchStackNavigationProps<keyof SearchStackParamList>
+>;
+
+export type SearchTopTabMangaScreenNavigationProps = CompositeNavigationProp<
+    MaterialTopTabNavigationProp<SearchTopTabParamList, 'SearchManga'>,
+    SearchStackNavigationProps<keyof SearchStackParamList>
+>;
 
 export type LibraryScreenNavigationProp = CompositeNavigationProp<
     NativeStackNavigationProp<LibraryStackParamList, 'Library'>,

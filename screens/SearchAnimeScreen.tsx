@@ -4,7 +4,10 @@ import { SearchTextInput } from 'components/inputs';
 import { SearchAnimesList } from 'components/lists';
 import Loading from 'components/Loading';
 import AppStyles from 'globals/AppStyles';
-import type { SearchTopTabScreenProps } from 'navigations/NavigationsTypes';
+import type {
+    SearchTopTabAnimeScreenNavigationProps,
+    SearchTopTabScreenProps,
+} from 'navigations/NavigationsTypes';
 import React, { useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import SearchStyles from './SearchStyles';
@@ -69,7 +72,9 @@ export default function SearchMangaScreen({
             />
             <View style={SearchStyles.list_container}>
                 <SearchAnimesList
-                    navigation={navigation}
+                    navigation={
+                        navigation as SearchTopTabAnimeScreenNavigationProps
+                    }
                     animes_list={animes_list}
                     last_page_reached={last_page_reached.current}
                     _searchAnimes={_searchAnimes}
