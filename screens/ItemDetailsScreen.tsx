@@ -3,18 +3,12 @@ import { KitsuData, KitsuItemType } from 'api/KitsuTypes';
 import { ButtonBorderColor } from 'components/buttons';
 import Loading from 'components/Loading';
 import { ItemDetailsScreenNavigationHeader } from 'components/navigations_headers';
-import AppStyles, { DARK_GREY, ORANGE } from 'globals/AppStyles';
+import StatusBar from 'components/StatusBar';
+import AppStyles, { DARK_GREY, GREY, ORANGE } from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
 import { SearchStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useEffect, useRef, useState } from 'react';
-import {
-    Animated,
-    Image,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native';
+import { Animated, Image, StyleSheet, Text, View } from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
 import { getFirestoreUserMangaById } from 'utils/firebase';
 import getKitsuItemTitle from 'utils/kitsu/GetKitsuItemTitle';
@@ -26,13 +20,14 @@ export default function ItemDetailsScreen({
 }: SearchStackScreenProps<'ItemDetails'>) {
     const [is_loading, setLoading] = useState(true);
     const [item, setItem] = useState<KitsuData>();
-    const [on_scroll, setOnScroll] = useState(false);
+    const scroll = useRef(new Animated.Value(0)).current;
     const item_id: Id = route.params.item_id;
     const item_type: KitsuItemType = route.params.item_type;
     const user = useAppSelector((state) => state.user);
     const dispatch = useAppDispatch();
     let image_url = useRef('');
     let item_title = item ? getKitsuItemTitle({ item: item }) : '';
+    console.log('RERENDERING');
 
     useEffect(() => {
         async function _getItemDetails() {
@@ -99,25 +94,21 @@ export default function ItemDetailsScreen({
     function _ItemDetails() {
         if (item != undefined) {
             return (
-                <ScrollView
+                <Animated.ScrollView
                     style={styles.scrollview_container}
                     stickyHeaderIndices={[0]}
-                    onScroll={(event) => {
-                        const scrolling = event.nativeEvent.contentOffset.y;
-
-                        if (scrolling > 1) {
-                            setOnScroll(true);
-                        } else {
-                            setOnScroll(false);
-                        }
-                    }}
+                    onScroll={Animated.event(
+                        [{ nativeEvent: { contentOffset: { y: scroll } } }],
+                        { useNativeDriver: true }
+                    )}
+                    scrollEventThrottle={1}
                 >
                     <Animated.View style={styles.navigation_header_container}>
                         <ItemDetailsScreenNavigationHeader
                             item_title={item_title}
                             image_url={image_url.current}
                             navigation={navigation}
-                            on_scroll={on_scroll}
+                            scroll={scroll}
                         ></ItemDetailsScreenNavigationHeader>
                     </Animated.View>
                     <View style={styles.content_container}>
@@ -151,13 +142,14 @@ export default function ItemDetailsScreen({
                             {_displayAddToLibrary()}
                         </View>
                     </View>
-                </ScrollView>
+                </Animated.ScrollView>
             );
         }
     }
 
     return (
         <View style={AppStyles.main_container}>
+            <StatusBar />
             <Loading is_loading={is_loading} />
             {_ItemDetails()}
         </View>
@@ -168,6 +160,7 @@ const styles = StyleSheet.create({
     scrollview_container: {
         flex: 1,
     },
+
     navigation_header_container: {
         flex: 1,
     },
@@ -178,7 +171,7 @@ const styles = StyleSheet.create({
         height: 150,
         width: 100,
         margin: 5,
-        backgroundColor: 'gray',
+        backgroundColor: GREY,
     },
     content_main_container: {
         flex: 3,
@@ -202,12 +195,12 @@ const styles = StyleSheet.create({
     overview_text: {
         flexWrap: 'wrap',
         fontSize: 17,
-        color: 'grey',
+        color: GREY,
         fontStyle: 'italic',
     },
     bottom_text: {
         flexWrap: 'wrap',
         fontSize: 17,
-        color: 'dimgrey',
+        color: GREY,
     },
 });

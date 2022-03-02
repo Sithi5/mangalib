@@ -1,4 +1,4 @@
-import FadeIn from 'animations/FadeIn';
+import { FadeIn } from 'animations';
 import { kitsuGetItemImage } from 'api/KitsuApi';
 import { KitsuData } from 'api/KitsuTypes';
 import {

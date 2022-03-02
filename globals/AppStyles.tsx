@@ -10,6 +10,8 @@ export const LIGHT_GREY = '#e6e6e6';
 export const DARK_GREY = '#1e1e1e';
 export const DEFAULT_MARGIN = 5;
 export const DEFAULT_RADIUS = 10;
+export const BACKGROUND_DARK_OPACITY = 'rgba(0,0,0, 0.80)';
+export const BACKGROUND_WHITE_OPACITY = 'rgba(255,255,255, 1)';
 
 export const WINDOW_HEIGHT = Dimensions.get('window').height;
 export const WINDOW_WIDTH = Dimensions.get('window').width;

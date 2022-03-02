@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import FadeIn from 'animations/FadeIn';
+import { FadeIn } from 'animations';
 import { kitsuGetItemImage } from 'api/KitsuApi';
 import { KitsuData, KitsuItemType } from 'api/KitsuTypes';
 import { NavigateToItemDetailsArgs } from 'components/lists/SearchItemsList';
