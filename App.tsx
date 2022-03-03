@@ -7,6 +7,8 @@ import 'react-native-gesture-handler'; //⚠️ Keep at top of the file ⚠️
 import { Provider } from 'react-redux';
 import RootBottomTabNavigator from './navigations/RootNavigations';
 import { store } from './redux/Store';
+import AppLoading from 'expo-app-loading';
+import { useFonts } from 'expo-font';
 
 LogBox.ignoreLogs([
     "AsyncStorage has been extracted from react-native core and will be removed in a future release. It can now be installed and imported from '@react-native-async-storage/async-storage' instead of 'react-native'. See https://github.com/react-native-async-storage/async-storage",
@@ -14,6 +16,12 @@ LogBox.ignoreLogs([
 LogBox.ignoreLogs(['Setting a timer']);
 
 export default function App() {
+    // let [fontsLoaded] = useFonts({
+    //     'Fredoka-Bold': require('assets/fonts/Fredoka-Bold.ttf'),
+    // });
+    // if (!fontsLoaded) {
+    //     return <AppLoading />;
+    // }
     console.log('RENDERING APP');
 
     return (
