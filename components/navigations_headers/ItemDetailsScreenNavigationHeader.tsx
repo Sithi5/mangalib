@@ -36,11 +36,14 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 const FADE_DURATION = 750;
 
 export default function ItemDetailsScreenNavigationHeader(props: Props) {
-    const [on_scroll, setOnScroll] = useState(false);
-    const had_fade_in = useRef(false);
-    const last_scroll_value = useRef(0);
     const { navigation, item_title, image_url, scroll } = props;
+
+    const [on_scroll, setOnScroll] = useState(false);
+    const [header_height, setHeaderHeight] = useState(HEADER_MAX_HEIGHT);
+
     const fade_out_anim = useRef(new Animated.Value(0)).current;
+    const had_fade_in = useRef(false);
+
     const header_diff_clamp = Animated.diffClamp(
         scroll,
         0,
@@ -50,6 +53,7 @@ export default function ItemDetailsScreenNavigationHeader(props: Props) {
         inputRange: [0, 1],
         outputRange: [BACKGROUND_DARK_OPACITY, BACKGROUND_WHITE_OPACITY],
     });
+
     const header_text_color = fade_out_anim.interpolate({
         inputRange: [0, 1],
         outputRange: [WHITE, BLACK],
@@ -64,31 +68,25 @@ export default function ItemDetailsScreenNavigationHeader(props: Props) {
             } else {
                 setOnScroll(false);
             }
-            if (
-                value > HEADER_SCROLL_DISTANCE - HEADER_MIN_HEIGHT &&
-                !had_fade_in.current
-            ) {
+            if (value > HEADER_SCROLL_DISTANCE && !had_fade_in.current) {
                 Animated.timing(fade_out_anim, {
                     toValue: 1,
                     duration: FADE_DURATION,
                     useNativeDriver: false,
                 }).start();
                 had_fade_in.current = true;
+                setHeaderHeight(HEADER_MIN_HEIGHT);
             }
-            if (value < last_scroll_value.current) {
-                // Scrolling up
+            if (value < HEADER_SCROLL_DISTANCE && had_fade_in.current) {
                 if (had_fade_in.current) {
                     Animated.timing(fade_out_anim, {
                         toValue: 0,
                         duration: FADE_DURATION,
                         useNativeDriver: false,
                     }).start();
+                    setHeaderHeight(HEADER_MAX_HEIGHT);
                     had_fade_in.current = false;
                 }
-            }
-
-            if (last_scroll_value.current != value) {
-                last_scroll_value.current = value;
             }
         });
         return () => {
@@ -102,43 +100,53 @@ export default function ItemDetailsScreenNavigationHeader(props: Props) {
                 style={[
                     styles.header_main_container,
                     {
-                        transform: [{ translateY: translate_header }],
+                        height: header_height, // Variable header height depending on the scrolling value.
                     },
                 ]}
             >
-                <ImageBackground
-                    source={
-                        image_url !== ''
-                            ? { uri: image_url }
-                            : require('images/default_image.png')
-                    }
-                    style={styles.image_background}
+                <Animated.View
+                    style={{
+                        flex: 1,
+                        backgroundColor: fade_out_background_image,
+                        transform:
+                            header_height === HEADER_MAX_HEIGHT
+                                ? [{ translateY: translate_header }]
+                                : [], // Translate until the header height is minimized
+                    }}
                 >
-                    <Animated.View
-                        style={{
-                            flex: 1,
-                            backgroundColor: fade_out_background_image,
-                        }}
+                    <ImageBackground
+                        source={
+                            image_url !== ''
+                                ? { uri: image_url }
+                                : require('images/default_image.png')
+                        }
+                        style={styles.image_background}
                     >
-                        <View style={styles.top_elems_container}>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    navigation.goBack();
-                                }}
-                            >
-                                <Ionicons
-                                    style={[
-                                        styles.back_button_icon,
-                                        on_scroll
-                                            ? { color: DARK_GREY }
-                                            : { color: WHITE },
-                                    ]}
-                                    name="arrow-back-outline"
-                                    size={25}
-                                    color={WHITE}
-                                />
-                            </TouchableOpacity>
-                            {/* <TouchableOpacity onPress={() => {}}>
+                        <Animated.View
+                            style={{
+                                flex: 1,
+                                backgroundColor: fade_out_background_image,
+                            }}
+                        >
+                            <View style={styles.top_elems_container}>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        navigation.goBack();
+                                    }}
+                                >
+                                    <Ionicons
+                                        style={[
+                                            styles.back_button_icon,
+                                            on_scroll
+                                                ? { color: DARK_GREY }
+                                                : { color: WHITE },
+                                        ]}
+                                        name="arrow-back-outline"
+                                        size={25}
+                                        color={WHITE}
+                                    />
+                                </TouchableOpacity>
+                                {/* <TouchableOpacity onPress={() => {}}>
                             <Ionicons
                                 style={styles.option_button_icon}
                                 name="ellipsis-vertical"
@@ -146,23 +154,33 @@ export default function ItemDetailsScreenNavigationHeader(props: Props) {
                                 color={WHITE}
                             />
                         </TouchableOpacity> */}
-                        </View>
-                        <View style={styles.bottom_elems_container}>
-                            <Animated.Text
-                                numberOfLines={1}
-                                style={[
-                                    styles.item_title_text,
-                                    { color: header_text_color },
-                                ]}
-                            >
-                                {item_title.length < 30
-                                    ? item_title
-                                    : item_title.substring(0, 27) + '...'}
-                            </Animated.Text>
-                        </View>
-                    </Animated.View>
-                </ImageBackground>
+                            </View>
+                            <View style={styles.bottom_elems_container}>
+                                <Animated.Text
+                                    numberOfLines={1}
+                                    style={[
+                                        styles.item_title_text,
+                                        { color: header_text_color },
+                                    ]}
+                                >
+                                    {item_title.length < 30
+                                        ? item_title
+                                        : item_title.substring(0, 27) + '...'}
+                                </Animated.Text>
+                            </View>
+                        </Animated.View>
+                    </ImageBackground>
+                </Animated.View>
             </Animated.View>
+            <View
+                // This view adjust the offset of the header to compensate the scrolling when the header height is minimized.
+                style={{
+                    height:
+                        header_height === HEADER_MIN_HEIGHT
+                            ? HEADER_SCROLL_DISTANCE
+                            : 0,
+                }}
+            ></View>
         </View>
     );
 }
@@ -170,8 +188,6 @@ export default function ItemDetailsScreenNavigationHeader(props: Props) {
 const styles = StyleSheet.create({
     header_main_container: {
         height: HEADER_MAX_HEIGHT,
-        borderBottomColor: LIGHT_GREY,
-        borderBottomWidth: 1,
         flex: 1,
     },
 
