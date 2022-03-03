@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     },
     item_title_text: {
         fontSize: 20,
-        fontWeight: 'bold',
+        fontFamily: 'Rubik-SemiBold',
     },
     top_elems_container: {
         flex: 1,

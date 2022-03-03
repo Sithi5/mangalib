@@ -15,7 +15,10 @@ export default function SearchStackNavigator() {
                 options={{
                     headerShown: true,
                     title: 'Search',
-                    headerTitleStyle: { color: ORANGE },
+                    headerTitleStyle: {
+                        color: ORANGE,
+                        fontFamily: 'Rubik-SemiBold',
+                    },
                 }}
             />
             <SearchStack.Screen

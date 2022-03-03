@@ -57,7 +57,10 @@ export default function RootBottomTabNavigator() {
                 tabBarInactiveBackgroundColor: WHITE,
                 tabBarInactiveTintColor: GREY,
                 tabBarShowLabel: false,
-                headerTitleStyle: { color: ORANGE },
+                headerTitleStyle: {
+                    color: ORANGE,
+                    fontFamily: 'Rubik-Regular',
+                },
                 headerShown: false,
             })}
         >

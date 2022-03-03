@@ -14,6 +14,9 @@ export default function SearchTopTabNavigator() {
                 headerStyle: {
                     backgroundColor: WHITE,
                 },
+                tabBarLabelStyle: {
+                    fontFamily: 'Rubik-Regular',
+                },
                 tabBarActiveTintColor: ORANGE,
                 tabBarInactiveTintColor: GREY,
             })}

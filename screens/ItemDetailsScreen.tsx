@@ -198,17 +198,11 @@ const styles = StyleSheet.create({
         flex: 1,
         margin: 5,
     },
-    title_text: {
-        flexWrap: 'wrap',
-        fontWeight: 'bold',
-        fontSize: 30,
-        color: DARK_GREY,
-    },
     overview_text: {
         flexWrap: 'wrap',
         fontSize: 17,
         color: GREY,
-        fontStyle: 'italic',
+        fontFamily: 'Rubik-LightItalic',
     },
     bottom_text: {
         flexWrap: 'wrap',
