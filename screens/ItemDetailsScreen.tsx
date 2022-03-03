@@ -99,7 +99,7 @@ export default function ItemDetailsScreen({
                     stickyHeaderIndices={[0]}
                     onScroll={Animated.event(
                         [{ nativeEvent: { contentOffset: { y: scroll } } }],
-                        { useNativeDriver: true }
+                        { useNativeDriver: false }
                     )}
                     scrollEventThrottle={1}
                 >
@@ -122,6 +122,18 @@ export default function ItemDetailsScreen({
                         />
                         <View style={styles.content_main_container}>
                             <View style={styles.content_overview_container}>
+                                <Text style={styles.overview_text}>
+                                    {item.attributes.synopsis}
+                                </Text>
+                                <Text style={styles.overview_text}>
+                                    {item.attributes.synopsis}
+                                </Text>
+                                <Text style={styles.overview_text}>
+                                    {item.attributes.synopsis}
+                                </Text>
+                                <Text style={styles.overview_text}>
+                                    {item.attributes.synopsis}
+                                </Text>
                                 <Text style={styles.overview_text}>
                                     {item.attributes.synopsis}
                                 </Text>

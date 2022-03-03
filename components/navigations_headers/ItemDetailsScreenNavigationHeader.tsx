@@ -3,8 +3,11 @@ import Constants from 'expo-constants';
 import {
     BACKGROUND_DARK_OPACITY,
     BACKGROUND_WHITE_OPACITY,
+    BLACK,
     DARK_GREY,
     DEFAULT_MARGIN,
+    GREY,
+    LIGHT_GREY,
     WHITE,
     WINDOW_HEIGHT,
 } from 'globals/AppStyles';
@@ -27,13 +30,15 @@ type Props = {
     scroll: Animated.Value;
 };
 
-const HEADER_MAX_HEIGHT = WINDOW_HEIGHT / 3.5;
+const HEADER_MAX_HEIGHT = 200;
 const HEADER_MIN_HEIGHT = 50;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
+const FADE_DURATION = 750;
 
 export default function ItemDetailsScreenNavigationHeader(props: Props) {
     const [on_scroll, setOnScroll] = useState(false);
-    const can_fade_in = useRef(true);
+    const had_fade_in = useRef(false);
+    const last_scroll_value = useRef(0);
     const { navigation, item_title, image_url, scroll } = props;
     const fade_out_anim = useRef(new Animated.Value(0)).current;
     const header_diff_clamp = Animated.diffClamp(
@@ -45,30 +50,60 @@ export default function ItemDetailsScreenNavigationHeader(props: Props) {
         inputRange: [0, 1],
         outputRange: [BACKGROUND_DARK_OPACITY, BACKGROUND_WHITE_OPACITY],
     });
+    const header_text_color = fade_out_anim.interpolate({
+        inputRange: [0, 1],
+        outputRange: [WHITE, BLACK],
+    });
+
     const translate_header = Animated.multiply(header_diff_clamp, -1);
 
-    scroll.addListener(({ value }) => {
-        if (value > 0) {
-            setOnScroll(true);
-        } else {
-            setOnScroll(false);
-        }
-        if (value > HEADER_MIN_HEIGHT && can_fade_in) {
-            Animated.timing(fade_out_anim, {
-                toValue: 1,
-                duration: 1000,
-                useNativeDriver: false,
-            }).start();
-            can_fade_in.current = false;
-        }
-    });
+    useEffect(() => {
+        scroll.addListener(({ value }) => {
+            if (value > 0) {
+                setOnScroll(true);
+            } else {
+                setOnScroll(false);
+            }
+            if (
+                value > HEADER_SCROLL_DISTANCE - HEADER_MIN_HEIGHT &&
+                !had_fade_in.current
+            ) {
+                Animated.timing(fade_out_anim, {
+                    toValue: 1,
+                    duration: FADE_DURATION,
+                    useNativeDriver: false,
+                }).start();
+                had_fade_in.current = true;
+            }
+            if (value < last_scroll_value.current) {
+                // Scrolling up
+                if (had_fade_in.current) {
+                    Animated.timing(fade_out_anim, {
+                        toValue: 0,
+                        duration: FADE_DURATION,
+                        useNativeDriver: false,
+                    }).start();
+                    had_fade_in.current = false;
+                }
+            }
+
+            if (last_scroll_value.current != value) {
+                last_scroll_value.current = value;
+            }
+        });
+        return () => {
+            scroll.removeAllListeners();
+        };
+    }, []);
 
     return (
         <View>
             <Animated.View
                 style={[
                     styles.header_main_container,
-                    { transform: [{ translateY: translate_header }] },
+                    {
+                        transform: [{ translateY: translate_header }],
+                    },
                 ]}
             >
                 <ImageBackground
@@ -113,14 +148,17 @@ export default function ItemDetailsScreenNavigationHeader(props: Props) {
                         </TouchableOpacity> */}
                         </View>
                         <View style={styles.bottom_elems_container}>
-                            <Text
+                            <Animated.Text
                                 numberOfLines={1}
-                                style={styles.item_title_text}
+                                style={[
+                                    styles.item_title_text,
+                                    { color: header_text_color },
+                                ]}
                             >
                                 {item_title.length < 30
                                     ? item_title
                                     : item_title.substring(0, 27) + '...'}
-                            </Text>
+                            </Animated.Text>
                         </View>
                     </Animated.View>
                 </ImageBackground>
@@ -132,6 +170,8 @@ export default function ItemDetailsScreenNavigationHeader(props: Props) {
 const styles = StyleSheet.create({
     header_main_container: {
         height: HEADER_MAX_HEIGHT,
+        borderBottomColor: LIGHT_GREY,
+        borderBottomWidth: 1,
         flex: 1,
     },
 
@@ -151,7 +191,6 @@ const styles = StyleSheet.create({
     item_title_text: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: WHITE,
     },
     top_elems_container: {
         flex: 1,
