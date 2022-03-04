@@ -4,6 +4,8 @@ import {
     BLACK,
     DARK_GREY,
     DEFAULT_MARGIN,
+    GREY,
+    ORANGE,
     WHITE,
 } from 'globals/AppStyles';
 import { SearchStackNavigationProps } from 'navigations/NavigationsTypes';
@@ -21,6 +23,7 @@ type Props = {
     item_title: string;
     image_url: string;
     scroll: Animated.Value;
+    updateHeaderZIndex: any;
 };
 
 const HEADER_MAX_HEIGHT = 200;
@@ -29,7 +32,8 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 const FADE_DURATION = 750;
 
 export default function ItemDetailsScreenNavigationHeader(props: Props) {
-    const { navigation, item_title, image_url, scroll } = props;
+    const { navigation, item_title, image_url, scroll, updateHeaderZIndex } =
+        props;
 
     const [header_height, setHeaderHeight] = useState(HEADER_MAX_HEIGHT);
 
@@ -54,7 +58,12 @@ export default function ItemDetailsScreenNavigationHeader(props: Props) {
 
     const header_text_color = fade_out_anim.interpolate({
         inputRange: [0, 1],
-        outputRange: [WHITE, BLACK],
+        outputRange: [WHITE, ORANGE],
+    });
+
+    const back_icon_color = fade_out_anim.interpolate({
+        inputRange: [0, 1],
+        outputRange: [WHITE, GREY],
     });
 
     const translate_header = Animated.multiply(header_diff_clamp, -1);
@@ -69,6 +78,7 @@ export default function ItemDetailsScreenNavigationHeader(props: Props) {
                 }).start();
                 had_fade_in.current = true;
                 setHeaderHeight(HEADER_MIN_HEIGHT);
+                updateHeaderZIndex(2);
             }
             if (value < HEADER_SCROLL_DISTANCE && had_fade_in.current) {
                 if (had_fade_in.current) {
@@ -77,8 +87,9 @@ export default function ItemDetailsScreenNavigationHeader(props: Props) {
                         duration: FADE_DURATION,
                         useNativeDriver: false,
                     }).start();
-                    setHeaderHeight(HEADER_MAX_HEIGHT);
                     had_fade_in.current = false;
+                    setHeaderHeight(HEADER_MAX_HEIGHT);
+                    updateHeaderZIndex(0);
                 }
             }
         });
@@ -101,7 +112,11 @@ export default function ItemDetailsScreenNavigationHeader(props: Props) {
                 <Animated.View
                     style={{
                         flex: 1,
-                        transform: [{ translateY: translate_header }],
+                        transform: [
+                            {
+                                translateY: translate_header,
+                            },
+                        ],
                     }}
                 >
                     <ImageBackground
@@ -141,7 +156,7 @@ export default function ItemDetailsScreenNavigationHeader(props: Props) {
                                             {
                                                 width: 35,
                                                 height: 35,
-                                                tintColor: header_text_color,
+                                                tintColor: back_icon_color,
                                             },
                                         ]}
                                         source={require('images/icon_back.png')}
@@ -174,9 +189,9 @@ export default function ItemDetailsScreenNavigationHeader(props: Props) {
         return (
             <View
                 style={{
-                    paddingBottom: HEADER_SCROLL_DISTANCE,
-                    borderWidth: 5,
-                    borderColor: BLACK,
+                    marginBottom: HEADER_SCROLL_DISTANCE,
+                    elevation: 24,
+                    zIndex: 24,
                 }}
             >
                 <View
@@ -214,7 +229,7 @@ export default function ItemDetailsScreenNavigationHeader(props: Props) {
                                             {
                                                 width: 35,
                                                 height: 35,
-                                                tintColor: header_text_color,
+                                                tintColor: back_icon_color,
                                             },
                                         ]}
                                         source={require('images/icon_back.png')}

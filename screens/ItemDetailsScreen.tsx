@@ -4,7 +4,7 @@ import { ButtonBorderColor } from 'components/buttons';
 import Loading from 'components/Loading';
 import { ItemDetailsScreenNavigationHeader } from 'components/navigations_headers';
 import StatusBar from 'components/StatusBar';
-import AppStyles, { DARK_GREY, GREY, ORANGE } from 'globals/AppStyles';
+import AppStyles, { DARK_GREY, GREY, ORANGE, WHITE } from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
 import { SearchStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useEffect, useRef, useState } from 'react';
@@ -20,6 +20,7 @@ export default function ItemDetailsScreen({
 }: SearchStackScreenProps<'ItemDetails'>) {
     const [is_loading, setLoading] = useState(true);
     const [item, setItem] = useState<KitsuData>();
+    const [header_z_index, setHeaderZIndex] = useState(0);
     const scroll = useRef(new Animated.Value(0)).current;
     const item_id: Id = route.params.item_id;
     const item_type: KitsuItemType = route.params.item_type;
@@ -28,6 +29,10 @@ export default function ItemDetailsScreen({
     let image_url = useRef('');
     let item_title = item ? getKitsuItemTitle({ item: item }) : '';
     console.log('RERENDERING');
+
+    function updateHeaderZIndex(new_z_index: number) {
+        setHeaderZIndex(new_z_index);
+    }
 
     useEffect(() => {
         async function _getItemDetails() {
@@ -93,6 +98,9 @@ export default function ItemDetailsScreen({
 
     function _ItemDetails() {
         if (item != undefined) {
+            const item_rating_text = item.attributes.averageRating
+                ? (parseInt(item.attributes.averageRating) / 10).toString()
+                : '';
             return (
                 <Animated.ScrollView
                     style={styles.scrollview_container}
@@ -103,14 +111,27 @@ export default function ItemDetailsScreen({
                     )}
                     scrollEventThrottle={1}
                 >
-                    <Animated.View style={styles.navigation_header_container}>
+                    <Animated.View
+                        style={{
+                            zIndex: header_z_index, // works on ios
+                            elevation: header_z_index, // works on android
+                        }}
+                    >
                         <ItemDetailsScreenNavigationHeader
                             item_title={item_title}
                             image_url={image_url.current}
                             navigation={navigation}
                             scroll={scroll}
+                            updateHeaderZIndex={updateHeaderZIndex}
                         ></ItemDetailsScreenNavigationHeader>
                     </Animated.View>
+                    <View style={styles.rating_bubble_container}>
+                        <View style={styles.rating_bubble_inside}>
+                            <Text style={styles.rating_bubble_text}>
+                                {item_rating_text}
+                            </Text>
+                        </View>
+                    </View>
                     <View style={styles.content_container}>
                         <Image
                             source={
@@ -272,6 +293,32 @@ const styles = StyleSheet.create({
         fontSize: 17,
         color: GREY,
         fontFamily: 'Rubik-LightItalic',
+    },
+    rating_bubble_text: {
+        fontSize: 17,
+        fontFamily: 'Rubik-Bold',
+        color: ORANGE,
+    },
+    rating_bubble_inside: {
+        width: 35,
+        height: 35,
+        borderRadius: 35 / 2,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: WHITE,
+    },
+    rating_bubble_container: {
+        marginTop: -20,
+        alignSelf: 'flex-end',
+        marginRight: '10%',
+        width: 40,
+        height: 40,
+        borderRadius: 40 / 2,
+        backgroundColor: ORANGE,
+        zIndex: 1, // works on ios
+        elevation: 1, // works on android
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     bottom_text: {
         flexWrap: 'wrap',
