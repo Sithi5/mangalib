@@ -14,7 +14,8 @@ import { getFirestoreUserMangaById } from 'utils/firebase';
 import getKitsuItemTitle from 'utils/kitsu/GetKitsuItemTitle';
 import addItemToUser from 'utils/users/AddItemToUser';
 
-const RATING_BUBBLE_CONTAINER_SIZE = 40;
+const RATING_BUBBLE_CONTAINER_SIZE = 50;
+const RATING_BUBBLE_CONTAINER_INSIDE_SIZE = RATING_BUBBLE_CONTAINER_SIZE - 10;
 
 export default function ItemDetailsScreen({
     navigation,
@@ -299,19 +300,7 @@ const styles = StyleSheet.create({
         color: GREY,
         fontFamily: 'Rubik-LightItalic',
     },
-    rating_bubble_text: {
-        fontSize: 17,
-        fontFamily: 'Rubik-Bold',
-        color: ORANGE,
-    },
-    rating_bubble_inside: {
-        width: 35,
-        height: 35,
-        borderRadius: 35 / 2,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: WHITE,
-    },
+
     rating_bubble_container: {
         marginTop: -(RATING_BUBBLE_CONTAINER_SIZE / 2),
         alignSelf: 'flex-end',
@@ -324,6 +313,19 @@ const styles = StyleSheet.create({
         elevation: 1, // works on android
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    rating_bubble_inside: {
+        width: RATING_BUBBLE_CONTAINER_INSIDE_SIZE,
+        height: RATING_BUBBLE_CONTAINER_INSIDE_SIZE,
+        borderRadius: RATING_BUBBLE_CONTAINER_INSIDE_SIZE / 2,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: WHITE,
+    },
+    rating_bubble_text: {
+        fontSize: 20,
+        fontFamily: 'Rubik-Bold',
+        color: ORANGE,
     },
     bottom_text: {
         flexWrap: 'wrap',
