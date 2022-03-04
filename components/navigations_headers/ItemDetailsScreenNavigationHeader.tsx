@@ -81,16 +81,14 @@ export default function ItemDetailsScreenNavigationHeader(props: Props) {
                 updateHeaderZIndex(2);
             }
             if (value < HEADER_SCROLL_DISTANCE && had_fade_in.current) {
-                if (had_fade_in.current) {
-                    Animated.timing(fade_out_anim, {
-                        toValue: 0,
-                        duration: FADE_DURATION,
-                        useNativeDriver: false,
-                    }).start();
-                    had_fade_in.current = false;
-                    setHeaderHeight(HEADER_MAX_HEIGHT);
-                    updateHeaderZIndex(0);
-                }
+                Animated.timing(fade_out_anim, {
+                    toValue: 0,
+                    duration: FADE_DURATION,
+                    useNativeDriver: false,
+                }).start();
+                had_fade_in.current = false;
+                setHeaderHeight(HEADER_MAX_HEIGHT);
+                updateHeaderZIndex(0);
             }
         });
         return () => {
@@ -264,8 +262,6 @@ const styles = StyleSheet.create({
     },
 
     image_background: {
-        resizeMode: 'cover',
-        justifyContent: 'center',
         flex: 1,
     },
     background_darker: {
