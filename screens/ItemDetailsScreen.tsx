@@ -126,16 +126,85 @@ export default function ItemDetailsScreen({
                                     {item.attributes.synopsis}
                                 </Text>
                                 <Text style={styles.overview_text}>
-                                    {item.attributes.synopsis}
-                                </Text>
-                                <Text style={styles.overview_text}>
-                                    {item.attributes.synopsis}
-                                </Text>
-                                <Text style={styles.overview_text}>
-                                    {item.attributes.synopsis}
-                                </Text>
-                                <Text style={styles.overview_text}>
-                                    {item.attributes.synopsis}
+                                    Lorem ipsum dolor sit amet, consectetur
+                                    adipiscing elit. Nulla laoreet aliquet arcu
+                                    aliquam imperdiet. Proin semper blandit
+                                    turpis, ut gravida nibh porta vitae. Fusce
+                                    id augue sit amet ligula dictum elementum ut
+                                    quis nibh. Integer lacinia rutrum leo, at
+                                    commodo elit elementum ut. Aenean laoreet
+                                    pharetra rutrum. Aenean condimentum elit et
+                                    eros sollicitudin, vitae vestibulum nunc
+                                    suscipit. Mauris in mi sit amet purus tempor
+                                    placerat. Nullam id ipsum erat. Etiam in
+                                    aliquet dolor. Pellentesque viverra tellus
+                                    sed odio sollicitudin ultricies. Aliquam
+                                    placerat arcu ac turpis gravida maximus.
+                                    Nulla sit amet gravida urna, eu dignissim
+                                    turpis. Proin at mattis nisi, eu mattis
+                                    nisl. In ut risus finibus, commodo mauris
+                                    et, aliquam leo. Vestibulum sapien velit,
+                                    pellentesque ut diam vitae, ultrices feugiat
+                                    erat. Donec porttitor lacus vitae fermentum
+                                    malesuada. Nam sapien orci, lobortis et
+                                    eleifend at, semper in tortor. Pellentesque
+                                    semper tellus quis magna placerat varius.
+                                    Sed pharetra varius enim, ut cursus nisl
+                                    vehicula ut. Maecenas rhoncus nibh quis
+                                    posuere eleifend. Sed pulvinar, massa et
+                                    auctor ornare, elit lectus sodales massa, at
+                                    ultricies magna nunc a purus. Maecenas
+                                    facilisis eros non dui lobortis, rhoncus
+                                    tempus ipsum ornare. Curabitur feugiat
+                                    tellus interdum sagittis porta. Sed justo
+                                    odio, cursus nec mauris quis, faucibus
+                                    congue quam. Sed egestas purus eu lectus
+                                    sollicitudin, varius facilisis eros
+                                    tincidunt. Aliquam erat volutpat. Mauris
+                                    sollicitudin diam id justo egestas, eu
+                                    pulvinar mauris vestibulum. Pellentesque
+                                    habitant morbi tristique senectus et netus
+                                    et malesuada fames ac turpis egestas.
+                                    Integer consectetur non mauris sed
+                                    imperdiet. Quisque scelerisque, justo a
+                                    commodo mattis, lacus nisi malesuada magna,
+                                    vitae aliquam tellus lacus quis metus. Ut
+                                    tellus dolor, rhoncus dignissim ipsum eget,
+                                    aliquet vulputate arcu. Sed faucibus libero
+                                    ac sapien dapibus, at placerat massa
+                                    molestie. Donec posuere ipsum nisi. Nulla
+                                    ligula urna, porta et commodo cursus,
+                                    laoreet vel diam. Aliquam purus sem,
+                                    sagittis in pulvinar sit amet, pharetra quis
+                                    mauris. Donec sit amet dolor vitae justo
+                                    malesuada ultricies. Donec id consequat
+                                    eros. Nunc a nibh metus. Proin non nisl sed
+                                    odio molestie porta eu sed neque. Donec
+                                    auctor augue vitae est condimentum, eget
+                                    porta sem laoreet. Suspendisse potenti. Ut
+                                    euismod in sem vel mollis. Etiam nisl nisi,
+                                    tristique rutrum tincidunt a, vulputate eu
+                                    nisl. Suspendisse quis faucibus orci.
+                                    Aliquam nec rhoncus enim. Curabitur finibus
+                                    gravida erat, ac accumsan lacus ultrices
+                                    non. Praesent eget tempus velit. Vivamus
+                                    dapibus nisl augue, sed condimentum metus
+                                    tempus at. Integer ac leo sodales, molestie
+                                    sem a, blandit tellus. Vestibulum porta est
+                                    id dolor ornare efficitur. Morbi enim est,
+                                    mattis id pellentesque vel, elementum in
+                                    sem. Vivamus lacus eros, venenatis sit amet
+                                    ligula id, pellentesque rhoncus lorem. Fusce
+                                    vel ante convallis, dignissim erat in,
+                                    tempor neque. Sed eu enim eget enim
+                                    tincidunt facilisis ut eu orci. Pellentesque
+                                    faucibus, magna in viverra vehicula, urna
+                                    ante varius massa, in ultrices sem ante
+                                    rhoncus enim. Praesent ultricies velit
+                                    maximus, sagittis urna sagittis, vestibulum
+                                    quam. Sed laoreet, risus ut porta suscipit,
+                                    dui metus venenatis massa, non egestas nisi
+                                    arcu non tellus.
                                 </Text>
                             </View>
                             <View style={styles.content_bottom_container}>
@@ -207,6 +276,7 @@ const styles = StyleSheet.create({
     bottom_text: {
         flexWrap: 'wrap',
         fontSize: 17,
+        fontFamily: 'Rubik-Bold',
         color: GREY,
     },
 });

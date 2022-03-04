@@ -23,14 +23,14 @@ export default function SearchTopTabNavigator() {
         >
             <SearchTopTab.Screen
                 name="SearchManga"
-                component={SearchAnimeScreen}
+                component={SearchMangaScreen}
                 options={{
                     title: 'Manga',
                 }}
             />
             <SearchTopTab.Screen
                 name="SearchAnime"
-                component={SearchMangaScreen}
+                component={SearchAnimeScreen}
                 options={{
                     title: 'Anime',
                 }}
