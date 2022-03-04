@@ -141,7 +141,9 @@ export default function SignUpScreen({
                         navigation.navigate('SignIn');
                     }}
                 >
-                    <Text style={{ color: BLUE }}>Sign in</Text>
+                    <Text style={{ color: BLUE, fontFamily: 'Rubik-Medium' }}>
+                        Sign in
+                    </Text>
                 </TouchableOpacity>
             </View>
         </KeyboardAvoidingView>
@@ -178,6 +180,7 @@ const styles = StyleSheet.create({
         borderColor: WHITE,
         borderWidth: 1,
         paddingLeft: DEFAULT_MARGIN,
+        fontFamily: 'Rubik-Medium',
         color: DARK_GREY,
     },
     error: {

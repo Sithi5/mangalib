@@ -19,7 +19,10 @@ export default function WatchListStackNavigator() {
                     component={WatchListScreen}
                     options={{
                         headerShown: true,
-                        headerTitleStyle: { color: ORANGE },
+                        headerTitleStyle: {
+                            color: ORANGE,
+                            fontFamily: 'Rubik-SemiBold',
+                        },
                         title: 'My WatchList',
                     }}
                 />

@@ -119,7 +119,7 @@ export default function WatchListScreen({
                     }}
                 >
                     <View>
-                        <Text>
+                        <Text style={{ fontFamily: 'Rubik-Medium' }}>
                             You need to be logged in to see your watchlist.
                         </Text>
                     </View>

@@ -4,6 +4,8 @@ import {
     DEFAULT_MARGIN,
     DEFAULT_RADIUS,
     GREY,
+    LIGHT_GREY,
+    ORANGE,
     WHITE,
 } from 'globals/AppStyles';
 import React, { useState } from 'react';
@@ -79,6 +81,7 @@ const styles = StyleSheet.create({
         borderColor: WHITE,
         borderWidth: 1,
         paddingLeft: DEFAULT_MARGIN,
-        color: DARK_GREY,
+        color: GREY,
+        fontFamily: 'Rubik-Light',
     },
 });

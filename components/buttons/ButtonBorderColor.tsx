@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     button_text: {
-        fontWeight: '700',
         fontSize: 16,
+        fontFamily: 'Rubik-Medium',
     },
 });

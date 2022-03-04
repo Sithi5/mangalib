@@ -129,6 +129,11 @@ export default function RootBottomTabNavigator() {
                     component={ProfilScreen}
                     options={{
                         title: 'Profil',
+                        headerShown: true,
+                        headerTitleStyle: {
+                            color: ORANGE,
+                            fontFamily: 'Rubik-SemiBold',
+                        },
                         tabBarIcon: ({ color }) => {
                             const image_name = '../images/icon_profil.png';
                             return (
@@ -148,6 +153,11 @@ export default function RootBottomTabNavigator() {
                     name="LoginStack"
                     component={LoginStackNavigator}
                     options={{
+                        headerShown: true,
+                        headerTitleStyle: {
+                            color: ORANGE,
+                            fontFamily: 'Rubik-SemiBold',
+                        },
                         title: 'Login',
                         tabBarIcon: ({ color }) => {
                             const image_name = '../images/icon_profil.png';

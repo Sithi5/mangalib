@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     },
     button_text: {
         color: WHITE,
-        fontWeight: '700',
         fontSize: 16,
+        fontFamily: 'Rubik-Medium',
     },
 });

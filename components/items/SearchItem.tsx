@@ -4,6 +4,7 @@ import { kitsuGetItemImage } from 'api/KitsuApi';
 import { KitsuData, KitsuItemType } from 'api/KitsuTypes';
 import { NavigateToItemDetailsArgs } from 'components/lists/SearchItemsList';
 import AppStyles, {
+    DARK_GREY,
     DEFAULT_MARGIN,
     DEFAULT_RADIUS,
     GREY,
@@ -185,7 +186,7 @@ const styles = StyleSheet.create({
     item_image: {
         width: 120,
         marginRight: DEFAULT_MARGIN,
-        backgroundColor: 'grey',
+        backgroundColor: GREY,
         borderTopLeftRadius: DEFAULT_RADIUS,
         borderBottomLeftRadius: DEFAULT_RADIUS,
     },
@@ -207,12 +208,13 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         flex: 1,
         flexWrap: 'wrap',
-        fontWeight: 'bold',
+        fontFamily: 'Rubik-Bold',
+        color: DARK_GREY,
         fontSize: 20,
     },
     rating_text: {
         textAlign: 'right',
-        fontWeight: 'bold',
+        fontFamily: 'Rubik-Bold',
         color: GREY,
         flex: 1,
         fontSize: 25,
@@ -220,6 +222,13 @@ const styles = StyleSheet.create({
     icon: {
         padding: 10,
     },
-    synopsis_text: { fontStyle: 'italic', color: GREY },
-    start_date_text: { textAlign: 'right' },
+    synopsis_text: {
+        color: GREY,
+        fontFamily: 'Rubik-LightItalic',
+    },
+    start_date_text: {
+        textAlign: 'right',
+        fontFamily: 'Rubik-Medium',
+        color: DARK_GREY,
+    },
 });

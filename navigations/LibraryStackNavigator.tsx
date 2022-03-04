@@ -18,9 +18,12 @@ export default function LibraryStackNavigator() {
                     name="Library"
                     component={LibraryScreen}
                     options={{
+                        headerTitleStyle: {
+                            color: ORANGE,
+                            fontFamily: 'Rubik-SemiBold',
+                        },
                         headerShown: true,
                         title: 'My Library',
-                        headerTitleStyle: { color: ORANGE },
                     }}
                 />
                 <LibraryStack.Screen

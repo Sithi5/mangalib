@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         flex: 1,
         flexWrap: 'wrap',
-        fontWeight: 'bold',
+        fontFamily: 'Rubik-SemiBold',
         color: ORANGE,
         fontSize: 15,
     },
