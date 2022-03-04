@@ -14,6 +14,8 @@ import { getFirestoreUserMangaById } from 'utils/firebase';
 import getKitsuItemTitle from 'utils/kitsu/GetKitsuItemTitle';
 import addItemToUser from 'utils/users/AddItemToUser';
 
+const RATING_BUBBLE_CONTAINER_SIZE = 40;
+
 export default function ItemDetailsScreen({
     navigation,
     route,
@@ -125,6 +127,7 @@ export default function ItemDetailsScreen({
                             updateHeaderZIndex={updateHeaderZIndex}
                         ></ItemDetailsScreenNavigationHeader>
                     </Animated.View>
+
                     <View style={styles.rating_bubble_container}>
                         <View style={styles.rating_bubble_inside}>
                             <Text style={styles.rating_bubble_text}>
@@ -132,6 +135,7 @@ export default function ItemDetailsScreen({
                             </Text>
                         </View>
                     </View>
+
                     <View style={styles.content_container}>
                         <Image
                             source={
@@ -268,6 +272,7 @@ const styles = StyleSheet.create({
     },
     content_container: {
         flex: 1,
+        marginTop: -(RATING_BUBBLE_CONTAINER_SIZE / 2),
     },
     item_image: {
         height: 150,
@@ -308,12 +313,12 @@ const styles = StyleSheet.create({
         backgroundColor: WHITE,
     },
     rating_bubble_container: {
-        marginTop: -20,
+        marginTop: -(RATING_BUBBLE_CONTAINER_SIZE / 2),
         alignSelf: 'flex-end',
         marginRight: '10%',
-        width: 40,
-        height: 40,
-        borderRadius: 40 / 2,
+        width: RATING_BUBBLE_CONTAINER_SIZE,
+        height: RATING_BUBBLE_CONTAINER_SIZE,
+        borderRadius: RATING_BUBBLE_CONTAINER_SIZE / 2,
         backgroundColor: ORANGE,
         zIndex: 1, // works on ios
         elevation: 1, // works on android

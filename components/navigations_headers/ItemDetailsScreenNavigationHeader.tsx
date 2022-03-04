@@ -188,17 +188,17 @@ export default function ItemDetailsScreenNavigationHeader(props: Props) {
             <View
                 style={{
                     marginBottom: HEADER_SCROLL_DISTANCE,
-                    elevation: 24,
-                    zIndex: 24,
                 }}
             >
                 <View
-                    style={[
-                        styles.header_main_container,
-                        {
-                            height: HEADER_MIN_HEIGHT,
-                        },
-                    ]}
+                    style={{
+                        position: 'absolute',
+                        height: HEADER_MAX_HEIGHT,
+                        width: '100%',
+                        marginTop: -(HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT),
+                        zIndex: 0,
+                        transform: [],
+                    }}
                 >
                     <ImageBackground
                         source={
@@ -213,43 +213,51 @@ export default function ItemDetailsScreenNavigationHeader(props: Props) {
                                 flex: 1,
                                 backgroundColor: fade_out_background_image,
                             }}
-                        >
-                            <Animated.View
-                                style={styles.min_header_elem_container}
-                            >
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        navigation.goBack();
-                                    }}
-                                >
-                                    <Animated.Image
-                                        style={[
-                                            {
-                                                width: 35,
-                                                height: 35,
-                                                tintColor: back_icon_color,
-                                            },
-                                        ]}
-                                        source={require('images/icon_back.png')}
-                                    />
-                                </TouchableOpacity>
-                                <Animated.Text
-                                    numberOfLines={1}
-                                    style={[
-                                        styles.item_title_text,
-                                        {
-                                            left: 10,
-                                            color: header_text_color,
-                                        },
-                                    ]}
-                                >
-                                    {item_title.length < 30
-                                        ? item_title
-                                        : item_title.substring(0, 27) + '...'}
-                                </Animated.Text>
-                            </Animated.View>
-                        </Animated.View>
+                        ></Animated.View>
                     </ImageBackground>
+                </View>
+                <View
+                    style={[
+                        styles.header_main_container,
+                        {
+                            height: HEADER_MIN_HEIGHT,
+                            zIndex: 1,
+                            backgroundColor: 'transparent',
+                        },
+                    ]}
+                >
+                    <Animated.View style={styles.min_header_elem_container}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.goBack();
+                            }}
+                        >
+                            <Animated.Image
+                                style={[
+                                    {
+                                        width: 35,
+                                        height: 35,
+                                        tintColor: back_icon_color,
+                                    },
+                                ]}
+                                source={require('images/icon_back.png')}
+                            />
+                        </TouchableOpacity>
+                        <Animated.Text
+                            numberOfLines={1}
+                            style={[
+                                styles.item_title_text,
+                                {
+                                    left: 10,
+                                    color: header_text_color,
+                                },
+                            ]}
+                        >
+                            {item_title.length < 30
+                                ? item_title
+                                : item_title.substring(0, 27) + '...'}
+                        </Animated.Text>
+                    </Animated.View>
                 </View>
             </View>
         );
@@ -260,17 +268,8 @@ const styles = StyleSheet.create({
     header_main_container: {
         flex: 1,
     },
-
     image_background: {
         flex: 1,
-    },
-    background_darker: {
-        flex: 1,
-        backgroundColor: BACKGROUND_DARK_OPACITY,
-    },
-    background_all_white: {
-        flex: 1,
-        backgroundColor: WHITE,
     },
     item_title_text: {
         fontSize: 20,
