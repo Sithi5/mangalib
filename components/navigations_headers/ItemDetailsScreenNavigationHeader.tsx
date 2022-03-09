@@ -1,22 +1,18 @@
 import {
     BACKGROUND_DARK_OPACITY,
     BACKGROUND_WHITE_OPACITY,
-    BLACK,
-    DARK_GREY,
-    DEFAULT_MARGIN,
     GREY,
+    ITEM_DETAILS_HEADER_MAX_HEIGHT,
+    ITEM_DETAILS_HEADER_MIN_HEIGHT,
+    ITEM_DETAILS_HEADER_SCROLL_DISTANCE,
     ORANGE,
     WHITE,
 } from 'globals/AppStyles';
 import { SearchStackNavigationProps } from 'navigations/NavigationsTypes';
 import React, { useEffect, useRef, useState } from 'react';
-import {
-    Animated,
-    ImageBackground,
-    StyleSheet,
-    TouchableOpacity,
-    View,
-} from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
+import ItemDetailsScreenNavigationHeaderMaxHeight from './ItemDetailsScreenNavigationHeaderMaxHeight';
+import ItemDetailsScreenNavigationHeaderMinHeight from './ItemDetailsScreenNavigationHeaderMinHeight';
 
 type Props = {
     navigation: SearchStackNavigationProps<'ItemDetails'>;
@@ -26,16 +22,15 @@ type Props = {
     updateHeaderZIndex: any;
 };
 
-const HEADER_MAX_HEIGHT = 200;
-const HEADER_MIN_HEIGHT = 50;
-const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 const FADE_DURATION = 750;
 
 export default function ItemDetailsScreenNavigationHeader(props: Props) {
     const { navigation, item_title, image_url, scroll, updateHeaderZIndex } =
         props;
 
-    const [header_height, setHeaderHeight] = useState(HEADER_MAX_HEIGHT);
+    const [header_height, setHeaderHeight] = useState(
+        ITEM_DETAILS_HEADER_MAX_HEIGHT
+    );
 
     const fade_out_anim = useRef(new Animated.Value(0)).current;
     const had_fade_in = useRef(false);
@@ -43,7 +38,7 @@ export default function ItemDetailsScreenNavigationHeader(props: Props) {
     const header_diff_clamp = Animated.diffClamp(
         scroll,
         0,
-        HEADER_SCROLL_DISTANCE
+        ITEM_DETAILS_HEADER_SCROLL_DISTANCE
     );
 
     const fade_out_background_image = fade_out_anim.interpolate({
@@ -52,7 +47,7 @@ export default function ItemDetailsScreenNavigationHeader(props: Props) {
     });
 
     const item_title_text_left_pos = header_diff_clamp.interpolate({
-        inputRange: [0, HEADER_SCROLL_DISTANCE],
+        inputRange: [0, ITEM_DETAILS_HEADER_SCROLL_DISTANCE],
         outputRange: [0, 20],
     });
 
@@ -70,24 +65,30 @@ export default function ItemDetailsScreenNavigationHeader(props: Props) {
 
     useEffect(() => {
         scroll.addListener(({ value }) => {
-            if (value > HEADER_SCROLL_DISTANCE && !had_fade_in.current) {
+            if (
+                value > ITEM_DETAILS_HEADER_SCROLL_DISTANCE &&
+                !had_fade_in.current
+            ) {
                 Animated.timing(fade_out_anim, {
                     toValue: 1,
                     duration: FADE_DURATION,
                     useNativeDriver: false,
                 }).start();
                 had_fade_in.current = true;
-                setHeaderHeight(HEADER_MIN_HEIGHT);
+                setHeaderHeight(ITEM_DETAILS_HEADER_MIN_HEIGHT);
                 updateHeaderZIndex(2);
             }
-            if (value < HEADER_SCROLL_DISTANCE && had_fade_in.current) {
+            if (
+                value < ITEM_DETAILS_HEADER_SCROLL_DISTANCE &&
+                had_fade_in.current
+            ) {
                 Animated.timing(fade_out_anim, {
                     toValue: 0,
                     duration: FADE_DURATION,
                     useNativeDriver: false,
                 }).start();
                 had_fade_in.current = false;
-                setHeaderHeight(HEADER_MAX_HEIGHT);
+                setHeaderHeight(ITEM_DETAILS_HEADER_MAX_HEIGHT);
                 updateHeaderZIndex(0);
             }
         });
@@ -97,207 +98,32 @@ export default function ItemDetailsScreenNavigationHeader(props: Props) {
     }, []);
 
     //Render Two different header if header size is MAX or MIN
-    if (header_height === HEADER_MAX_HEIGHT) {
+    if (header_height === ITEM_DETAILS_HEADER_MAX_HEIGHT) {
         return (
-            <View
-                style={[
-                    styles.header_main_container,
-                    {
-                        height: HEADER_MAX_HEIGHT,
-                    },
-                ]}
-            >
-                <Animated.View
-                    style={{
-                        flex: 1,
-                        transform: [
-                            {
-                                translateY: translate_header,
-                            },
-                        ],
-                    }}
-                >
-                    <ImageBackground
-                        source={
-                            image_url !== ''
-                                ? { uri: image_url }
-                                : require('images/default_image.png')
-                        }
-                        style={styles.image_background}
-                    >
-                        <Animated.View
-                            style={{
-                                flex: 1,
-                                backgroundColor: fade_out_background_image,
-                            }}
-                        >
-                            <Animated.View
-                                style={[
-                                    styles.top_elems_container,
-                                    {
-                                        top:
-                                            header_height === HEADER_MAX_HEIGHT
-                                                ? header_diff_clamp
-                                                : 0,
-                                    },
-                                ]}
-                            >
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        navigation.goBack();
-                                    }}
-                                >
-                                    <Animated.Image
-                                        style={[
-                                            styles.back_button_icon,
-
-                                            {
-                                                width: 35,
-                                                height: 35,
-                                                tintColor: back_icon_color,
-                                            },
-                                        ]}
-                                        source={require('images/icon_back.png')}
-                                    />
-                                </TouchableOpacity>
-                            </Animated.View>
-
-                            <View style={styles.bottom_elems_container}>
-                                <Animated.Text
-                                    numberOfLines={1}
-                                    style={[
-                                        styles.item_title_text,
-                                        {
-                                            color: header_text_color,
-                                            left: item_title_text_left_pos,
-                                        },
-                                    ]}
-                                >
-                                    {item_title.length < 30
-                                        ? item_title
-                                        : item_title.substring(0, 27) + '...'}
-                                </Animated.Text>
-                            </View>
-                        </Animated.View>
-                    </ImageBackground>
-                </Animated.View>
-            </View>
+            <ItemDetailsScreenNavigationHeaderMaxHeight
+                navigation={navigation}
+                fade_out_background_image={fade_out_background_image}
+                header_diff_clamp={header_diff_clamp}
+                back_icon_color={back_icon_color}
+                header_text_color={header_text_color}
+                item_title={item_title}
+                translate_header={translate_header}
+                image_url={image_url}
+                item_title_text_left_pos={item_title_text_left_pos}
+            />
         );
     } else {
         return (
-            <View
-                style={{
-                    marginBottom: HEADER_SCROLL_DISTANCE,
-                }}
-            >
-                <View
-                    style={{
-                        position: 'absolute',
-                        height: HEADER_MAX_HEIGHT,
-                        width: '100%',
-                        marginTop: -(HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT),
-                        zIndex: 0,
-                        transform: [],
-                    }}
-                >
-                    <ImageBackground
-                        source={
-                            image_url !== ''
-                                ? { uri: image_url }
-                                : require('images/default_image.png')
-                        }
-                        style={styles.image_background}
-                    >
-                        <Animated.View
-                            style={{
-                                flex: 1,
-                                backgroundColor: fade_out_background_image,
-                            }}
-                        ></Animated.View>
-                    </ImageBackground>
-                </View>
-                <View
-                    style={[
-                        styles.header_main_container,
-                        {
-                            height: HEADER_MIN_HEIGHT,
-                            zIndex: 1,
-                            backgroundColor: 'transparent',
-                        },
-                    ]}
-                >
-                    <Animated.View style={styles.min_header_elem_container}>
-                        <TouchableOpacity
-                            onPress={() => {
-                                navigation.goBack();
-                            }}
-                        >
-                            <Animated.Image
-                                style={[
-                                    {
-                                        width: 35,
-                                        height: 35,
-                                        tintColor: back_icon_color,
-                                    },
-                                ]}
-                                source={require('images/icon_back.png')}
-                            />
-                        </TouchableOpacity>
-                        <Animated.Text
-                            numberOfLines={1}
-                            style={[
-                                styles.item_title_text,
-                                {
-                                    left: 10,
-                                    color: header_text_color,
-                                },
-                            ]}
-                        >
-                            {item_title.length < 30
-                                ? item_title
-                                : item_title.substring(0, 27) + '...'}
-                        </Animated.Text>
-                    </Animated.View>
-                </View>
-            </View>
+            <ItemDetailsScreenNavigationHeaderMinHeight
+                navigation={navigation}
+                fade_out_background_image={fade_out_background_image}
+                back_icon_color={back_icon_color}
+                header_text_color={header_text_color}
+                item_title={item_title}
+                image_url={image_url}
+            />
         );
     }
 }
 
-const styles = StyleSheet.create({
-    header_main_container: {
-        flex: 1,
-    },
-    image_background: {
-        flex: 1,
-    },
-    item_title_text: {
-        fontSize: 20,
-        color: DARK_GREY,
-        fontFamily: 'Rubik-SemiBold',
-    },
-    top_elems_container: {
-        flex: 1,
-        position: 'absolute',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    min_header_elem_container: {
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    back_button_icon: {
-        padding: 10,
-        top: 8,
-    },
-    option_button_icon: {
-        padding: 10,
-    },
-    bottom_elems_container: {
-        position: 'absolute',
-        bottom: 10,
-        left: 20,
-        margin: DEFAULT_MARGIN,
-    },
-});
+const styles = StyleSheet.create({});
