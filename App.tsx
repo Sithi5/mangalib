@@ -17,12 +17,12 @@ LogBox.ignoreLogs(['Setting a timer']);
 
 export default function App() {
     let [fontsLoaded] = useFonts({
-        'Rubik-Bold': require('assets/fonts/Rubik-Bold.ttf'),
-        'Rubik-Medium': require('assets/fonts/Rubik-Medium.ttf'),
-        'Rubik-Regular': require('assets/fonts/Rubik-Regular.ttf'),
-        'Rubik-SemiBold': require('assets/fonts/Rubik-SemiBold.ttf'),
-        'Rubik-Light': require('assets/fonts/Rubik-Light.ttf'),
         'Rubik-LightItalic': require('assets/fonts/Rubik-LightItalic.ttf'),
+        'Rubik-Light': require('assets/fonts/Rubik-Light.ttf'),
+        'Rubik-Regular': require('assets/fonts/Rubik-Regular.ttf'),
+        'Rubik-Medium': require('assets/fonts/Rubik-Medium.ttf'),
+        'Rubik-SemiBold': require('assets/fonts/Rubik-SemiBold.ttf'),
+        'Rubik-Bold': require('assets/fonts/Rubik-Bold.ttf'),
     });
     if (!fontsLoaded) {
         return <AppLoading />;

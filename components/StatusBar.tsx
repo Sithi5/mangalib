@@ -1,5 +1,5 @@
 import Constants from 'expo-constants';
-import { BLACK, WHITE } from 'globals/AppStyles';
+import { WHITE } from 'globals/AppStyles';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
