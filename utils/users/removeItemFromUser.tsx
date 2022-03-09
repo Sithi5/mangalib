@@ -7,12 +7,15 @@ import {
     removeMangaFromUserMangaList,
 } from 'redux/UserSliceAsyncThunk';
 import { asyncAlert } from 'utils/alerts';
+import {
+    getFirestoreUserAnimeById,
+    getFirestoreUserMangaById,
+} from 'utils/firebase';
 import animeIsInUserWatchList from './animeIsInUserWatchList';
 import mangaIsInUserLibrary from './MangaIsInUserLibrary';
 
 export type Args = {
     user: UserState;
-    user_item: FirestoreUserManga | FirestoreUserAnime;
     item_id: Id;
     item_type: string;
     dispatch: AppDispatch;
@@ -21,7 +24,6 @@ export type Args = {
 /** Remove item from user and return true if the item is well removed.*/
 export default async function removeItemFromUser({
     user,
-    user_item,
     item_id,
     item_type,
     dispatch,
@@ -33,14 +35,20 @@ export default async function removeItemFromUser({
                     await dispatch(
                         removeMangaFromUserMangaList({
                             uid: user.uid,
-                            user_manga: user_item as FirestoreUserManga,
+                            user_manga: getFirestoreUserMangaById({
+                                id: item_id,
+                                user: user,
+                            }),
                         })
                     );
                 } else {
                     await dispatch(
                         removeAnimeFromUserAnimeList({
                             uid: user.uid,
-                            user_anime: user_item as FirestoreUserAnime,
+                            user_anime: getFirestoreUserAnimeById({
+                                id: item_id,
+                                user: user,
+                            }),
                         })
                     );
                 }

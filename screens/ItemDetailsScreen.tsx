@@ -1,34 +1,41 @@
 import { kitsuGetItemDetails, kitsuGetItemImage } from 'api/KitsuApi';
 import {
+    KitsuAnimeAttributes,
     KitsuData,
     KitsuItemType,
     KitsuMangaAttributes,
-    KitsuAnimeAttributes,
 } from 'api/KitsuTypes';
-import { ButtonBorderColor } from 'components/buttons';
+import {
+    ButtonBorderColor,
+    ButtonFullBackgroundColor,
+} from 'components/buttons';
 import Loading from 'components/Loading';
 import { ItemDetailsScreenNavigationHeader } from 'components/navigations_headers';
 import StatusBar from 'components/StatusBar';
 import AppStyles, {
     BLACK,
-    DARK_GREY,
     DEFAULT_MARGIN,
     GREY,
     ORANGE,
+    RED,
     WHITE,
 } from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
+import moment from 'moment';
 import { SearchStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Image, StyleSheet, Text, View } from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
-import { getFirestoreUserMangaById } from 'utils/firebase';
+import {
+    getFirestoreUserAnimeById,
+    getFirestoreUserMangaById,
+} from 'utils/firebase';
 import getKitsuItemTitle from 'utils/kitsu/GetKitsuItemTitle';
+import { removeItemFromUser } from 'utils/users';
 import addItemToUser from 'utils/users/AddItemToUser';
-import moment from 'moment';
 
 const RATING_BUBBLE_CONTAINER_SIZE = 50;
-const RATING_BUBBLE_CONTAINER_INSIDE_SIZE = RATING_BUBBLE_CONTAINER_SIZE - 10;
+const RATING_BUBBLE_CONTAINER_INSIDE_SIZE = RATING_BUBBLE_CONTAINER_SIZE - 5;
 
 export default function ItemDetailsScreen({
     navigation,
@@ -75,7 +82,7 @@ export default function ItemDetailsScreen({
     }, [item_id]);
 
     function _displayAddToLibrary() {
-        async function _addMangaToLibrary() {
+        async function _addItemToUser() {
             if (user.uid !== undefined && item) {
                 try {
                     addItemToUser({
@@ -90,24 +97,66 @@ export default function ItemDetailsScreen({
                 }
             }
         }
-        if (item && item_type === 'manga' && user.logged) {
-            const manga_is_in_library = user.user_mangas_list.includes(
-                getFirestoreUserMangaById({
-                    user: user,
-                    id: item.id,
-                })
-            );
-            if (!manga_is_in_library) {
-                return (
-                    <ButtonBorderColor
-                        color={ORANGE}
-                        text={'Add to library'}
-                        onPressFunction={() => {
-                            _addMangaToLibrary();
-                        }}
-                    />
-                );
+
+        async function _removeItemFromUser() {
+            if (user.uid !== undefined && item) {
+                try {
+                    removeItemFromUser({
+                        item_type: item_type,
+                        item_id: item_id,
+                        dispatch: dispatch,
+                        user: user,
+                    });
+                } catch (error: any) {
+                    console.error(error.message);
+                }
             }
+        }
+
+        if (item && user.logged) {
+            const is_in_library =
+                item_type === 'manga'
+                    ? user.user_mangas_list.includes(
+                          getFirestoreUserMangaById({
+                              user: user,
+                              id: item.id,
+                          })
+                      )
+                    : user.user_animes_list.includes(
+                          getFirestoreUserAnimeById({
+                              user: user,
+                              id: item.id,
+                          })
+                      );
+            return (
+                <View style={styles.remove_or_add_button}>
+                    {is_in_library ? (
+                        <ButtonFullBackgroundColor
+                            color={RED}
+                            text={
+                                item_type === 'manga'
+                                    ? 'Remove from library'
+                                    : 'Remove from Watchlist'
+                            }
+                            onPressFunction={() => {
+                                _removeItemFromUser();
+                            }}
+                        />
+                    ) : (
+                        <ButtonBorderColor
+                            color={ORANGE}
+                            text={
+                                item_type === 'manga'
+                                    ? 'Add to library'
+                                    : 'Add to Watchlist'
+                            }
+                            onPressFunction={() => {
+                                _addItemToUser();
+                            }}
+                        />
+                    )}
+                </View>
+            );
         }
     }
 
@@ -268,6 +317,9 @@ export default function ItemDetailsScreen({
                             {_top_container_item_details()}
                         </View>
                         <View style={styles.content_body_container}>
+                            <Text style={styles.content_body_text}>
+                                Overview:
+                            </Text>
                             <View style={styles.content_overview_container}>
                                 <Text style={styles.overview_text}>
                                     {item.attributes.synopsis}
@@ -328,7 +380,12 @@ const styles = StyleSheet.create({
         flex: 3,
         margin: 5,
     },
-
+    content_body_text: {
+        margin: 5,
+        fontFamily: 'Rubik-Bold',
+        fontSize: 17,
+        color: BLACK,
+    },
     content_overview_container: {
         flex: 1,
         margin: 5,
@@ -375,5 +432,10 @@ const styles = StyleSheet.create({
         fontSize: 17,
         fontFamily: 'Rubik-Bold',
         color: GREY,
+    },
+    remove_or_add_button: {
+        flex: 1,
+        width: '60%',
+        alignSelf: 'center',
     },
 });
