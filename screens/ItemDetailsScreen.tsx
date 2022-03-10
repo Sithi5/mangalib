@@ -6,13 +6,16 @@ import {
 } from 'components/buttons';
 import {
     BodyContainerUserItemDetails,
+    ModalUserItem,
     TopContainerItemDetailsContent,
-} from 'components/item_details';
+} from 'components/item_details_screen_components';
 import Loading from 'components/Loading';
 import { ItemDetailsScreenNavigationHeader } from 'components/navigations_headers';
 import StatusBar from 'components/StatusBar';
+import { BlurView } from 'expo-blur';
 import AppStyles, {
     BLACK,
+    BLUR_INTENSITY,
     DEFAULT_MARGIN,
     DEFAULT_RADIUS,
     GREY,
@@ -43,7 +46,7 @@ export default function ItemDetailsScreen({
     route,
 }: SearchStackScreenProps<'ItemDetails'>) {
     const [is_loading, setLoading] = useState(true);
-    const [show_library, setShowLibrary] = useState(false);
+    const [show_library_modal, setShowLibraryModal] = useState(false);
     const [item, setItem] = useState<KitsuData>();
     const [header_z_index, setHeaderZIndex] = useState(0);
     const scroll = useRef(new Animated.Value(0)).current;
@@ -221,11 +224,12 @@ export default function ItemDetailsScreen({
                                 item={item}
                                 item_type={item_type}
                                 user={user}
-                                setShowLibrary={setShowLibrary}
+                                setShowLibraryModal={setShowLibraryModal}
                             ></BodyContainerUserItemDetails>
-                            {show_library === true ? (
-                                <Text>show lib</Text>
-                            ) : null}
+                            <ModalUserItem
+                                show_library_modal={show_library_modal}
+                                setShowLibraryModal={setShowLibraryModal}
+                            ></ModalUserItem>
                             <Text style={styles.content_body_text}>
                                 Overview:
                             </Text>
@@ -238,6 +242,17 @@ export default function ItemDetailsScreen({
                         <View style={styles.content_bottom_container}></View>
                         {_displayAddToLibrary()}
                     </View>
+                    <BlurView
+                        style={[
+                            styles.blur_container,
+                            {
+                                zIndex: show_library_modal ? 1 : -1,
+                                elevation: show_library_modal ? 1 : -1,
+                            },
+                        ]}
+                        tint="dark"
+                        intensity={show_library_modal ? BLUR_INTENSITY : 0}
+                    />
                 </Animated.ScrollView>
             );
         }
@@ -253,6 +268,13 @@ export default function ItemDetailsScreen({
 }
 
 const styles = StyleSheet.create({
+    blur_container: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+    },
     scrollview_container: {
         flex: 1,
     },

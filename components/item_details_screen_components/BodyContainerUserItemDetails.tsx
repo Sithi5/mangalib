@@ -18,12 +18,12 @@ import {
 type Props = {
     item: KitsuData | undefined;
     user: UserState;
-    setShowLibrary: React.Dispatch<React.SetStateAction<boolean>>;
+    setShowLibraryModal: React.Dispatch<React.SetStateAction<boolean>>;
     item_type: 'manga' | 'anime';
 };
 
 export default function BodyContainerUserItemDetails(props: Props) {
-    const { item, item_type, user, setShowLibrary } = props;
+    const { item, item_type, user, setShowLibraryModal } = props;
 
     function userAnimeDetails() {
         if (item !== undefined) {
@@ -82,7 +82,7 @@ export default function BodyContainerUserItemDetails(props: Props) {
                                 color={DARK_GREY}
                                 text={'See my library'}
                                 onPressFunction={() => {
-                                    setShowLibrary(true);
+                                    setShowLibraryModal(true);
                                 }}
                             ></ButtonFullBackgroundColor>
                         </View>

@@ -24,6 +24,8 @@ export const ITEM_DETAILS_HEADER_MIN_HEIGHT = 50;
 export const ITEM_DETAILS_HEADER_SCROLL_DISTANCE =
     ITEM_DETAILS_HEADER_MAX_HEIGHT - ITEM_DETAILS_HEADER_MIN_HEIGHT;
 
+export const BLUR_INTENSITY = 50;
+
 export default StyleSheet.create({
     main_container: { flex: 1, backgroundColor: LIGHT_GREY },
     button_search: {
