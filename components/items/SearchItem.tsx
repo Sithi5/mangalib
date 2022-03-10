@@ -79,7 +79,6 @@ export default React.memo(function SearchItem(props: Props) {
                           });
                 await removeItemFromUser({
                     user: user,
-                    user_item: user_item,
                     item_id: item.id,
                     item_type: item_type,
                     dispatch: dispatch,

@@ -2,13 +2,10 @@ import type { KitsuData } from 'api/KitsuTypes';
 import SearchItemsList, {
     NavigateToItemDetailsArgs,
 } from 'components/lists/SearchItemsList';
-import { WHITE } from 'globals/AppStyles';
 import type { SearchTopTabAnimeScreenNavigationProps } from 'navigations/NavigationsTypes';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { FunctionSearchAnimeArgs } from 'Screens/SearchAnimeScreen';
-
-const SEPARATOR_HEIGHT = 5;
 
 type Props = {
     navigation: SearchTopTabAnimeScreenNavigationProps;
@@ -49,9 +46,4 @@ export default function SearchAnimesList(props: Props) {
     );
 }
 
-const styles = StyleSheet.create({
-    separator_container: {
-        height: SEPARATOR_HEIGHT,
-        backgroundColor: WHITE,
-    },
-});
+const styles = StyleSheet.create({});

@@ -2,13 +2,10 @@ import type { KitsuData } from 'api/KitsuTypes';
 import SearchItemsList, {
     NavigateToItemDetailsArgs,
 } from 'components/lists/SearchItemsList'; // Not using the index.ts to avoid cycle import.
-import { WHITE } from 'globals/AppStyles';
 import type { SearchTopTabMangaScreenNavigationProps } from 'navigations/NavigationsTypes';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import type { FunctionSearchMangaArgs } from 'screens/SearchMangaScreen';
-
-const SEPARATOR_HEIGHT = 5;
 
 type Props = {
     navigation: SearchTopTabMangaScreenNavigationProps;
@@ -49,9 +46,4 @@ export default function SearchMangasList(props: Props) {
     );
 }
 
-const styles = StyleSheet.create({
-    separator_container: {
-        height: SEPARATOR_HEIGHT,
-        backgroundColor: WHITE,
-    },
-});
+const styles = StyleSheet.create({});

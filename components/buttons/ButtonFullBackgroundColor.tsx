@@ -5,18 +5,21 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 type Props = {
     color: string;
     text: string;
+    text_color?: string;
     onPressFunction: () => void;
 };
 
 export default function ButtonFullBackgroundColor(props: Props) {
-    const { color, onPressFunction, text } = props;
+    const { color, onPressFunction, text, text_color = WHITE } = props;
 
     return (
         <TouchableOpacity
             onPress={onPressFunction}
             style={[styles.button, { backgroundColor: color }]}
         >
-            <Text style={styles.button_text}>{text}</Text>
+            <Text style={[styles.button_text, { color: text_color }]}>
+                {text}
+            </Text>
         </TouchableOpacity>
     );
 }
@@ -30,7 +33,6 @@ const styles = StyleSheet.create({
         margin: DEFAULT_MARGIN,
     },
     button_text: {
-        color: WHITE,
         fontSize: 16,
         fontFamily: 'Rubik-Medium',
     },

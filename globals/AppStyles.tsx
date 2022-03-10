@@ -10,6 +10,7 @@ export const LIGHT_GREY = '#e6e6e6';
 export const DARK_BLUE = '#0d1f3d';
 export const LIGHT_BLUE = '#2067e3';
 export const DARK_GREY = '#1e1e1e';
+export const PALE_ORANGE = '#997163';
 export const DEFAULT_MARGIN = 5;
 export const DEFAULT_RADIUS = 10;
 export const BACKGROUND_DARK_OPACITY = 'rgba(0,0,0, 0.80)';

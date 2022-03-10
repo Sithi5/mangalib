@@ -1,27 +1,26 @@
 import { kitsuGetItemDetails, kitsuGetItemImage } from 'api/KitsuApi';
-import {
-    KitsuAnimeAttributes,
-    KitsuData,
-    KitsuItemType,
-    KitsuMangaAttributes,
-} from 'api/KitsuTypes';
+import { KitsuData, KitsuItemType } from 'api/KitsuTypes';
 import {
     ButtonBorderColor,
     ButtonFullBackgroundColor,
 } from 'components/buttons';
+import {
+    BodyContainerUserItemDetails,
+    TopContainerItemDetailsContent,
+} from 'components/item_details';
 import Loading from 'components/Loading';
 import { ItemDetailsScreenNavigationHeader } from 'components/navigations_headers';
 import StatusBar from 'components/StatusBar';
 import AppStyles, {
     BLACK,
     DEFAULT_MARGIN,
+    DEFAULT_RADIUS,
     GREY,
     ORANGE,
     RED,
     WHITE,
 } from 'globals/AppStyles';
 import { Id } from 'globals/GlobalTypes';
-import moment from 'moment';
 import { SearchStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Image, StyleSheet, Text, View } from 'react-native';
@@ -36,12 +35,15 @@ import addItemToUser from 'utils/users/AddItemToUser';
 
 const RATING_BUBBLE_CONTAINER_SIZE = 50;
 const RATING_BUBBLE_CONTAINER_INSIDE_SIZE = RATING_BUBBLE_CONTAINER_SIZE - 5;
+const TOP_CONTAINER_ITEM_IMAGE_HEIGHT = 180;
+const TOP_CONTAINER_ITEM_IMAGE_WIDTH = TOP_CONTAINER_ITEM_IMAGE_HEIGHT * 0.75;
 
 export default function ItemDetailsScreen({
     navigation,
     route,
 }: SearchStackScreenProps<'ItemDetails'>) {
     const [is_loading, setLoading] = useState(true);
+    const [show_library, setShowLibrary] = useState(false);
     const [item, setItem] = useState<KitsuData>();
     const [header_z_index, setHeaderZIndex] = useState(0);
     const scroll = useRef(new Animated.Value(0)).current;
@@ -160,111 +162,6 @@ export default function ItemDetailsScreen({
         }
     }
 
-    function _top_container_item_details() {
-        if (item != undefined) {
-            const item_attribute = item.attributes;
-            return (
-                <View style={styles.content_top_container_item_details}>
-                    <Text
-                        style={styles.content_top_container_item_details_text}
-                    >
-                        Type: {item_attribute.subtype}
-                    </Text>
-                    <Text
-                        style={styles.content_top_container_item_details_text}
-                    >
-                        Start date:{' '}
-                        {moment(item_attribute.startDate).format(
-                            'MMMM Do YYYY'
-                        )}
-                    </Text>
-                    <Text
-                        style={styles.content_top_container_item_details_text}
-                    >
-                        Status: {item_attribute.status}
-                    </Text>
-                    {item_attribute.status === 'finished' ? (
-                        <Text
-                            style={
-                                styles.content_top_container_item_details_text
-                            }
-                        >
-                            End date:{' '}
-                            {item_attribute.endDate
-                                ? moment(item_attribute.endDate).format(
-                                      'MMMM Do YYYY'
-                                  )
-                                : 'unknow'}
-                        </Text>
-                    ) : null}
-                    {item_type == 'manga' ? (
-                        <View>
-                            <Text
-                                style={
-                                    styles.content_top_container_item_details_text
-                                }
-                            >
-                                Chapter count:{' '}
-                                {
-                                    (item_attribute as KitsuMangaAttributes)
-                                        .chapterCount
-                                }
-                            </Text>
-                            <Text
-                                style={
-                                    styles.content_top_container_item_details_text
-                                }
-                            >
-                                Volume count:{' '}
-                                {
-                                    (item_attribute as KitsuMangaAttributes)
-                                        .volumeCount
-                                }
-                            </Text>
-                            <Text
-                                style={
-                                    styles.content_top_container_item_details_text
-                                }
-                            >
-                                Serialization:{' '}
-                                {
-                                    (item_attribute as KitsuMangaAttributes)
-                                        .serialization
-                                }
-                            </Text>
-                        </View>
-                    ) : (
-                        <View>
-                            <Text
-                                style={
-                                    styles.content_top_container_item_details_text
-                                }
-                            >
-                                Episode count:{' '}
-                                {
-                                    (item_attribute as KitsuAnimeAttributes)
-                                        .episodeCount
-                                }
-                            </Text>
-                            <Text
-                                style={
-                                    styles.content_top_container_item_details_text
-                                }
-                            >
-                                Episode Lenght:{' '}
-                                {
-                                    (item_attribute as KitsuAnimeAttributes)
-                                        .episodeLength
-                                }{' '}
-                                mins
-                            </Text>
-                        </View>
-                    )}
-                </View>
-            );
-        }
-    }
-
     function _ItemDetails() {
         if (item != undefined) {
             const item_rating_text = item.attributes.averageRating
@@ -314,9 +211,21 @@ export default function ItemDetailsScreen({
                                 }
                                 style={styles.content_top_container_item_image}
                             />
-                            {_top_container_item_details()}
+                            <TopContainerItemDetailsContent
+                                item={item}
+                                item_type={item_type}
+                            ></TopContainerItemDetailsContent>
                         </View>
                         <View style={styles.content_body_container}>
+                            <BodyContainerUserItemDetails
+                                item={item}
+                                item_type={item_type}
+                                user={user}
+                                setShowLibrary={setShowLibrary}
+                            ></BodyContainerUserItemDetails>
+                            {show_library === true ? (
+                                <Text>show lib</Text>
+                            ) : null}
                             <Text style={styles.content_body_text}>
                                 Overview:
                             </Text>
@@ -358,24 +267,17 @@ const styles = StyleSheet.create({
     content_top_container: {
         flex: 1,
         flexDirection: 'row',
+        backgroundColor: WHITE,
+        borderRadius: DEFAULT_RADIUS,
     },
     content_top_container_item_image: {
-        height: 150,
-        width: 100,
+        height: TOP_CONTAINER_ITEM_IMAGE_HEIGHT,
+        width: TOP_CONTAINER_ITEM_IMAGE_WIDTH,
         margin: DEFAULT_MARGIN,
         borderRadius: 10,
         backgroundColor: GREY,
     },
-    content_top_container_item_details: {
-        flexDirection: 'column',
-        margin: 5,
-        flex: 1,
-    },
-    content_top_container_item_details_text: {
-        margin: 3,
-        fontFamily: 'Rubik-Medium',
-        color: BLACK,
-    },
+
     content_body_container: {
         flex: 3,
         margin: 5,

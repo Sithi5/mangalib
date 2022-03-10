@@ -68,7 +68,6 @@ export default function UserMangaDetailsScreen({
         try {
             await removeItemFromUser({
                 user: user,
-                user_item: user_manga,
                 item_id: manga_id,
                 item_type: 'manga',
                 dispatch: dispatch,

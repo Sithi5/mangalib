@@ -75,7 +75,6 @@ export default function UserAnimeDetailsScreen({
         try {
             await removeItemFromUser({
                 user: user,
-                user_item: user_anime,
                 item_id: anime_id,
                 item_type: 'anime',
                 dispatch: dispatch,
