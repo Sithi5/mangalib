@@ -86,7 +86,7 @@ export default function ItemDetailsScreen({
         _getItemDetails();
     }, [item_id]);
 
-    function _displayAddToLibrary() {
+    function _displayAddOrRemoveFromLibrary() {
         async function _addItemToUser() {
             if (user.uid !== undefined && item) {
                 try {
@@ -196,13 +196,19 @@ export default function ItemDetailsScreen({
                         ></ItemDetailsScreenNavigationHeader>
                     </Animated.View>
 
-                    <View style={styles.rating_bubble_container}>
-                        <View style={styles.rating_bubble_inside}>
-                            <Text style={styles.rating_bubble_text}>
-                                {item_rating_text}
-                            </Text>
+                    {item_rating_text ? (
+                        <View style={styles.rating_bubble_container}>
+                            <View style={styles.rating_bubble_inside}>
+                                <Text style={styles.rating_bubble_text}>
+                                    {item_rating_text}
+                                </Text>
+                            </View>
                         </View>
-                    </View>
+                    ) : (
+                        <View
+                            style={styles.rating_bubble_container_hidden}
+                        ></View>
+                    )}
 
                     <View style={styles.content_main_container}>
                         <View style={styles.content_top_container}>
@@ -240,7 +246,7 @@ export default function ItemDetailsScreen({
                             </View>
                         </View>
                         <View style={styles.content_bottom_container}></View>
-                        {_displayAddToLibrary()}
+                        {_displayAddOrRemoveFromLibrary()}
                     </View>
                     <BlurView
                         style={[
@@ -335,6 +341,15 @@ const styles = StyleSheet.create({
         backgroundColor: ORANGE,
         zIndex: 1, // works on ios
         elevation: 1, // works on android
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    rating_bubble_container_hidden: {
+        marginTop: -(RATING_BUBBLE_CONTAINER_SIZE / 2),
+        alignSelf: 'flex-end',
+        marginRight: '10%',
+        width: RATING_BUBBLE_CONTAINER_SIZE,
+        height: RATING_BUBBLE_CONTAINER_SIZE,
         justifyContent: 'center',
         alignItems: 'center',
     },

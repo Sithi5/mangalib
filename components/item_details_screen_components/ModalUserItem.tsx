@@ -23,7 +23,6 @@ type Props = {
 export default function ModalUserItem(props: Props) {
     const { show_library_modal, setShowLibraryModal } = props;
 
-    console.log('show_library_modal = ', show_library_modal);
     return (
         <View>
             <Modal
