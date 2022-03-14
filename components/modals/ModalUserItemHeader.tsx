@@ -24,8 +24,8 @@ type Props = {
 };
 
 export default function ModalUserItemHeader(props: Props) {
-    const from_number = React.useRef('');
-    const to_number = React.useRef('');
+    const from_number = React.useRef('1');
+    const to_number = React.useRef('1');
     const { item_type, user, user_item, dispatch } = props;
 
     function _addItemsToUser() {
@@ -75,7 +75,7 @@ export default function ModalUserItemHeader(props: Props) {
                     <NumberInput
                         search_text={from_number}
                         width={'30%'}
-                        placeholder={'0'}
+                        placeholder={'1'}
                         min_value={0}
                     />
                 </View>
@@ -84,7 +84,7 @@ export default function ModalUserItemHeader(props: Props) {
                     <NumberInput
                         search_text={to_number}
                         width={'30%'}
-                        placeholder={'0'}
+                        placeholder={'1'}
                         min_value={0}
                     />
                 </View>

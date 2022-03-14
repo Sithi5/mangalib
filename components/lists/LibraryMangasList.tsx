@@ -15,9 +15,10 @@ export default function LibraryMangasList(props: Props) {
     const { navigation, mangas_list } = props;
 
     function _navigateToLibraryMangaDetails(manga_id: Id, manga_title: string) {
-        navigation.navigate('UserMangaDetails', {
-            manga_id: manga_id,
-            manga_title: manga_title,
+        navigation.navigate('ItemDetails', {
+            item_id: manga_id,
+            item_type: 'manga',
+            item_title: manga_title,
         });
     }
 

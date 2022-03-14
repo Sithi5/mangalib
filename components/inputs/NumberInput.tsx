@@ -27,13 +27,13 @@ export default function NumberInput(props: Props) {
     const {
         search_text,
         on_submit_function,
-        placeholder = '0',
+        placeholder = '1',
         width,
         min_value,
         max_value,
         keep_value_on_submit = true,
     } = props;
-    const [text, setText] = useState('');
+    const [text, setText] = useState(placeholder);
 
     return (
         <View style={styles.icons_and_input_container}>
@@ -93,7 +93,7 @@ export default function NumberInput(props: Props) {
                             setText(text);
                         }
                         if (!keep_value_on_submit) {
-                            setText('');
+                            setText('1');
                         }
                         if (on_submit_function !== undefined) {
                             on_submit_function();

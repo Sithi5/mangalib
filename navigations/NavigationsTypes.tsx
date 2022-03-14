@@ -37,7 +37,7 @@ export type SearchTopTabParamList = {
 
 export type LibraryStackParamList = {
     Library: undefined;
-    UserMangaDetails: { manga_id: Id; manga_title: string };
+    ItemDetails: { item_id: Id; item_type: KitsuItemType; item_title: string };
 };
 
 export type LoginStackParamList = {
@@ -118,11 +118,6 @@ export type LibraryScreenNavigationProp = CompositeNavigationProp<
 
 export type WatchListScreenNavigationProp = CompositeNavigationProp<
     NativeStackNavigationProp<WatchListStackParamList, 'WatchList'>,
-    RootBottomTabNavigationProp<keyof RootBottomTabParamList>
->;
-
-export type UserMangaDetailsScreenNavigationProp = CompositeNavigationProp<
-    NativeStackNavigationProp<LibraryStackParamList, 'UserMangaDetails'>,
     RootBottomTabNavigationProp<keyof RootBottomTabParamList>
 >;
 
