@@ -23,12 +23,14 @@ import {
     TouchableWithoutFeedback,
     View,
 } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import { useDispatch } from 'react-redux';
 import { UserState } from 'redux/UserSlice';
 import {
     getFirestoreUserAnimeById,
     getFirestoreUserMangaById,
 } from 'utils/firebase';
+import ModalUserItemHeader from './ModalUserItemHeader';
 
 type Props = {
     show_library_modal: boolean;
@@ -41,6 +43,7 @@ type Props = {
 export default function ModalUserItem(props: Props) {
     const { show_library_modal, setShowLibraryModal, item, user, item_type } =
         props;
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (!item) {
@@ -56,16 +59,28 @@ export default function ModalUserItem(props: Props) {
                 id: item.id,
             });
             return (
-                <FlatList
-                    data={user_manga.possessed_volumes}
-                    keyExtractor={(item) => item.toString()}
-                    numColumns={8}
-                    renderItem={({ item }) => (
-                        <View style={styles.item_bubble}>
-                            <Text style={styles.item_bubble_text}>{item}</Text>
-                        </View>
-                    )}
-                ></FlatList>
+                <View onStartShouldSetResponder={(): boolean => true}>
+                    <FlatList
+                        ListHeaderComponent={
+                            <ModalUserItemHeader
+                                item_type={'manga'}
+                                user={user}
+                                user_item={user_manga}
+                                dispatch={dispatch}
+                            />
+                        }
+                        data={user_manga.possessed_volumes}
+                        keyExtractor={(item) => item.toString()}
+                        numColumns={8}
+                        renderItem={({ item }) => (
+                            <View style={styles.item_bubble}>
+                                <Text style={styles.item_bubble_text}>
+                                    {item}
+                                </Text>
+                            </View>
+                        )}
+                    ></FlatList>
+                </View>
             );
         }
     }

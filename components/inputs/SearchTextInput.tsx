@@ -1,13 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import {
-    DARK_GREY,
-    DEFAULT_MARGIN,
-    DEFAULT_RADIUS,
-    GREY,
-    LIGHT_GREY,
-    ORANGE,
-    WHITE,
-} from 'globals/AppStyles';
+import { DEFAULT_MARGIN, DEFAULT_RADIUS, GREY, WHITE } from 'globals/AppStyles';
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 

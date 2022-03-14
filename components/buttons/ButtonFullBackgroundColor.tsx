@@ -6,18 +6,35 @@ type Props = {
     color: string;
     text: string;
     text_color?: string;
+    text_font_size?: number;
+    padding?: number;
     onPressFunction: () => void;
 };
 
 export default function ButtonFullBackgroundColor(props: Props) {
-    const { color, onPressFunction, text, text_color = WHITE } = props;
+    const {
+        color,
+        onPressFunction,
+        text,
+        text_color = WHITE,
+        text_font_size,
+        padding = 15,
+    } = props;
 
     return (
         <TouchableOpacity
             onPress={onPressFunction}
-            style={[styles.button, { backgroundColor: color }]}
+            style={[
+                styles.button,
+                { backgroundColor: color, padding: padding },
+            ]}
         >
-            <Text style={[styles.button_text, { color: text_color }]}>
+            <Text
+                style={[
+                    styles.button_text,
+                    { color: text_color, fontSize: text_font_size },
+                ]}
+            >
                 {text}
             </Text>
         </TouchableOpacity>

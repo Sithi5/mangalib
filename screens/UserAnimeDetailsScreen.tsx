@@ -181,6 +181,7 @@ export default function UserAnimeDetailsScreen({
     }
     return (
         <View style={AppStyles.main_container}>
+            volume_bubble_size
             <Loading is_loading={is_loading} />
             {_UserAnimeDetails()}
         </View>

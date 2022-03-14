@@ -11,7 +11,7 @@ import {
     getFirestoreUserAnimeById,
     getFirestoreUserMangaById,
 } from 'utils/firebase';
-import animeIsInUserWatchList from './animeIsInUserWatchList';
+import animeIsInUserWatchList from './AnimeIsInUserWatchList';
 import mangaIsInUserLibrary from './MangaIsInUserLibrary';
 
 export type Args = {
