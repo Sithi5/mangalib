@@ -232,13 +232,16 @@ export default function ItemDetailsScreen({
                                 user={user}
                                 setShowLibraryModal={setShowLibraryModal}
                             ></BodyContainerUserItemDetails>
-                            <ModalUserItem
-                                show_library_modal={show_library_modal}
-                                setShowLibraryModal={setShowLibraryModal}
-                                item={item}
-                                item_type={item_type}
-                                user={user}
-                            ></ModalUserItem>
+                            {user !== undefined ? (
+                                <ModalUserItem
+                                    show_library_modal={show_library_modal}
+                                    setShowLibraryModal={setShowLibraryModal}
+                                    item={item}
+                                    item_type={item_type}
+                                    user={user}
+                                ></ModalUserItem>
+                            ) : null}
+
                             <Text style={styles.content_body_text}>
                                 Overview:
                             </Text>

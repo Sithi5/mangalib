@@ -46,30 +46,56 @@ export default function ModalUserItem(props: Props) {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (!item) {
+        if (!item || !user) {
             setShowLibraryModal(false);
         }
     }, [show_library_modal]);
 
     function _mangaFlatList() {
         if (item !== undefined) {
-            const manga = item.attributes as KitsuMangaAttributes;
-            let user_manga = getFirestoreUserMangaById({
+            const user_manga = getFirestoreUserMangaById({
                 user: user,
                 id: item.id,
             });
-            return (
-                <View onStartShouldSetResponder={(): boolean => true}>
+            if (user_manga) {
+                return (
+                    <View onStartShouldSetResponder={(): boolean => true}>
+                        <FlatList
+                            ListHeaderComponent={
+                                <ModalUserItemHeader
+                                    item_type={'manga'}
+                                    user={user}
+                                    user_item={user_manga}
+                                    dispatch={dispatch}
+                                />
+                            }
+                            data={user_manga.possessed_volumes}
+                            keyExtractor={(item) => item.toString()}
+                            numColumns={8}
+                            renderItem={({ item }) => (
+                                <View style={styles.item_bubble}>
+                                    <Text style={styles.item_bubble_text}>
+                                        {item}
+                                    </Text>
+                                </View>
+                            )}
+                        ></FlatList>
+                    </View>
+                );
+            }
+        }
+    }
+
+    function _animeFlatList() {
+        if (item !== undefined) {
+            const user_anime = getFirestoreUserAnimeById({
+                user: user,
+                id: item.id,
+            });
+            if (user_anime) {
+                return (
                     <FlatList
-                        ListHeaderComponent={
-                            <ModalUserItemHeader
-                                item_type={'manga'}
-                                user={user}
-                                user_item={user_manga}
-                                dispatch={dispatch}
-                            />
-                        }
-                        data={user_manga.possessed_volumes}
+                        data={user_anime.seen_episodes}
                         keyExtractor={(item) => item.toString()}
                         numColumns={8}
                         renderItem={({ item }) => (
@@ -80,34 +106,12 @@ export default function ModalUserItem(props: Props) {
                             </View>
                         )}
                     ></FlatList>
-                </View>
-            );
+                );
+            }
         }
     }
 
-    function _animeFlatList() {
-        if (item !== undefined) {
-            const anime = item.attributes as KitsuAnimeAttributes;
-            let user_anime = getFirestoreUserAnimeById({
-                user: user,
-                id: item.id,
-            });
-            return (
-                <FlatList
-                    data={user_anime.seen_episodes}
-                    keyExtractor={(item) => item.toString()}
-                    numColumns={8}
-                    renderItem={({ item }) => (
-                        <View style={styles.item_bubble}>
-                            <Text style={styles.item_bubble_text}>{item}</Text>
-                        </View>
-                    )}
-                ></FlatList>
-            );
-        }
-    }
-
-    if (item !== undefined) {
+    if (item !== undefined && user !== undefined) {
         return (
             <View>
                 <Modal
