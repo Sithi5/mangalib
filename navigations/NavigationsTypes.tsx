@@ -47,7 +47,7 @@ export type LoginStackParamList = {
 
 export type WatchListStackParamList = {
     WatchList: undefined;
-    UserAnimeDetails: { anime_id: Id; anime_title: string };
+    ItemDetails: { item_id: Id; item_type: KitsuItemType; item_title: string };
 };
 
 // Screen props

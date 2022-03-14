@@ -18,9 +18,10 @@ export default function WatchListAnimesList(props: Props) {
         anime_id: Id,
         anime_title: string
     ) {
-        navigation.navigate('UserAnimeDetails', {
-            anime_id: anime_id,
-            anime_title: anime_title,
+        navigation.navigate('ItemDetails', {
+            item_id: anime_id,
+            item_title: anime_title,
+            item_type: 'anime',
         });
     }
 

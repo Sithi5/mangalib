@@ -3,7 +3,6 @@ import { ORANGE } from 'globals/AppStyles';
 import React from 'react';
 import { useAppSelector } from 'redux/Hooks';
 import { ItemDetailsScreen, LibraryScreen } from 'screens';
-import UserMangaDetailsScreen from 'screens/UserMangaDetailsScreen';
 import { LibraryStackParamList } from './NavigationsTypes';
 
 const LibraryStack = createNativeStackNavigator<LibraryStackParamList>();
