@@ -6,10 +6,10 @@ import {
 } from 'components/buttons';
 import {
     BodyContainerUserItemDetails,
-    ModalUserItem,
     TopContainerItemDetailsContent,
 } from 'components/item_details_screen_components';
 import Loading from 'components/Loading';
+import { ModalUserItem } from 'components/modals';
 import { ItemDetailsScreenNavigationHeader } from 'components/navigations_headers';
 import StatusBar from 'components/StatusBar';
 import { BlurView } from 'expo-blur';
@@ -235,6 +235,9 @@ export default function ItemDetailsScreen({
                             <ModalUserItem
                                 show_library_modal={show_library_modal}
                                 setShowLibraryModal={setShowLibraryModal}
+                                item={item}
+                                item_type={item_type}
+                                user={user}
                             ></ModalUserItem>
                             <Text style={styles.content_body_text}>
                                 Overview:
