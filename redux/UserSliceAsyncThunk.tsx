@@ -1,22 +1,27 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
+    firestoreAddAnimeToUserAnimesList,
     firestoreAddMangaToUserMangasList,
+    firestoreCreateUserData,
     firestoreGetUserData,
+    firestoreRemoveAnimeFromUserAnimesList,
     firestoreRemoveMangaFromUserMangasList,
+    firestoreUpdateUserAnimesList,
     firestoreUpdateUserMangasList,
 } from 'api/FirebaseApi';
-import { FirestoreUser, FirestoreUserManga } from 'api/FirebaseTypes';
+import {
+    FirestoreUser,
+    FirestoreUserAnime,
+    FirestoreUserManga,
+} from 'api/FirebaseTypes';
 import {
     createUserWithEmailAndPassword,
     getAuth,
     signInWithEmailAndPassword,
     signOut,
 } from 'firebase/auth';
-import { collection, doc, getFirestore, setDoc } from 'firebase/firestore';
 
 const auth = getAuth();
-
-const firestore = getFirestore();
 
 export const signInUser = createAsyncThunk(
     'user/signInUser',
@@ -49,22 +54,23 @@ export const signUpUser = createAsyncThunk(
             password
         );
         const uid = response.user.uid;
-        const user_data: FirestoreUser = {
+
+        await firestoreCreateUserData({
+            uid: uid,
             email: email,
             username: username,
-            user_mangas_list: [],
-        };
-        await setDoc(doc(collection(firestore, 'users'), uid), user_data);
+        });
         const snapshot = await firestoreGetUserData({ uid: uid });
         if (!snapshot.exists()) {
             throw 'Error when creating user data.';
         }
+        const user_data = snapshot.data() as FirestoreUser;
         return { email, uid, username, user_data };
     }
 );
 
-export const setUserData = createAsyncThunk(
-    'user/setUserData',
+export const getUserData = createAsyncThunk(
+    'user/getUserData',
     async (args: { user_uid: string }) => {
         const { user_uid } = args;
         const snapshot = await firestoreGetUserData({ uid: user_uid });
@@ -115,5 +121,41 @@ export const updateUserMangasList = createAsyncThunk(
             uid: uid,
         });
         return { user_mangas_list };
+    }
+);
+
+export const addAnimeToUserAnimeList = createAsyncThunk(
+    'user/addAnimeToUserAnimeList',
+    async (args: { uid: string; user_anime: FirestoreUserAnime }) => {
+        const { user_anime, uid } = args;
+        const response = await firestoreAddAnimeToUserAnimesList({
+            user_anime: user_anime,
+            uid: uid,
+        });
+        return { user_anime };
+    }
+);
+
+export const removeAnimeFromUserAnimeList = createAsyncThunk(
+    'user/removeAnimeFromUserAnimeList',
+    async (args: { uid: string; user_anime: FirestoreUserAnime }) => {
+        const { user_anime, uid } = args;
+        const response = await firestoreRemoveAnimeFromUserAnimesList({
+            user_anime: user_anime,
+            uid: uid,
+        });
+        return { user_anime };
+    }
+);
+
+export const updateUserAnimesList = createAsyncThunk(
+    'user/updateUserAnimesList',
+    async (args: { uid: string; user_animes_list: FirestoreUserAnime[] }) => {
+        const { user_animes_list, uid } = args;
+        const response = await firestoreUpdateUserAnimesList({
+            user_animes_list: user_animes_list,
+            uid: uid,
+        });
+        return { user_animes_list };
     }
 );

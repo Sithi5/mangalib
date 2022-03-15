@@ -1,6 +1,6 @@
 import type { KitsuData, KitsuItemType } from 'api/KitsuTypes';
-import SearchItem, { ITEM_HEIGHT } from 'components/SearchItem';
-import { LIGHTGREY } from 'globals/AppStyles';
+import SearchItem, { ITEM_HEIGHT } from 'components/items/SearchItem';
+import { LIGHT_GREY } from 'globals/AppStyles';
 import type { Id } from 'globals/GlobalTypes';
 import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
@@ -10,14 +10,18 @@ import { FunctionSearchMangaArgs } from 'screens/SearchMangaScreen';
 const SEPARATOR_HEIGHT = 15;
 
 export type NavigateToItemDetailsArgs = {
-    id: Id;
+    item_id: Id;
+    item_title: string;
 };
 
 type Props = {
     item_type: KitsuItemType;
     items_list: KitsuData[];
     last_page_reached?: boolean;
-    _navigateToItemDetails: ({ id }: NavigateToItemDetailsArgs) => void;
+    _navigateToItemDetails: ({
+        item_id,
+        item_title,
+    }: NavigateToItemDetailsArgs) => void;
     _searchItems?: ({}:
         | FunctionSearchMangaArgs
         | FunctionSearchAnimeArgs) => Promise<void>;
@@ -64,7 +68,7 @@ export default function SearchItemsList(props: Props) {
 
 const styles = StyleSheet.create({
     list_container: {
-        backgroundColor: LIGHTGREY,
+        backgroundColor: LIGHT_GREY,
         paddingTop: SEPARATOR_HEIGHT,
     },
     separator_container: {

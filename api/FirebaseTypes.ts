@@ -3,18 +3,32 @@ import { Id } from 'globals/GlobalTypes';
 export type FirestoreUserManga = {
     manga_id: Id;
     manga_name: string;
-    volumes: number[];
+    total_volumes: number;
     possessed_volumes: number[];
+};
+
+export type FirestoreUserAnime = {
+    anime_id: Id;
+    anime_title: string;
+    total_episodes: number;
+    seen_episodes: number[];
 };
 
 export type FirestoreUser = {
     user_mangas_list: FirestoreUserManga[];
+    user_animes_list: FirestoreUserAnime[];
     email?: string;
     username?: string;
 };
 // Functions args
 export type ArgsFireforceGetUserData = {
     uid: string;
+};
+
+export type ArgsFireforceCreateUserData = {
+    uid: string;
+    email: string;
+    username: string;
 };
 
 export type ArgsUpdateUserEmail = {
@@ -40,5 +54,20 @@ export type ArgsAddMangaToUserMangasList = {
 export type ArgsRemoveMangaFromUserMangasList = {
     uid: string;
     user_manga: FirestoreUserManga;
+};
+
+export type ArgsUpdateUserAnimesList = {
+    uid: string;
+    user_animes_list: FirestoreUserAnime[];
+};
+
+export type ArgsAddAnimeToUserAnimesList = {
+    uid: string;
+    user_anime: FirestoreUserAnime;
+};
+
+export type ArgsRemoveAnimeFromUserAnimesList = {
+    uid: string;
+    user_anime: FirestoreUserAnime;
 };
 // Functions returns

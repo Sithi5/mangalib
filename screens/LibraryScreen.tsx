@@ -5,11 +5,11 @@ import { SearchTextInput } from 'components/inputs';
 import { TextInputOnSubmitFunctionArgs } from 'components/inputs/SearchTextInput';
 import { LibraryMangasList } from 'components/lists';
 import Loading from 'components/Loading';
-import AppStyles, { ORANGE } from 'globals/AppStyles';
+import AppStyles, { DEFAULT_MARGIN, ORANGE } from 'globals/AppStyles';
 import type { LibraryStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { useAppSelector } from 'redux/Hooks';
+import { useAppDispatch, useAppSelector } from 'redux/Hooks';
 import { getMangasIdsListFromFirestoreUsersMangasList } from 'utils/firebase/';
 import { getKitsuItemTitle } from 'utils/kitsu/';
 import { replaceAll } from 'utils/strings/';
@@ -17,7 +17,7 @@ import { replaceAll } from 'utils/strings/';
 export default function LibraryScreen({
     navigation,
 }: LibraryStackScreenProps<'Library'>) {
-    const [is_loading, setLoading] = useState(false);
+    const [is_loading, setLoading] = useState(true);
     const search_text = useRef('');
     const mangas_list = useRef<KitsuData[]>([]);
     const [filtered_mangas_list, setFilteredMangasList] = useState<KitsuData[]>(
@@ -28,6 +28,7 @@ export default function LibraryScreen({
     useEffect(() => {
         async function _getManga() {
             try {
+                setLoading(true);
                 let tmp_mangas_list: KitsuData[] = [];
                 const mangas_ids_list =
                     getMangasIdsListFromFirestoreUsersMangasList({
@@ -97,29 +98,41 @@ export default function LibraryScreen({
                     search_text={search_text}
                     on_submit_function={_filterMangas}
                 />
-                {mangas_list.current.length > 0 ? (
+                {is_loading ? (
+                    <Loading is_loading={is_loading} />
+                ) : (
                     <LibraryMangasList
                         navigation={navigation}
                         mangas_list={filtered_mangas_list}
                     />
-                ) : (
-                    <Text>Nothing to show.</Text>
                 )}
-
-                <Loading is_loading={is_loading} />
             </View>
         );
     } else {
         return (
             <View style={AppStyles.main_container}>
-                <Text>You need to be logged in to see your library.</Text>
-                <ButtonFullBackgroundColor
-                    color={ORANGE}
-                    text={'Go to login'}
-                    onPressFunction={() => {
-                        navigation.navigate('LoginStack');
+                <View
+                    style={{
+                        flex: 1,
+                        alignItems: 'center',
+                        justifyContent: 'center',
                     }}
-                ></ButtonFullBackgroundColor>
+                >
+                    <View>
+                        <Text style={{ fontFamily: 'Rubik-Medium' }}>
+                            You need to be logged in to see your library.
+                        </Text>
+                    </View>
+                    <View style={{ width: '60%', paddingTop: DEFAULT_MARGIN }}>
+                        <ButtonFullBackgroundColor
+                            color={ORANGE}
+                            text={'Go to login'}
+                            onPressFunction={() => {
+                                navigation.navigate('LoginStack');
+                            }}
+                        ></ButtonFullBackgroundColor>
+                    </View>
+                </View>
             </View>
         );
     }

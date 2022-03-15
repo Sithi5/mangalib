@@ -1,18 +1,14 @@
 import type { KitsuData } from 'api/KitsuTypes';
-import { WHITE } from 'globals/AppStyles';
-import type { Id } from 'globals/GlobalTypes';
-import type { SearchMangaScreenNavigationProp } from 'navigations/NavigationsTypes';
-import React from 'react';
-import { StyleSheet } from 'react-native';
-import type { FunctionSearchMangaArgs } from 'screens/SearchMangaScreen';
 import SearchItemsList, {
     NavigateToItemDetailsArgs,
 } from 'components/lists/SearchItemsList'; // Not using the index.ts to avoid cycle import.
-
-const SEPARATOR_HEIGHT = 5;
+import type { SearchTopTabMangaScreenNavigationProps } from 'navigations/NavigationsTypes';
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import type { FunctionSearchMangaArgs } from 'screens/SearchMangaScreen';
 
 type Props = {
-    navigation: SearchMangaScreenNavigationProp;
+    navigation: SearchTopTabMangaScreenNavigationProps;
     mangas_list: KitsuData[];
     last_page_reached?: boolean;
     _searchMangas?: ({}: FunctionSearchMangaArgs) => Promise<void>;
@@ -28,8 +24,15 @@ export default function SearchMangasList(props: Props) {
 
     const item_type = 'manga';
 
-    function _navigateToItemDetails({ id }: NavigateToItemDetailsArgs) {
-        navigation.navigate('ItemDetails', { id: id, item_type: item_type });
+    function _navigateToItemDetails({
+        item_id,
+        item_title,
+    }: NavigateToItemDetailsArgs) {
+        navigation.navigate('ItemDetails', {
+            item_id: item_id,
+            item_type: item_type,
+            item_title: item_title,
+        });
     }
 
     return (
@@ -43,9 +46,4 @@ export default function SearchMangasList(props: Props) {
     );
 }
 
-const styles = StyleSheet.create({
-    separator_container: {
-        height: SEPARATOR_HEIGHT,
-        backgroundColor: WHITE,
-    },
-});
+const styles = StyleSheet.create({});

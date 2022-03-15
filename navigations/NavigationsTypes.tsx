@@ -19,31 +19,25 @@ import { Id } from 'globals/GlobalTypes';
 
 // Param list
 export type RootBottomTabParamList = {
-    SearchTopTab: undefined;
+    SearchStack: undefined;
     LibraryStack: undefined;
     WatchListStack: undefined;
     Profil: undefined;
     LoginStack: undefined;
 };
+export type SearchStackParamList = {
+    SearchTopTab: undefined;
+    ItemDetails: { item_id: Id; item_type: KitsuItemType; item_title: string };
+};
 
 export type SearchTopTabParamList = {
-    SearchMangaStack: undefined;
-    SearchAnimeStack: undefined;
-};
-
-export type SearchMangaStackParamList = {
     SearchManga: undefined;
-    ItemDetails: { id: Id; item_type: KitsuItemType };
-};
-
-export type SearchAnimeStackParamList = {
     SearchAnime: undefined;
-    ItemDetails: { id: Id; item_type: KitsuItemType };
 };
 
 export type LibraryStackParamList = {
     Library: undefined;
-    UserMangaDetails: { manga_id: Id };
+    ItemDetails: { item_id: Id; item_type: KitsuItemType; item_title: string };
 };
 
 export type LoginStackParamList = {
@@ -52,38 +46,35 @@ export type LoginStackParamList = {
 };
 
 export type WatchListStackParamList = {
-    Library: undefined;
-    ItemDetails: { id: Id; item_type: KitsuItemType };
+    WatchList: undefined;
+    ItemDetails: { item_id: Id; item_type: KitsuItemType; item_title: string };
 };
 
 // Screen props
-
 export type RootBottomTabScreenProps<T extends keyof RootBottomTabParamList> =
     BottomTabScreenProps<RootBottomTabParamList, T>;
+
+export type SearchStackScreenProps<T extends keyof SearchStackParamList> =
+    CompositeScreenProps<
+        NativeStackScreenProps<SearchStackParamList, T>,
+        RootBottomTabScreenProps<keyof RootBottomTabParamList>
+    >;
 
 export type SearchTopTabScreenProps<T extends keyof SearchTopTabParamList> =
     CompositeScreenProps<
         MaterialTopTabScreenProps<SearchTopTabParamList, T>,
-        RootBottomTabScreenProps<keyof RootBottomTabParamList>
+        SearchStackScreenProps<keyof SearchStackParamList>
     >;
-
-export type SearchMangaStackScreenProps<
-    T extends keyof SearchMangaStackParamList
-> = CompositeScreenProps<
-    NativeStackScreenProps<SearchMangaStackParamList, T>,
-    SearchTopTabScreenProps<keyof SearchTopTabParamList>
->;
-
-export type SearchAnimeStackScreenProps<
-    T extends keyof SearchAnimeStackParamList
-> = CompositeScreenProps<
-    NativeStackScreenProps<SearchAnimeStackParamList, T>,
-    SearchTopTabScreenProps<keyof SearchTopTabParamList>
->;
 
 export type LibraryStackScreenProps<T extends keyof LibraryStackParamList> =
     CompositeScreenProps<
         NativeStackScreenProps<LibraryStackParamList, T>,
+        RootBottomTabScreenProps<keyof RootBottomTabParamList>
+    >;
+
+export type WatchListStackScreenProps<T extends keyof WatchListStackParamList> =
+    CompositeScreenProps<
+        NativeStackScreenProps<WatchListStackParamList, T>,
         RootBottomTabScreenProps<keyof RootBottomTabParamList>
     >;
 
@@ -94,25 +85,30 @@ export type LoginStackScreenProps<T extends keyof LoginStackParamList> =
     >;
 
 // Navigation prop
-
 export type RootBottomTabNavigationProp<
     T extends keyof RootBottomTabParamList
 > = BottomTabNavigationProp<RootBottomTabParamList, T>;
 
-export type SearchTopTabNavigationProps<T extends keyof SearchTopTabParamList> =
+export type SearchStackNavigationProps<T extends keyof SearchStackParamList> =
     CompositeNavigationProp<
-        MaterialTopTabNavigationProp<SearchTopTabParamList, T>,
+        NativeStackNavigationProp<SearchStackParamList, T>,
         RootBottomTabNavigationProp<keyof RootBottomTabParamList>
     >;
 
-export type SearchMangaScreenNavigationProp = CompositeNavigationProp<
-    NativeStackNavigationProp<SearchMangaStackParamList, 'SearchManga'>,
-    SearchTopTabNavigationProps<keyof SearchTopTabParamList>
+export type SearchTopTabNavigationProps<T extends keyof SearchTopTabParamList> =
+    CompositeNavigationProp<
+        MaterialTopTabNavigationProp<SearchTopTabParamList, T>,
+        SearchStackNavigationProps<keyof SearchStackParamList>
+    >;
+
+export type SearchTopTabAnimeScreenNavigationProps = CompositeNavigationProp<
+    MaterialTopTabNavigationProp<SearchTopTabParamList, 'SearchAnime'>,
+    SearchStackNavigationProps<keyof SearchStackParamList>
 >;
 
-export type SearchAnimeScreenNavigationProp = CompositeNavigationProp<
-    NativeStackNavigationProp<SearchAnimeStackParamList, 'SearchAnime'>,
-    SearchTopTabNavigationProps<keyof SearchTopTabParamList>
+export type SearchTopTabMangaScreenNavigationProps = CompositeNavigationProp<
+    MaterialTopTabNavigationProp<SearchTopTabParamList, 'SearchManga'>,
+    SearchStackNavigationProps<keyof SearchStackParamList>
 >;
 
 export type LibraryScreenNavigationProp = CompositeNavigationProp<
@@ -120,8 +116,8 @@ export type LibraryScreenNavigationProp = CompositeNavigationProp<
     RootBottomTabNavigationProp<keyof RootBottomTabParamList>
 >;
 
-export type UserMangaDetailsScreenNavigationProp = CompositeNavigationProp<
-    NativeStackNavigationProp<LibraryStackParamList, 'UserMangaDetails'>,
+export type WatchListScreenNavigationProp = CompositeNavigationProp<
+    NativeStackNavigationProp<WatchListStackParamList, 'WatchList'>,
     RootBottomTabNavigationProp<keyof RootBottomTabParamList>
 >;
 

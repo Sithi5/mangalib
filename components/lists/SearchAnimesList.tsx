@@ -2,16 +2,13 @@ import type { KitsuData } from 'api/KitsuTypes';
 import SearchItemsList, {
     NavigateToItemDetailsArgs,
 } from 'components/lists/SearchItemsList';
-import { WHITE } from 'globals/AppStyles';
-import type { SearchAnimeScreenNavigationProp } from 'navigations/NavigationsTypes';
+import type { SearchTopTabAnimeScreenNavigationProps } from 'navigations/NavigationsTypes';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { FunctionSearchAnimeArgs } from 'Screens/SearchAnimeScreen';
 
-const SEPARATOR_HEIGHT = 5;
-
 type Props = {
-    navigation: SearchAnimeScreenNavigationProp;
+    navigation: SearchTopTabAnimeScreenNavigationProps;
     animes_list: KitsuData[];
     last_page_reached?: boolean;
     _searchAnimes?: ({}: FunctionSearchAnimeArgs) => Promise<void>;
@@ -27,8 +24,15 @@ export default function SearchAnimesList(props: Props) {
 
     const item_type = 'anime';
 
-    function _navigateToItemDetails({ id }: NavigateToItemDetailsArgs) {
-        navigation.navigate('ItemDetails', { id, item_type: item_type });
+    function _navigateToItemDetails({
+        item_id,
+        item_title,
+    }: NavigateToItemDetailsArgs) {
+        navigation.navigate('ItemDetails', {
+            item_id,
+            item_type: item_type,
+            item_title: item_title,
+        });
     }
 
     return (
@@ -42,9 +46,4 @@ export default function SearchAnimesList(props: Props) {
     );
 }
 
-const styles = StyleSheet.create({
-    separator_container: {
-        height: SEPARATOR_HEIGHT,
-        backgroundColor: WHITE,
-    },
-});
+const styles = StyleSheet.create({});

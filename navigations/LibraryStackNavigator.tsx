@@ -1,8 +1,8 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { ORANGE } from 'globals/AppStyles';
 import React from 'react';
 import { useAppSelector } from 'redux/Hooks';
-import { LibraryScreen } from 'screens';
-import UserMangaDetailsScreen from 'screens/UserMangaDetailsScreen';
+import { ItemDetailsScreen, LibraryScreen } from 'screens';
 import { LibraryStackParamList } from './NavigationsTypes';
 
 const LibraryStack = createNativeStackNavigator<LibraryStackParamList>();
@@ -17,17 +17,20 @@ export default function LibraryStackNavigator() {
                     name="Library"
                     component={LibraryScreen}
                     options={{
-                        headerShown: false,
-                        title: 'Library',
+                        headerTitleStyle: {
+                            color: ORANGE,
+                            fontFamily: 'Rubik-SemiBold',
+                        },
+                        headerShown: true,
+                        title: 'My Library',
                     }}
                 />
                 <LibraryStack.Screen
-                    name="UserMangaDetails"
-                    component={UserMangaDetailsScreen}
-                    options={{
-                        headerShown: true,
-                        title: 'Details',
-                    }}
+                    name="ItemDetails"
+                    component={ItemDetailsScreen}
+                    options={() => ({
+                        headerShown: false,
+                    })}
                 />
             </LibraryStack.Navigator>
         );

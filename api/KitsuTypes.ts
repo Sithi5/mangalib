@@ -117,6 +117,35 @@ export type KitsuMangaAttributes = {
 };
 
 export type KitsuAnimeAttributes = {
+    createdAt?: Nullable<string>;
+    updatedAt?: Nullable<string>;
+    slug?: Nullable<string>;
+    synopsis?: Nullable<string>;
+    description?: Nullable<string>;
+    coverImageTopOffset?: Nullable<number>;
+    titles?: Nullable<{
+        en?: Nullable<string>;
+        en_us?: Nullable<string>;
+        en_jp?: Nullable<string>;
+        ja_jp?: Nullable<string>;
+    }>;
+    canonicalTitle?: Nullable<string>;
+    abbreviatedTitles?: string[];
+    averageRating?: Nullable<string>;
+    ratingFrequencies?: {};
+    userCount?: Nullable<number>;
+    favoritesCount?: Nullable<number>;
+    startDate?: Nullable<string>;
+    endDate?: Nullable<string>;
+    nextRelease?: Nullable<string>;
+    popularityRank?: Nullable<number>;
+
+    ratingRank?: Nullable<number>;
+    ageRating?: Nullable<string>;
+    ageRatingGuide?: Nullable<string>;
+    subtype?: Nullable<string>;
+    status?: Nullable<string>;
+    tba?: Nullable<string>;
     posterImage?: {
         large?: Nullable<string>;
         medium?: Nullable<string>;
@@ -125,32 +154,6 @@ export type KitsuAnimeAttributes = {
         original?: Nullable<string>;
         meta?: Nullable<{}>;
     };
-    chapterCount?: Nullable<number>;
-    volumeCount?: Nullable<number>;
-    synopsis?: Nullable<string>;
-    description?: Nullable<string>;
-    titles?: Nullable<{
-        en?: Nullable<string>;
-        en_us?: Nullable<string>;
-        en_jp?: Nullable<string>;
-        ja_jp?: Nullable<string>;
-    }>;
-    slug?: Nullable<string>;
-    averageRating?: Nullable<string>;
-    ratingRank?: Nullable<number>;
-    serialization?: Nullable<string>;
-    startDate?: Nullable<string>;
-    endDate?: Nullable<string>;
-    createdAt?: Nullable<string>;
-    updatedAt?: Nullable<string>;
-    nextRelease?: Nullable<string>;
-    popularityRank?: Nullable<number>;
-    ageRating?: Nullable<string>;
-    ageRatingGuide?: Nullable<string>;
-    subtype?: Nullable<string>;
-    mangaType?: Nullable<string>;
-    tba?: Nullable<string>;
-    status?: Nullable<string>;
     coverImage?: {
         tiny?: Nullable<string>;
         large?: Nullable<string>;
@@ -161,10 +164,10 @@ export type KitsuAnimeAttributes = {
         original?: Nullable<string>;
         meta?: Nullable<{}>;
     } | null;
-    coverImageTopOffset?: Nullable<number>;
-    canonicalTitle?: Nullable<string>;
-    abbreviatedTitles?: string[];
-    ratingFrequencies?: {};
-    userCount?: Nullable<number>;
-    favoritesCount?: Nullable<number>;
+    episodeCount?: Nullable<number>;
+    episodeLength?: Nullable<number>;
+    totalLength?: Nullable<number>;
+    youtubeVideoId?: Nullable<string>;
+    showType?: Nullable<string>;
+    nsfw?: Nullable<boolean>;
 };

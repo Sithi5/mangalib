@@ -1,8 +1,8 @@
 import { AntDesign } from '@expo/vector-icons';
 import { ButtonFullBackgroundColor } from 'components/buttons';
 import AppStyles, {
-    BLACK,
     BLUE,
+    DARK_GREY,
     DEFAULT_MARGIN,
     DEFAULT_RADIUS,
     GREY,
@@ -57,11 +57,7 @@ export default function SignUpScreen({
                     })
                 ).unwrap(); //Unwrap to raise error.
             } catch (error: any) {
-                Alert.alert('error:', error.message, [
-                    {
-                        text: 'ok',
-                    },
-                ]);
+                console.error(error);
             }
         }
     }
@@ -145,7 +141,9 @@ export default function SignUpScreen({
                         navigation.navigate('SignIn');
                     }}
                 >
-                    <Text style={{ color: BLUE }}>Sign in</Text>
+                    <Text style={{ color: BLUE, fontFamily: 'Rubik-Medium' }}>
+                        Sign in
+                    </Text>
                 </TouchableOpacity>
             </View>
         </KeyboardAvoidingView>
@@ -182,7 +180,8 @@ const styles = StyleSheet.create({
         borderColor: WHITE,
         borderWidth: 1,
         paddingLeft: DEFAULT_MARGIN,
-        color: BLACK,
+        fontFamily: 'Rubik-Medium',
+        color: DARK_GREY,
     },
     error: {
         marginTop: 10,

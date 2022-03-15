@@ -1,35 +1,36 @@
 import { Ionicons } from '@expo/vector-icons';
-import FadeIn from 'animations/FadeIn';
+import { FadeIn } from 'animations';
 import { kitsuGetItemImage } from 'api/KitsuApi';
 import { KitsuData, KitsuItemType } from 'api/KitsuTypes';
+import { NavigateToItemDetailsArgs } from 'components/lists/SearchItemsList';
 import AppStyles, {
+    DARK_GREY,
     DEFAULT_MARGIN,
     DEFAULT_RADIUS,
     GREY,
     ORANGE,
     WHITE,
 } from 'globals/AppStyles';
-import { Id } from 'globals/GlobalTypes';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
 import {
-    addMangaToUserMangaList,
-    removeMangaFromUserMangaList,
-} from 'redux/UserSliceAsyncThunk';
-import { alertRemoveMangaFromLibrary } from 'utils/alerts';
-import {
-    createNewFirestoreUserManga,
+    getFirestoreUserAnimeById,
     getFirestoreUserMangaById,
 } from 'utils/firebase';
 import { getKitsuItemTitle } from 'utils/kitsu/';
+import { removeItemFromUser } from 'utils/users';
+import addItemToUser from 'utils/users/AddItemToUser';
 
 export const ITEM_HEIGHT = 190;
 
 type Props = {
     item: KitsuData;
     item_type: KitsuItemType;
-    _navigateToItemDetails: ({ id }: { id: Id }) => void;
+    _navigateToItemDetails: ({
+        item_id,
+        item_title,
+    }: NavigateToItemDetailsArgs) => void;
 };
 
 export default React.memo(function SearchItem(props: Props) {
@@ -45,80 +46,76 @@ export default React.memo(function SearchItem(props: Props) {
         format: 'small',
     });
 
-    function _addOrRemoveMangaFromLibrary() {
+    function _addOrRemoveItemFromLibrary({
+        item_is_in_library,
+    }: {
+        item_is_in_library: boolean;
+    }) {
         if (user.logged) {
-            const manga_is_in_library = user.user_mangas_list.includes(
-                getFirestoreUserMangaById({
+            async function _addItemToUser() {
+                try {
+                    await addItemToUser({
+                        item_type: item_type,
+                        item: item,
+                        dispatch: dispatch,
+                        user: user,
+                        item_title: item_title,
+                    });
+                } catch (error: any) {
+                    console.error(error.message);
+                }
+            }
+
+            async function _removeUserItem() {
+                const user_item =
+                    item_type === 'manga'
+                        ? getFirestoreUserMangaById({
+                              user: user,
+                              id: item.id,
+                          })
+                        : getFirestoreUserAnimeById({
+                              user: user,
+                              id: item.id,
+                          });
+                await removeItemFromUser({
                     user: user,
-                    id: item.id,
-                })
-            );
-
-            async function _addMangaToLibrary() {
-                if (user.uid !== undefined) {
-                    const manga_is_in_library = user.user_mangas_list.includes(
-                        getFirestoreUserMangaById({
-                            user: user,
-                            id: item.id,
-                        })
-                    );
-                    try {
-                        await dispatch(
-                            addMangaToUserMangaList({
-                                uid: user.uid,
-                                user_manga: createNewFirestoreUserManga({
-                                    manga_name: item_title,
-                                    manga_id: item.id,
-                                }),
-                            })
-                        );
-                    } catch (error: any) {
-                        console.error(error.message);
-                    }
-                }
-            }
-
-            async function _removeUserManga() {
-                if (user.uid !== undefined) {
-                    try {
-                        await dispatch(
-                            removeMangaFromUserMangaList({
-                                uid: user.uid,
-                                user_manga: getFirestoreUserMangaById({
-                                    user: user,
-                                    id: item.id,
-                                }),
-                            })
-                        );
-                    } catch (error: any) {
-                        console.error(error.message);
-                    }
-                }
-            }
-
-            if (manga_is_in_library) {
-                alertRemoveMangaFromLibrary({
-                    alertYesFunction: _removeUserManga,
+                    item_id: item.id,
+                    item_type: item_type,
+                    dispatch: dispatch,
                 });
+            }
+
+            if (item_is_in_library) {
+                _removeUserItem();
             } else {
-                _addMangaToLibrary();
+                _addItemToUser();
             }
         }
     }
 
     function _displayAddToLibraryImage() {
-        if (item_type === 'manga' && user.logged) {
-            const manga_is_in_library = user.user_mangas_list.includes(
-                getFirestoreUserMangaById({
-                    user: user,
-                    id: item.id,
-                })
-            );
-            const color = manga_is_in_library ? ORANGE : GREY;
+        if (user.logged) {
+            const item_is_in_library =
+                item_type === 'manga'
+                    ? user.user_mangas_list.includes(
+                          getFirestoreUserMangaById({
+                              user: user,
+                              id: item.id,
+                          })
+                      )
+                    : user.user_animes_list.includes(
+                          getFirestoreUserAnimeById({
+                              user: user,
+                              id: item.id,
+                          })
+                      );
+            const color = item_is_in_library ? ORANGE : GREY;
             return (
                 <TouchableOpacity
                     onPress={async () => {
-                        await _addOrRemoveMangaFromLibrary();
+                        await _addOrRemoveItemFromLibrary({
+                            item_is_in_library: item_is_in_library,
+                        });
                     }}
                 >
                     <Ionicons
@@ -137,7 +134,12 @@ export default React.memo(function SearchItem(props: Props) {
             <FadeIn>
                 <TouchableOpacity
                     style={styles.item_container}
-                    onPress={() => _navigateToItemDetails({ id: item.id })}
+                    onPress={() =>
+                        _navigateToItemDetails({
+                            item_id: item.id,
+                            item_title: item_title,
+                        })
+                    }
                 >
                     <Image
                         source={{ uri: image_url }}
@@ -183,7 +185,7 @@ const styles = StyleSheet.create({
     item_image: {
         width: 120,
         marginRight: DEFAULT_MARGIN,
-        backgroundColor: 'grey',
+        backgroundColor: GREY,
         borderTopLeftRadius: DEFAULT_RADIUS,
         borderBottomLeftRadius: DEFAULT_RADIUS,
     },
@@ -205,19 +207,27 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         flex: 1,
         flexWrap: 'wrap',
-        fontWeight: 'bold',
+        fontFamily: 'Rubik-Bold',
+        color: DARK_GREY,
         fontSize: 20,
     },
     rating_text: {
         textAlign: 'right',
-        fontWeight: 'bold',
-        color: 'grey',
+        fontFamily: 'Rubik-Bold',
+        color: GREY,
         flex: 1,
         fontSize: 25,
     },
     icon: {
         padding: 10,
     },
-    synopsis_text: { fontStyle: 'italic', color: 'grey' },
-    start_date_text: { textAlign: 'right' },
+    synopsis_text: {
+        color: GREY,
+        fontFamily: 'Rubik-LightItalic',
+    },
+    start_date_text: {
+        textAlign: 'right',
+        fontFamily: 'Rubik-Medium',
+        color: DARK_GREY,
+    },
 });

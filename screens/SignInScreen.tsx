@@ -1,8 +1,8 @@
 import { AntDesign } from '@expo/vector-icons';
 import { ButtonFullBackgroundColor } from 'components/buttons';
 import AppStyles, {
-    BLACK,
     BLUE,
+    DARK_GREY,
     DEFAULT_MARGIN,
     DEFAULT_RADIUS,
     GREY,
@@ -22,7 +22,7 @@ import {
     View,
 } from 'react-native';
 import { useAppDispatch } from 'redux/Hooks';
-import { setUserData, signInUser } from 'redux/UserSliceAsyncThunk';
+import { signInUser } from 'redux/UserSliceAsyncThunk';
 
 export default function SignInScreen({
     navigation,
@@ -128,7 +128,9 @@ export default function SignInScreen({
                         alignItems: 'center',
                     }}
                 >
-                    <Text style={{ color: BLACK }}>
+                    <Text
+                        style={{ color: DARK_GREY, fontFamily: 'Rubik-Medium' }}
+                    >
                         Don't have an account yet ?
                     </Text>
                     <TouchableOpacity
@@ -136,7 +138,11 @@ export default function SignInScreen({
                             navigation.navigate('SignUp');
                         }}
                     >
-                        <Text style={{ color: BLUE }}>Sign up</Text>
+                        <Text
+                            style={{ color: BLUE, fontFamily: 'Rubik-Medium' }}
+                        >
+                            Sign up
+                        </Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -171,9 +177,8 @@ const styles = StyleSheet.create({
     text_input: {
         flex: 1,
         height: 30,
-        borderColor: WHITE,
-        borderWidth: 1,
         paddingLeft: DEFAULT_MARGIN,
-        color: BLACK,
+        color: DARK_GREY,
+        fontFamily: 'Rubik-Medium',
     },
 });

@@ -1,4 +1,4 @@
-import { FirestoreUser, FirestoreUserManga } from 'api/FirebaseTypes';
+import { FirestoreUserManga } from 'api/FirebaseTypes';
 import { Id } from 'globals/GlobalTypes';
 
 type Args = {

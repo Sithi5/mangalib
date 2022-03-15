@@ -1,18 +1,19 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 // Components
-import { GREY, LIGHTGREY, ORANGE, WHITE } from 'globals/AppStyles';
+import { GREY, LIGHT_GREY, ORANGE, WHITE } from 'globals/AppStyles';
 import * as React from 'react';
-import { Alert, Image, StyleSheet } from 'react-native';
+import { Image, StyleSheet } from 'react-native';
 import { useAppDispatch, useAppSelector } from 'redux/Hooks';
 import { setUserLogged, setUserUid } from 'redux/UserSlice';
-import { setUserData } from 'redux/UserSliceAsyncThunk';
+import { getUserData } from 'redux/UserSliceAsyncThunk';
 import ProfilScreen from 'screens/ProfilScreen';
 import LibraryStackNavigator from './LibraryStackNavigator';
 import LoginStackNavigator from './LoginStackNavigator';
 // Type
 import type { RootBottomTabParamList } from './NavigationsTypes';
-import SearchTopTabNavigator from './SearchTopTabNavigator';
+import SearchStackNavigator from './SearchStackNavigator';
+import WatchListStackNavigator from './WatchListStackNavigator';
 
 const RootBottomTab = createBottomTabNavigator<RootBottomTabParamList>();
 const auth = getAuth();
@@ -24,88 +25,115 @@ function _checkForPersistingUser() {
         if (user) {
             dispatch(setUserLogged(true));
             dispatch(setUserUid(user.uid));
-            async function _setUserData(user_uid: string) {
+            async function _getUserData(user_uid: string) {
                 try {
                     await dispatch(
-                        setUserData({ user_uid: user_uid })
+                        getUserData({ user_uid: user_uid })
                     ).unwrap(); //Unwrap to raise error.
                 } catch (error: any) {
-                    Alert.alert('error:', error.message, [
-                        {
-                            text: 'ok',
-                        },
-                    ]);
+                    console.error(error);
                 }
             }
-            _setUserData(user.uid);
+            _getUserData(user.uid);
         }
     });
 }
+
 export default function RootBottomTabNavigator() {
-    _checkForPersistingUser();
-
     const user = useAppSelector((state) => state.user);
+    if (user.logged == false) {
+        _checkForPersistingUser();
+    }
 
-    if (user.logged) {
-        return (
-            <RootBottomTab.Navigator
-                initialRouteName="Profil"
-                screenOptions={() => ({
-                    headerStyle: {
-                        backgroundColor: WHITE,
+    return (
+        <RootBottomTab.Navigator
+            initialRouteName="SearchStack"
+            screenOptions={() => ({
+                headerStyle: {
+                    backgroundColor: WHITE,
+                },
+                tabBarActiveTintColor: ORANGE,
+                tabBarActiveBackgroundColor: LIGHT_GREY,
+                tabBarInactiveBackgroundColor: WHITE,
+                tabBarInactiveTintColor: GREY,
+                tabBarShowLabel: false,
+                headerTitleStyle: {
+                    color: ORANGE,
+                    fontFamily: 'Rubik-Regular',
+                },
+                headerShown: false,
+            })}
+        >
+            <RootBottomTab.Screen
+                name="SearchStack"
+                component={SearchStackNavigator}
+                options={{
+                    title: 'Search',
+                    tabBarIcon: ({ color }) => {
+                        const image_name = '../images/icon_search.png';
+                        return (
+                            <Image
+                                style={[
+                                    styles.tab_bar_icon,
+                                    { tintColor: color },
+                                ]}
+                                source={require(image_name)}
+                            ></Image>
+                        );
                     },
-                    tabBarActiveTintColor: ORANGE,
-                    tabBarActiveBackgroundColor: LIGHTGREY,
-                    tabBarInactiveBackgroundColor: WHITE,
-                    tabBarInactiveTintColor: GREY,
-                    tabBarShowLabel: false,
-                    headerTitleStyle: { color: ORANGE },
-                    headerShown: true,
-                })}
-            >
-                <RootBottomTab.Screen
-                    name="SearchTopTab"
-                    component={SearchTopTabNavigator}
-                    options={{
-                        title: 'Search',
-                        tabBarIcon: ({ color }) => {
-                            const image_name = '../images/icon_search.png';
-                            return (
-                                <Image
-                                    style={[
-                                        styles.tab_bar_icon,
-                                        { tintColor: color },
-                                    ]}
-                                    source={require(image_name)}
-                                ></Image>
-                            );
-                        },
-                    }}
-                />
-                <RootBottomTab.Screen
-                    name="LibraryStack"
-                    component={LibraryStackNavigator}
-                    options={{
-                        title: 'My Library',
-                        tabBarIcon: ({ color }) => {
-                            const image_name = '../images/icon_open_book.png';
-                            return (
-                                <Image
-                                    style={[
-                                        styles.tab_bar_icon,
-                                        { tintColor: color },
-                                    ]}
-                                    source={require(image_name)}
-                                ></Image>
-                            );
-                        },
-                    }}
-                />
+                }}
+            />
+            <RootBottomTab.Screen
+                name="LibraryStack"
+                component={LibraryStackNavigator}
+                options={{
+                    headerShown: false,
+                    title: 'My Library',
+                    tabBarIcon: ({ color }) => {
+                        const image_name = '../images/icon_open_book.png';
+                        return (
+                            <Image
+                                style={[
+                                    styles.tab_bar_icon,
+                                    { tintColor: color },
+                                ]}
+                                source={require(image_name)}
+                            ></Image>
+                        );
+                    },
+                }}
+            />
+            <RootBottomTab.Screen
+                name="WatchListStack"
+                component={WatchListStackNavigator}
+                options={{
+                    headerShown: false,
+                    title: 'My WatchList',
+                    tabBarIcon: ({ color }) => {
+                        const image_name = '../images/icon_checklist.png';
+                        return (
+                            <Image
+                                style={[
+                                    styles.tab_bar_icon,
+                                    { tintColor: color },
+                                ]}
+                                source={require(image_name)}
+                            ></Image>
+                        );
+                    },
+                }}
+            />
+            {user.logged ? (
                 <RootBottomTab.Screen
                     name="Profil"
                     component={ProfilScreen}
                     options={{
                         title: 'Profil',
+                        headerShown: true,
+                        headerTitleStyle: {
+                            color: ORANGE,
+                            fontFamily: 'Rubik-SemiBold',
+                        },
                         tabBarIcon: ({ color }) => {
                             const image_name = '../images/icon_profil.png';
                             return (
@@ -120,68 +148,16 @@ export default function RootBottomTabNavigator() {
                         },
                     }}
                 />
-            </RootBottomTab.Navigator>
-        );
-    } else {
-        return (
-            <RootBottomTab.Navigator
-                initialRouteName="SearchTopTab"
-                screenOptions={() => ({
-                    headerStyle: {
-                        backgroundColor: WHITE,
-                    },
-                    tabBarActiveTintColor: ORANGE,
-                    tabBarActiveBackgroundColor: LIGHTGREY,
-                    tabBarInactiveBackgroundColor: WHITE,
-                    tabBarInactiveTintColor: GREY,
-                    tabBarShowLabel: false,
-                    headerTitleStyle: { color: ORANGE },
-                    headerShown: true,
-                })}
-            >
-                <RootBottomTab.Screen
-                    name="SearchTopTab"
-                    component={SearchTopTabNavigator}
-                    options={{
-                        title: 'Search',
-                        tabBarIcon: ({ color }) => {
-                            const image_name = '../images/icon_search.png';
-                            return (
-                                <Image
-                                    style={[
-                                        styles.tab_bar_icon,
-                                        { tintColor: color },
-                                    ]}
-                                    source={require(image_name)}
-                                ></Image>
-                            );
-                        },
-                    }}
-                />
-                <RootBottomTab.Screen
-                    name="LibraryStack"
-                    component={LibraryStackNavigator}
-                    options={{
-                        title: 'My Library',
-                        tabBarIcon: ({ color }) => {
-                            const image_name = '../images/icon_open_book.png';
-                            return (
-                                <Image
-                                    style={[
-                                        styles.tab_bar_icon,
-                                        { tintColor: color },
-                                    ]}
-                                    source={require(image_name)}
-                                ></Image>
-                            );
-                        },
-                    }}
-                />
-
+            ) : (
                 <RootBottomTab.Screen
                     name="LoginStack"
                     component={LoginStackNavigator}
                     options={{
+                        headerShown: true,
+                        headerTitleStyle: {
+                            color: ORANGE,
+                            fontFamily: 'Rubik-SemiBold',
+                        },
                         title: 'Login',
                         tabBarIcon: ({ color }) => {
                             const image_name = '../images/icon_profil.png';
@@ -197,9 +173,9 @@ export default function RootBottomTabNavigator() {
                         },
                     }}
                 />
-            </RootBottomTab.Navigator>
-        );
-    }
+            )}
+        </RootBottomTab.Navigator>
+    );
 }
 
 const styles = StyleSheet.create({
