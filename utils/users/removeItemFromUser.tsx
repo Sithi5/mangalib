@@ -1,4 +1,3 @@
-import { FirestoreUserAnime, FirestoreUserManga } from 'api/FirebaseTypes';
 import { Id } from 'globals/GlobalTypes';
 import { AppDispatch } from 'redux/store';
 import { UserState } from 'redux/UserSlice';
