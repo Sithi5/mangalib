@@ -28,6 +28,7 @@ export default {
                 backgroundColor: '#FFFFFF',
             },
             package: 'com.mangalib',
+            versionCode: 2,
         },
         web: {
             favicon: './assets/favicon.png',
