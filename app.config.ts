@@ -2,10 +2,10 @@ import 'dotenv/config';
 
 export default {
     expo: {
-        name: 'mangalib',
+        name: 'MangaLib',
         description:
             'MangaLib is a free, open source application to help users list their mangas library, built with React-Native for Android and iOS devices.',
-        slug: 'mangalib',
+        slug: 'MangaLib',
         version: '1.0.0',
         orientation: 'portrait',
         icon: './assets/icon.png',
