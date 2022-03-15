@@ -3,13 +3,13 @@ import 'config/firebase';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from 'expo-font';
 import React from 'react';
-// Ignore annoying warning comming from firebase
 import { LogBox, Platform, StatusBar } from 'react-native';
-import 'react-native-gesture-handler'; //⚠️ Keep at top of the file ⚠️
+import 'react-native-gesture-handler';
 import { Provider } from 'react-redux';
 import RootBottomTabNavigator from './navigations/RootNavigations';
 import { store } from './redux/Store';
 
+// Ignore annoying warning comming from firebase
 LogBox.ignoreLogs([
     "AsyncStorage has been extracted from react-native core and will be removed in a future release. It can now be installed and imported from '@react-native-async-storage/async-storage' instead of 'react-native'. See https://github.com/react-native-async-storage/async-storage",
 ]);

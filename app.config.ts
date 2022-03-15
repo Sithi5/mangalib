@@ -6,7 +6,7 @@ export default {
         description:
             'MangaLib is a free, open source application to help users list their mangas library, built with React-Native for Android and iOS devices.',
         slug: 'MangaLib',
-        version: '1.0.0',
+        version: '1.0.1',
         orientation: 'portrait',
         icon: './assets/icon.png',
         splash: {
