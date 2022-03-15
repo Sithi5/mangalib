@@ -225,20 +225,26 @@ export default function ItemDetailsScreen({
                             ></TopContainerItemDetailsContent>
                         </View>
                         <View style={styles.content_body_container}>
-                            <BodyContainerUserItemDetails
-                                item={item}
-                                item_type={item_type}
-                                user={user}
-                                setShowLibraryModal={setShowLibraryModal}
-                            ></BodyContainerUserItemDetails>
                             {user.logged ? (
-                                <ModalUserItem
-                                    show_library_modal={show_library_modal}
-                                    setShowLibraryModal={setShowLibraryModal}
-                                    item={item}
-                                    item_type={item_type}
-                                    user={user}
-                                ></ModalUserItem>
+                                <View>
+                                    <BodyContainerUserItemDetails
+                                        item={item}
+                                        item_type={item_type}
+                                        user={user}
+                                        setShowLibraryModal={
+                                            setShowLibraryModal
+                                        }
+                                    ></BodyContainerUserItemDetails>
+                                    <ModalUserItem
+                                        show_library_modal={show_library_modal}
+                                        setShowLibraryModal={
+                                            setShowLibraryModal
+                                        }
+                                        item={item}
+                                        item_type={item_type}
+                                        user={user}
+                                    />
+                                </View>
                             ) : null}
 
                             <Text style={styles.content_body_text}>
@@ -253,17 +259,19 @@ export default function ItemDetailsScreen({
                         <View style={styles.content_bottom_container}></View>
                         {_displayAddOrRemoveFromLibrary()}
                     </View>
-                    <BlurView
-                        style={[
-                            styles.blur_container,
-                            {
-                                zIndex: show_library_modal ? 1 : -1,
-                                elevation: show_library_modal ? 1 : -1,
-                            },
-                        ]}
-                        tint="dark"
-                        intensity={show_library_modal ? BLUR_INTENSITY : 0}
-                    />
+                    {user.logged ? (
+                        <BlurView
+                            style={[
+                                styles.blur_container,
+                                {
+                                    zIndex: show_library_modal ? 1 : -1,
+                                    elevation: show_library_modal ? 1 : -1,
+                                },
+                            ]}
+                            tint="dark"
+                            intensity={show_library_modal ? BLUR_INTENSITY : 0}
+                        />
+                    ) : null}
                 </Animated.ScrollView>
             );
         }

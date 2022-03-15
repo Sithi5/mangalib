@@ -26,7 +26,7 @@ export default function BodyContainerUserItemDetails(props: Props) {
     const { item, item_type, user, setShowLibraryModal } = props;
 
     function userAnimeDetails() {
-        if (item !== undefined) {
+        if (item !== undefined && user.logged) {
             const user_item = getFirestoreUserAnimeById({
                 user: user,
                 id: item?.id,
@@ -60,7 +60,7 @@ export default function BodyContainerUserItemDetails(props: Props) {
     }
 
     function userMangaDetails() {
-        if (item !== undefined) {
+        if (item !== undefined && user.logged) {
             const user_item = getFirestoreUserMangaById({
                 user: user,
                 id: item?.id,
