@@ -192,7 +192,7 @@ export default function ItemDetailsScreen({
                             navigation={navigation}
                             scroll={scroll}
                             updateHeaderZIndex={updateHeaderZIndex}
-                        ></ItemDetailsScreenNavigationHeader>
+                        />
                     </Animated.View>
 
                     {item_rating_text ? (

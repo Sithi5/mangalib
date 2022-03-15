@@ -56,7 +56,7 @@ export type RootBottomTabScreenProps<T extends keyof RootBottomTabParamList> =
 
 export type SearchStackScreenProps<T extends keyof SearchStackParamList> =
     CompositeScreenProps<
-        MaterialTopTabScreenProps<SearchStackParamList, T>,
+        NativeStackScreenProps<SearchStackParamList, T>,
         RootBottomTabScreenProps<keyof RootBottomTabParamList>
     >;
 
@@ -91,7 +91,7 @@ export type RootBottomTabNavigationProp<
 
 export type SearchStackNavigationProps<T extends keyof SearchStackParamList> =
     CompositeNavigationProp<
-        MaterialTopTabNavigationProp<SearchStackParamList, T>,
+        NativeStackNavigationProp<SearchStackParamList, T>,
         RootBottomTabNavigationProp<keyof RootBottomTabParamList>
     >;
 
