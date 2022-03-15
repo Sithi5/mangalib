@@ -3,12 +3,12 @@ import { AppDispatch } from 'redux/store';
 import { UserState } from 'redux/UserSlice';
 import {
     removeAnimeFromUserAnimeList,
-    removeMangaFromUserMangaList,
+    removeMangaFromUserMangaList
 } from 'redux/UserSliceAsyncThunk';
 import { asyncAlert } from 'utils/alerts';
 import {
     getFirestoreUserAnimeById,
-    getFirestoreUserMangaById,
+    getFirestoreUserMangaById
 } from 'utils/firebase';
 import animeIsInUserWatchList from './AnimeIsInUserWatchList';
 import mangaIsInUserLibrary from './MangaIsInUserLibrary';
