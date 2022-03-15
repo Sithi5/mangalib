@@ -61,8 +61,6 @@ export default function ItemDetailsScreen({
         setHeaderZIndex(new_z_index);
     }
 
-    console.log('user = ', user);
-
     useEffect(() => {
         async function _getItemDetails() {
             try {
@@ -76,7 +74,6 @@ export default function ItemDetailsScreen({
             } catch (error) {
                 console.error(error);
             } finally {
-                console.log;
                 image_url.current = kitsuGetItemImage({
                     id: item_id,
                     item_type: item_type,

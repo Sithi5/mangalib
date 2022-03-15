@@ -94,18 +94,28 @@ export default function ModalUserItem(props: Props) {
             });
             if (user_anime) {
                 return (
-                    <FlatList
-                        data={user_anime.seen_episodes}
-                        keyExtractor={(item) => item.toString()}
-                        numColumns={8}
-                        renderItem={({ item }) => (
-                            <View style={styles.item_bubble}>
-                                <Text style={styles.item_bubble_text}>
-                                    {item}
-                                </Text>
-                            </View>
-                        )}
-                    ></FlatList>
+                    <View onStartShouldSetResponder={(): boolean => true}>
+                        <FlatList
+                            ListHeaderComponent={
+                                <ModalUserItemHeader
+                                    item_type={'anime'}
+                                    user={user}
+                                    user_item={user_anime}
+                                    dispatch={dispatch}
+                                />
+                            }
+                            data={user_anime.seen_episodes}
+                            keyExtractor={(item) => item.toString()}
+                            numColumns={8}
+                            renderItem={({ item }) => (
+                                <View style={styles.item_bubble}>
+                                    <Text style={styles.item_bubble_text}>
+                                        {item}
+                                    </Text>
+                                </View>
+                            )}
+                        ></FlatList>
+                    </View>
                 );
             }
         }
@@ -132,7 +142,7 @@ export default function ModalUserItem(props: Props) {
                             <View style={styles.content_main_container}>
                                 {item_type === 'manga'
                                     ? _mangaFlatList()
-                                    : _animeFlatList}
+                                    : _animeFlatList()}
                             </View>
                         </TouchableWithoutFeedback>
                     </TouchableOpacity>

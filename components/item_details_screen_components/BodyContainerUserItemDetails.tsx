@@ -35,7 +35,7 @@ export default function BodyContainerUserItemDetails(props: Props) {
                 return null;
             } else {
                 const total_episodes_seen = user_item.seen_episodes.length;
-                const total_episodes = user_item.episodes.length;
+                const total_episodes = user_item.total_episodes;
                 return (
                     <View>
                         <Text style={styles.text_style}>
@@ -44,6 +44,15 @@ export default function BodyContainerUserItemDetails(props: Props) {
                         <Text style={styles.text_style}>
                             Total episodes: {total_episodes}
                         </Text>
+                        <View style={styles.button_container}>
+                            <ButtonFullBackgroundColor
+                                color={DARK_GREY}
+                                text={'See my watchlist'}
+                                onPressFunction={() => {
+                                    setShowLibraryModal(true);
+                                }}
+                            ></ButtonFullBackgroundColor>
+                        </View>
                     </View>
                 );
             }
@@ -61,7 +70,7 @@ export default function BodyContainerUserItemDetails(props: Props) {
             } else {
                 const total_possessed_volume =
                     user_item.possessed_volumes.length;
-                const total_volume = user_item.volumes.length;
+                const total_volume = user_item.total_volumes;
                 const last_volume_possessed =
                     total_possessed_volume > 0
                         ? Math.max(...user_item.possessed_volumes)

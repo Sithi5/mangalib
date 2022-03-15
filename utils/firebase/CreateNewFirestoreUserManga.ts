@@ -15,16 +15,10 @@ export default function createNewFirestoreUserManga({
     if (!volumes_count) {
         volumes_count = 1;
     }
-    let volumes: number[] = [];
-    while (volumes_count > 0) {
-        volumes.push(volumes_count);
-        volumes_count -= 1;
-    }
-    volumes.reverse();
     const new_user_manga: FirestoreUserManga = {
         manga_name: manga_name,
         manga_id: manga_id,
-        volumes: volumes,
+        total_volumes: volumes_count,
         possessed_volumes: [],
     };
     return new_user_manga;

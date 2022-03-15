@@ -31,19 +31,23 @@ export default async function addToUserAnimeSeenEpisodes({
         let new_user_animes_list: FirestoreUserAnime[] = deepCopy({
             source_object: user.user_animes_list,
         });
-        while (current_volume < to_number) {
-            if (user_anime.seen_episodes.includes(current_volume)) {
-                if (
-                    !new_user_animes_list[
-                        anime_index_in_user_animes_list
-                    ].seen_episodes.includes(current_volume)
-                )
-                    new_user_animes_list[
-                        anime_index_in_user_animes_list
-                    ].seen_episodes.push(current_volume);
+        while (current_volume <= to_number) {
+            if (
+                !new_user_animes_list[
+                    anime_index_in_user_animes_list
+                ].seen_episodes.includes(current_volume)
+            ) {
+                new_user_animes_list[
+                    anime_index_in_user_animes_list
+                ].seen_episodes.push(current_volume);
             }
             current_volume++;
         }
+        new_user_animes_list[
+            anime_index_in_user_animes_list
+        ].seen_episodes.sort(function (a, b) {
+            return a - b;
+        });
         try {
             await dispatch(
                 updateUserAnimesList({
