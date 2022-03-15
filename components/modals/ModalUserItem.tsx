@@ -111,7 +111,7 @@ export default function ModalUserItem(props: Props) {
         }
     }
 
-    if (item !== undefined && user !== undefined) {
+    if (item !== undefined && user.logged) {
         return (
             <View>
                 <Modal

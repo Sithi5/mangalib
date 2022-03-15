@@ -61,6 +61,8 @@ export default function ItemDetailsScreen({
         setHeaderZIndex(new_z_index);
     }
 
+    console.log('user = ', user);
+
     useEffect(() => {
         async function _getItemDetails() {
             try {
@@ -232,7 +234,7 @@ export default function ItemDetailsScreen({
                                 user={user}
                                 setShowLibraryModal={setShowLibraryModal}
                             ></BodyContainerUserItemDetails>
-                            {user !== undefined ? (
+                            {user.logged ? (
                                 <ModalUserItem
                                     show_library_modal={show_library_modal}
                                     setShowLibraryModal={setShowLibraryModal}
