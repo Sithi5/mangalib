@@ -1,6 +1,5 @@
+import { Ionicons } from '@expo/vector-icons';
 import {
-    BLACK,
-    DARK_GREY,
     DEFAULT_MARGIN,
     DEFAULT_RADIUS,
     GREY,
@@ -9,7 +8,6 @@ import {
 } from 'globals/AppStyles';
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
 export type TextInputOnSubmitFunctionArgs = {};
 

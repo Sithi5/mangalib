@@ -21,3 +21,5 @@ README.md.backup
 
 .vscode
 credentials.json
+
+__snapshots__
