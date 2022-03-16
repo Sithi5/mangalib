@@ -3,6 +3,7 @@ import { ORANGE } from 'globals/AppStyles';
 import React from 'react';
 import { useAppSelector } from 'redux/Hooks';
 import { ItemDetailsScreen, LibraryScreen } from 'screens';
+import LoginStackNavigator from './LoginStackNavigator';
 import { LibraryStackParamList } from './NavigationsTypes';
 
 const LibraryStack = createNativeStackNavigator<LibraryStackParamList>();
@@ -36,13 +37,17 @@ export default function LibraryStackNavigator() {
         );
     } else {
         return (
-            <LibraryStack.Navigator initialRouteName="Library">
+            <LibraryStack.Navigator initialRouteName="LoginStack">
                 <LibraryStack.Screen
-                    name="Library"
-                    component={LibraryScreen}
+                    name="LoginStack"
+                    component={LoginStackNavigator}
                     options={{
-                        headerShown: false,
-                        title: 'Library',
+                        headerShown: true,
+                        headerTitleStyle: {
+                            color: ORANGE,
+                            fontFamily: 'Rubik-SemiBold',
+                        },
+                        title: 'Login',
                     }}
                 />
             </LibraryStack.Navigator>

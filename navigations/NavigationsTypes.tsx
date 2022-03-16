@@ -38,6 +38,7 @@ export type SearchTopTabParamList = {
 export type LibraryStackParamList = {
     Library: undefined;
     ItemDetails: { item_id: Id; item_type: KitsuItemType; item_title: string };
+    LoginStack: undefined;
 };
 
 export type LoginStackParamList = {
@@ -48,6 +49,7 @@ export type LoginStackParamList = {
 export type WatchListStackParamList = {
     WatchList: undefined;
     ItemDetails: { item_id: Id; item_type: KitsuItemType; item_title: string };
+    LoginStack: undefined;
 };
 
 // Screen props
@@ -78,11 +80,31 @@ export type WatchListStackScreenProps<T extends keyof WatchListStackParamList> =
         RootBottomTabScreenProps<keyof RootBottomTabParamList>
     >;
 
+export type LoginStackFromRootBottomTabScreenProps<
+    T extends keyof LoginStackParamList
+> = CompositeScreenProps<
+    NativeStackScreenProps<LoginStackParamList, T>,
+    RootBottomTabScreenProps<keyof RootBottomTabParamList>
+>;
+
+export type LoginStackFromWatchListStackScreenProps<
+    T extends keyof LoginStackParamList
+> = CompositeScreenProps<
+    NativeStackScreenProps<LoginStackParamList, T>,
+    WatchListStackScreenProps<keyof WatchListStackParamList>
+>;
+
+export type LoginStackFromLibraryStackScreenProps<
+    T extends keyof LoginStackParamList
+> = CompositeScreenProps<
+    NativeStackScreenProps<LoginStackParamList, T>,
+    LibraryStackScreenProps<keyof LibraryStackParamList>
+>;
+
 export type LoginStackScreenProps<T extends keyof LoginStackParamList> =
-    CompositeScreenProps<
-        NativeStackScreenProps<LoginStackParamList, T>,
-        RootBottomTabScreenProps<keyof RootBottomTabParamList>
-    >;
+    | LoginStackFromRootBottomTabScreenProps<T>
+    | LoginStackFromWatchListStackScreenProps<T>
+    | LoginStackFromLibraryStackScreenProps<T>;
 
 // Navigation prop
 export type RootBottomTabNavigationProp<
@@ -93,12 +115,6 @@ export type SearchStackNavigationProps<T extends keyof SearchStackParamList> =
     CompositeNavigationProp<
         NativeStackNavigationProp<SearchStackParamList, T>,
         RootBottomTabNavigationProp<keyof RootBottomTabParamList>
-    >;
-
-export type SearchTopTabNavigationProps<T extends keyof SearchTopTabParamList> =
-    CompositeNavigationProp<
-        MaterialTopTabNavigationProp<SearchTopTabParamList, T>,
-        SearchStackNavigationProps<keyof SearchStackParamList>
     >;
 
 export type SearchTopTabAnimeScreenNavigationProps = CompositeNavigationProp<
@@ -120,6 +136,17 @@ export type WatchListScreenNavigationProp = CompositeNavigationProp<
     NativeStackNavigationProp<WatchListStackParamList, 'WatchList'>,
     RootBottomTabNavigationProp<keyof RootBottomTabParamList>
 >;
+
+export type SignUpStackScreenFromRootBottomTabNavigationProps =
+    CompositeNavigationProp<
+        NativeStackNavigationProp<LoginStackParamList, 'SignUp'>,
+        RootBottomTabNavigationProp<keyof RootBottomTabParamList>
+    >;
+export type SignInStackScreenFromRootBottomTabNavigationProps =
+    CompositeNavigationProp<
+        NativeStackNavigationProp<LoginStackParamList, 'SignIn'>,
+        RootBottomTabNavigationProp<keyof RootBottomTabParamList>
+    >;
 
 declare global {
     namespace ReactNavigation {

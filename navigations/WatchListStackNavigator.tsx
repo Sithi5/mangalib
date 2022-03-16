@@ -3,6 +3,7 @@ import { ORANGE } from 'globals/AppStyles';
 import React from 'react';
 import { useAppSelector } from 'redux/Hooks';
 import { ItemDetailsScreen, WatchListScreen } from 'screens';
+import LoginStackNavigator from './LoginStackNavigator';
 import { WatchListStackParamList } from './NavigationsTypes';
 
 const WatchList = createNativeStackNavigator<WatchListStackParamList>();
@@ -36,13 +37,17 @@ export default function WatchListStackNavigator() {
         );
     } else {
         return (
-            <WatchList.Navigator initialRouteName="WatchList">
+            <WatchList.Navigator initialRouteName="LoginStack">
                 <WatchList.Screen
-                    name="WatchList"
-                    component={WatchListScreen}
+                    name="LoginStack"
+                    component={LoginStackNavigator}
                     options={{
-                        headerShown: false,
-                        title: 'WatchList',
+                        headerShown: true,
+                        headerTitleStyle: {
+                            color: ORANGE,
+                            fontFamily: 'Rubik-SemiBold',
+                        },
+                        title: 'Login',
                     }}
                 />
             </WatchList.Navigator>
