@@ -9,7 +9,10 @@ import AppStyles, {
     ORANGE,
     WHITE,
 } from 'globals/AppStyles';
-import { LoginStackScreenProps } from 'navigations/NavigationsTypes';
+import {
+    LoginStackScreenProps,
+    SignUpStackScreenFromRootBottomTabNavigationProps,
+} from 'navigations/NavigationsTypes';
 import React, { useState } from 'react';
 import {
     Alert,
@@ -57,7 +60,11 @@ export default function SignUpScreen({
                     })
                 ).unwrap(); //Unwrap to raise error.
             } catch (error: any) {
-                console.error(error);
+                Alert.alert('error:', error.message, [
+                    {
+                        text: 'ok',
+                    },
+                ]);
             }
         }
     }
@@ -138,7 +145,9 @@ export default function SignUpScreen({
                 </View>
                 <TouchableOpacity
                     onPress={() => {
-                        navigation.navigate('SignIn');
+                        (
+                            navigation as SignUpStackScreenFromRootBottomTabNavigationProps
+                        ).navigate('SignIn');
                     }}
                 >
                     <Text style={{ color: BLUE, fontFamily: 'Rubik-Medium' }}>

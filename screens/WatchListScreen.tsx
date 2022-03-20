@@ -1,14 +1,13 @@
 import { kitsuGetMultipleItemsDetails } from 'api/KitsuApi';
 import type { KitsuData } from 'api/KitsuTypes';
-import { ButtonFullBackgroundColor } from 'components/buttons';
 import { SearchTextInput } from 'components/inputs';
 import { TextInputOnSubmitFunctionArgs } from 'components/inputs/SearchTextInput';
 import { WatchListAnimesList } from 'components/lists';
 import Loading from 'components/Loading';
-import AppStyles, { DEFAULT_MARGIN, ORANGE } from 'globals/AppStyles';
+import AppStyles from 'globals/AppStyles';
 import type { WatchListStackScreenProps } from 'navigations/NavigationsTypes';
 import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useAppSelector } from 'redux/Hooks';
 import { getAnimesIdsListFromFirestoreUsersAnimesList } from 'utils/firebase';
 import { getKitsuItemTitle } from 'utils/kitsu/';
@@ -90,52 +89,23 @@ export default function WatchListScreen({
         }
     }
 
-    if (user.logged === true) {
-        return (
-            <View style={AppStyles.main_container}>
-                <SearchTextInput
-                    placeholder="Anime title"
-                    search_text={search_text}
-                    on_submit_function={_filterAnimes}
+    return (
+        <View style={AppStyles.main_container}>
+            <SearchTextInput
+                placeholder="Anime title"
+                search_text={search_text}
+                on_submit_function={_filterAnimes}
+            />
+            {is_loading ? (
+                <Loading is_loading={is_loading} />
+            ) : (
+                <WatchListAnimesList
+                    navigation={navigation}
+                    animes_list={filtered_anime_list}
                 />
-                {is_loading ? (
-                    <Loading is_loading={is_loading} />
-                ) : (
-                    <WatchListAnimesList
-                        navigation={navigation}
-                        animes_list={filtered_anime_list}
-                    />
-                )}
-            </View>
-        );
-    } else {
-        return (
-            <View style={AppStyles.main_container}>
-                <View
-                    style={{
-                        flex: 1,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                >
-                    <View>
-                        <Text style={{ fontFamily: 'Rubik-Medium' }}>
-                            You need to be logged in to see your watchlist.
-                        </Text>
-                    </View>
-                    <View style={{ width: '60%', paddingTop: DEFAULT_MARGIN }}>
-                        <ButtonFullBackgroundColor
-                            color={ORANGE}
-                            text={'Go to login'}
-                            onPressFunction={() => {
-                                navigation.navigate('LoginStack');
-                            }}
-                        ></ButtonFullBackgroundColor>
-                    </View>
-                </View>
-            </View>
-        );
-    }
+            )}
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({});
