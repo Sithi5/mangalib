@@ -3,7 +3,7 @@ import { NumberInput } from 'components/inputs';
 import React from 'react';
 import { act } from 'react-test-renderer';
 
-describe('My test group', () => {
+describe('NumberInput', () => {
     it('renders correctly', async () => {
         const initial_value = '';
         React.useRef = jest.fn().mockReturnValue(initial_value);
