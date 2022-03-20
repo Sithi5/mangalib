@@ -60,7 +60,11 @@ export default function SignUpScreen({
                     })
                 ).unwrap(); //Unwrap to raise error.
             } catch (error: any) {
-                console.error(error);
+                Alert.alert('error:', error.message, [
+                    {
+                        text: 'ok',
+                    },
+                ]);
             }
         }
     }
