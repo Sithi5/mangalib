@@ -31,7 +31,7 @@
 **Class/Functions Components:** `PascalCase`  
 **Navigations Components:** `PascalCase`  
 **Functions:** `camelCase`  
-**Vars**: `camelCase` (use `let` | `const` instead of the generic `var`)  
+**Vars**: `snake_case` (use `let` | `const` instead of the generic `var`)  
 
 ## Class vs React.createClass vs stateless vs functional component
 
@@ -64,6 +64,7 @@ function Listing({ hello }: Props) {
   return <div>{hello}</div>;
 }
 ```
+
 
 
 ## Import/Export
