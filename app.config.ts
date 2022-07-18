@@ -28,6 +28,9 @@ export default {
                 backgroundColor: '#FFFFFF',
             },
             package: 'com.mangalib',
+            config: {
+                googleMobileAdsAppId: 'ca-app-pub-2983445386454572~5447016533',
+            },
             versionCode: 3,
         },
         web: {
