@@ -1,6 +1,6 @@
 # MangaLib
 
-Ad-free, MangaLib allows you to store your personal manga library and to perform a quick search within it.
+MangaLib allows you to store your personal manga library and to perform a quick search within it.
 
 MangaLib allows you to :
 
