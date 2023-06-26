@@ -18,6 +18,9 @@ export default {
         primaryColor: '#ff7400',
         assetBundlePatterns: ['**/*'],
         ios: {
+            config: {
+                usesNonExemptEncryption: false,
+            },
             supportsTablet: true,
             bundleIdentifier: 'com.mangalib',
         },
@@ -41,6 +44,9 @@ export default {
             firebaseStorageBucket: process.env.FIREBASE_STORAGE_BUCKET,
             firebaseMessagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
             firebaseAppId: process.env.FIREBASE_APP_ID,
+            eas: {
+                projectId: '7037347c-02ae-4482-9da4-c4f0bf21622b',
+            },
         },
     },
 };
