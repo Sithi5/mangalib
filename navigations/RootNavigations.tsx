@@ -1,5 +1,4 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { InterstitialAds } from 'components/ads';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 // Components
 import { GREY, LIGHT_GREY, ORANGE, WHITE } from 'globals/AppStyles';
@@ -36,11 +35,6 @@ function _checkForPersistingUser() {
                 }
             }
             _getUserData(user.uid);
-        }
-
-        // Check before putting interstitial ads :)
-        if (!user || user.email !== 's@gmail.com') {
-            InterstitialAds();
         }
     });
 }

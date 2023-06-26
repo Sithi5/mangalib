@@ -4,10 +4,9 @@ export default {
     expo: {
         name: 'MangaLib',
         description:
-            'MangaLib is a free, open source application to help users list their mangas library, built with React-Native for Android and iOS devices.',
+            'MangaLib is an open source application to help users list their mangas library, built with React-Native for Android and iOS devices.',
         slug: 'MangaLib',
-        version: '1.0.3',
-        orientation: 'portrait',
+        version: '1.1.0',
         icon: './assets/icon.png',
         splash: {
             image: './assets/splash.png',
@@ -31,7 +30,6 @@ export default {
             config: {
                 googleMobileAdsAppId: 'ca-app-pub-2983445386454572~5447016533',
             },
-            versionCode: 4,
         },
         web: {
             favicon: './assets/favicon.png',

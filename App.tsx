@@ -6,8 +6,8 @@ import React from 'react';
 import { LogBox, Platform, StatusBar } from 'react-native';
 import 'react-native-gesture-handler';
 import { Provider } from 'react-redux';
-import RootBottomTabNavigator from './navigations/RootNavigations';
-import { store } from './redux/Store';
+import RootBottomTabNavigator from 'navigations/RootNavigations';
+import { store } from 'redux/store';
 
 // Ignore annoying warning comming from firebase
 LogBox.ignoreLogs([
